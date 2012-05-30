@@ -1,0 +1,11 @@
+# Setup clustering
+
+1. Shutdown the clustering-enabled CMS instance
+2. Copy the storage directory to src/main/webapp/WEB-INF
+	cp -r ../../senintra/target/storage src/main/webapp/WEB-INF
+3. INSERT INTO JOURNAL_LOCAL_REVISIONS(JOURNAL_ID, REVISION_ID) SELECT 'node_hct' AS JOURNAL_ID, REVISION_ID FROM JOURNAL_LOCAL_REVISIONS WHERE JOURNAL_ID='node_cms';
+
+# Setup live / preview from CMS
+
+1. go to the CMS console under /hippo:configuration/hippo:frontend/cms/cms-services/previewSiteDocumentUrlService
+2. go to the CMS console under /hippo:configuration/hippo:frontend/cms/cms-services/liveSiteDocumentUrlService

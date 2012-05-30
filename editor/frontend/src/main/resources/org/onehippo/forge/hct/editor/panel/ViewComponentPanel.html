@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:wicket="http://wicket.apache.org/"
+    xml:lang="en"
+    lang="en">
+    <wicket:extend>
+        <table class="components">
+            <tr>
+                <td>
+                    <table class="hctheader">
+                        <tr>
+                            <td>
+                                <div>
+                                    <div style="float:left;">
+                                        <img wicket:id="img_component"/>
+                                    </div>
+                                    <div style="float:left;margin-top: 10px;">
+                                        <h2>
+                                            <wicket:message key="component-view-options-title"></wicket:message>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ul>
+                                    <li style:{color:} wicket:id="edit-component"><a href="#"><wicket:message key="component-edit"/></a></li>
+                                    <li wicket:id="delete-component"/>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="hct" cellspacing="0" cellpadding="0" border="1" width="60%">
+                        <tr>
+                            <td>
+                                <wicket:message key="component-name"/>:
+                            </td>
+                            <td>
+                                <label wicket:id="componentName"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <wicket:message key="componentType"/>:
+                            </td>
+                            <td>
+                                <label wicket:id="componentType"/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </wicket:extend>
+</html>

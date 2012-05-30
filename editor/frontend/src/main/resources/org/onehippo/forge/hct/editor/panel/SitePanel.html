@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:wicket="http://wicket.apache.org/"
+    xml:lang="en"
+    lang="en">
+    <wicket:extend>
+        <div wicket:id="feedmsg" class="hippo-feedback"/>
+        <form class="hctForm" wicket:id="form">
+            <div>
+                <h2><wicket:message key="site-create-title"/></h2>
+            </div>
+            <div>
+                <div>
+                    <wicket:message key="siteName"/>
+                </div>
+                <div>
+                    <span wicket:id="siteName">[siteName]</span>
+                </div>
+            </div>
+            <div>                
+                <div>
+                    <wicket:message key="description"/>
+                </div>
+                <div>
+                    <span wicket:id="description">[description]</span>
+                </div>
+            </div>
+            <p>
+                <input type="submit" wicket:message="value:create-action" wicket:id="create-button"/>
+                <input type="submit" wicket:message="value:cancel-action" wicket:id="cancel-button"/>
+            </p>
+        </form>
+    </wicket:extend>
+</html>

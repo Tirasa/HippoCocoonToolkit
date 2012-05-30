@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+
+  <groupId>org.onehippo.forge.hct</groupId>
+  <artifactId>hct</artifactId>
+  <version>0.4-SNAPSHOT</version>
+  <name>Hippo Cocoon Toolkit</name>
+
+  <url>http://forge.onehippo.org/gf/project/hct/</url>
+  <prerequisites>
+    <maven>[3.0.3,)</maven>
+  </prerequisites>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:svn:https://forge.onehippo.org/svn/hct/trunk/</connection>
+    <developerConnection>scm:svn:https://forge.onehippo.org/svn/hct/trunk/</developerConnection>
+    <url>https://forge.onehippo.org/svn/hct/trunk</url>
+  </scm>
+
+  <issueManagement>
+    <system>GForge</system>
+    <url>https://forge.onehippo.org/gf/project/hct/tracker/?action=TrackerItemBrowse&amp;tracker_id=600/</url>
+  </issueManagement>
+
+  <properties>
+    <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
+    <spring.version>3.1.1.RELEASE</spring.version>
+
+    <hippo.repository.version>2.22.05</hippo.repository.version>
+    <hippo.cms.version>2.22.05</hippo.cms.version>
+    <hippo.hst.version>2.24.04</hippo.hst.version>
+        
+    <forge.taxonomy.version>1.08.03</forge.taxonomy.version>
+    <forge.ecm-tagging.version>4.04.01</forge.ecm-tagging.version>
+        
+    <wicket.version>1.5.5</wicket.version>
+        
+    <slf4j.version>1.6.4</slf4j.version>
+        
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+    
+  <distributionManagement>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>hct-maven-repo</id>
+      <url>svn:https://forge.onehippo.org/svn/hct/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.5</version>
+        <scope>provided</scope>
+      </dependency>
+        
+      <dependency> 
+        <groupId>javax.jcr</groupId> 
+        <artifactId>jcr</artifactId> 
+        <version>2.0</version>
+        <scope>provided</scope>
+      </dependency>
+            
+      <dependency> 
+        <groupId>javax.transaction</groupId> 
+        <artifactId>jta</artifactId> 
+        <version>1.1</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.cocoon.sitemap</groupId>
+        <artifactId>cocoon-sitemap</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cocoon.sax</groupId>
+        <artifactId>cocoon-sax</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cocoon.servlet</groupId>
+        <artifactId>cocoon-servlet</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cocoon.optional</groupId>
+        <artifactId>cocoon-optional</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cocoon.stringtemplate</groupId>
+        <artifactId>cocoon-stringtemplate</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+
+      <!--  Hippo dependencies -->
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-repository-api</artifactId>
+        <version>${hippo.repository.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-repository-servlets</artifactId>
+        <version>${hippo.repository.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-repository-connector</artifactId>
+        <version>${hippo.repository.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-repository-builtin</artifactId>
+        <version>${hippo.repository.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-repository-engine</artifactId>
+        <version>${hippo.repository.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-repository-modules</artifactId>
+        <version>${hippo.repository.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-cms-translation-common</artifactId>
+        <version>${hippo.cms.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-cms-translation-repository</artifactId>
+        <version>${hippo.cms.version}</version>
+      </dependency>
+            
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-cms-engine</artifactId>
+        <version>${hippo.cms.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7</groupId>
+        <artifactId>hippo-cms-api</artifactId>
+        <version>${hippo.cms.version}</version>
+      </dependency>
+            
+      <dependency>
+        <groupId>org.onehippo.cms7.hst</groupId>
+        <artifactId>hst-api</artifactId>
+        <version>${hippo.hst.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7.hst</groupId>
+        <artifactId>hst-commons</artifactId>
+        <version>${hippo.hst.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7.hst.components</groupId>
+        <artifactId>hst-core</artifactId>
+        <version>${hippo.hst.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7.hst</groupId>
+        <artifactId>hst-content-beans</artifactId>
+        <version>${hippo.hst.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo.cms7.hst</groupId>
+        <artifactId>hst-client</artifactId>
+        <version>${hippo.hst.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.onehippo</groupId>
+        <artifactId>taxonomy-api</artifactId>
+        <version>${forge.taxonomy.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo</groupId>
+        <artifactId>taxonomy-addon-repository</artifactId>
+        <version>${forge.taxonomy.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.onehippo</groupId>
+        <artifactId>taxonomy-addon-frontend</artifactId>
+        <version>${forge.taxonomy.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.onehippo.forge</groupId>
+        <artifactId>ecm-tagging</artifactId>
+        <version>${forge.ecm-tagging.version}</version>
+      </dependency>
+            
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.6</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.1</version>
+      </dependency>
+            
+      <dependency>
+        <groupId>org.apache.xmlgraphics</groupId>
+        <artifactId>fop</artifactId>
+        <version>1.0</version>
+      </dependency>
+
+      <!--  Logging dependencies -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>    
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.16</version>
+        <scope>runtime</scope>
+      </dependency>    
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1.1</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+
+      <!-- Spring (+ AOP support)-->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context-support</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.wicket</groupId>
+        <artifactId>wicket</artifactId>
+        <version>${wicket.version}</version>
+        <type>pom</type>
+      </dependency>
+    
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>5.1.18</version>
+        <scope>runtime</scope>
+      </dependency>
+
+      <!--  Test dependencies -->
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.10</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.cocoon</groupId>
+          <artifactId>cocoon-maven-plugin</artifactId>
+          <version>1.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>1.6</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+        
+    <extensions>
+      <extension>
+        <groupId>org.jvnet.wagon-svn</groupId>
+        <artifactId>wagon-svn</artifactId>
+        <version>1.12</version>
+      </extension>
+    </extensions>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+            
+  <repositories>
+    <repository>
+      <id>main</id>
+      <url>http://repo1.maven.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>hippo</id>
+      <name>Hippo maven 2 repository.</name>
+      <url>http://maven.onehippo.com/maven2/</url>
+    </repository>
+    <repository>
+      <id>hippo-maven2-snapshots</id>
+      <name>Hippo Maven 2</name>
+      <url>http://maven.onehippo.com/maven2-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>cocoon3</id>
+      <name>Cocoon3 snapshots</name>
+      <url>https://repository.apache.org/content/repositories/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>hippo-forge</id>
+      <name>Hippo Forge maven 2 repository.</name>
+      <url>http://maven.onehippo.com/maven2-forge/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <layout>default</layout>
+    </repository>
+  </repositories>
+    
+  <modules>
+    <module>core</module>    
+    <module>taxonomy</module>    
+    <module>editor</module>
+  </modules>
+</project>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.onehippo.forge.hct</groupId>
+    <artifactId>hct</artifactId>
+    <version>0.4-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.onehippo.forge.hct</groupId>
+  <artifactId>hct-sample-webapp</artifactId>
+  <name>Hippo Cocoon Toolkit - Sample WebApp</name>
+  <packaging>war</packaging>
+
+  <properties>
+    <tomcat.version>7.0.27</tomcat.version>
+
+    <cargo.servlet.port>8888</cargo.servlet.port>
+    <cargo.log>/tmp/hct-cargo.log</cargo.log>
+    <cargo.output>/tmp/hct-cargo-output.log</cargo.output>
+  </properties>
+    
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+        
+    <dependency> 
+      <groupId>javax.jcr</groupId> 
+      <artifactId>jcr</artifactId> 
+      <scope>provided</scope>
+    </dependency>
+            
+    <dependency> 
+      <groupId>javax.transaction</groupId> 
+      <artifactId>jta</artifactId> 
+      <scope>provided</scope>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.onehippo.forge.hct</groupId>
+      <artifactId>hct-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+            
+    <dependency>
+      <groupId>org.apache.cocoon.servlet</groupId>
+      <artifactId>cocoon-servlet</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cocoon.sax</groupId>
+      <artifactId>cocoon-sax</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cocoon.optional</groupId>
+      <artifactId>cocoon-optional</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cocoon.stringtemplate</groupId>
+      <artifactId>cocoon-stringtemplate</artifactId>
+    </dependency>
+
+    <!--  Hippo dependencies -->
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-servlets</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-connector</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-builtin</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-engine</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-modules</artifactId>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-cms-translation-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-cms-translation-repository</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.onehippo.cms7.hst</groupId>
+      <artifactId>hst-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7.hst</groupId>
+      <artifactId>hst-commons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7.hst.components</groupId>
+      <artifactId>hst-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7.hst</groupId>
+      <artifactId>hst-content-beans</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7.hst</groupId>
+      <artifactId>hst-client</artifactId>
+    </dependency>
+        
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>fop</artifactId>
+    </dependency>
+
+    <!--  Logging dependencies -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>runtime</scope>
+    </dependency>    
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <scope>runtime</scope>
+    </dependency>    
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+
+    <!-- Spring (+ AOP support)-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <build>      
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <inherited>true</inherited>
+        <configuration>
+          <attachClasses>true</attachClasses>
+          <packagingExcludes>WEB-INF/storage/**</packagingExcludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.cocoon</groupId>
+        <artifactId>cocoon-maven-plugin</artifactId>
+        <inherited>true</inherited>
+        <configuration>
+          <webappProfile>ssf</webappProfile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+    
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <build>     
+        <defaultGoal>clean package cargo:run</defaultGoal>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <inherited>true</inherited>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven2-plugin</artifactId>
+            <version>1.2.1</version>
+            <configuration>
+              <container>
+                <containerId>tomcat7x</containerId>
+                <zipUrlInstaller>
+                  <url>http://archive.apache.org/dist/tomcat/tomcat-7/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</url>
+                  <downloadDir>${settings.localRepository}/org/codehaus/cargo/cargo-container-archives</downloadDir>
+                  <extractDir>${java.io.tmpdir}</extractDir>
+                </zipUrlInstaller>          
+                <log>${cargo.log}</log>
+                <output>${cargo.output}</output>
+                <dependencies>
+                  <dependency> 
+                    <groupId>javax.transaction</groupId> 
+                    <artifactId>jta</artifactId> 
+                  </dependency>
+                  <dependency> 
+                    <groupId>javax.jcr</groupId> 
+                    <artifactId>jcr</artifactId> 
+                  </dependency>
+                  <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                  </dependency>
+                </dependencies>
+              </container>
+              <configuration>
+                <type>standalone</type>
+                <properties>
+                  <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
+                  <cargo.tomcat.ajp.port>8889</cargo.tomcat.ajp.port>
+                  <cargo.rmi.port>8805</cargo.rmi.port> 
+                  <cargo.jvmargs>-Xdebug -Xrunjdwp:transport=dt_socket,address=9000,server=y,suspend=n</cargo.jvmargs>
+                </properties>
+                <deployables>
+                  <deployable>
+                    <properties>
+                      <context>hct</context>    
+                    </properties>    
+                  </deployable>    
+                </deployables>
+                <configfiles>
+                  <configfile>
+                    <file>${project.basedir}/conf/context.xml</file>
+                    <todir>conf/</todir>
+                    <tofile>context.xml</tofile>
+                  </configfile>
+                </configfiles>
+              </configuration>
+            </configuration>
+          </plugin>
+        </plugins>
+            
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <filtering>false</filtering>
+            <excludes>
+              <exclude>**/hct-servlet-service.xml</exclude>
+            </excludes>
+          </resource>    
+          <resource>
+            <directory>src/test/resources</directory>
+            <filtering>true</filtering>
+            <includes>
+              <include>**/hct-servlet-service.xml</include>
+            </includes>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+  </profiles>
+</project>

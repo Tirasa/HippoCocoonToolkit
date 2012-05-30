@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:wicket="http://wicket.apache.org/"
+    xml:lang="en"
+    lang="en">
+
+    <wicket:panel> 
+        <fieldset id="personal">
+            <legend>General Parameters</legend>
+            <div>
+                <div>
+                    <wicket:message key="componentName"/>
+                </div>
+                <div>
+                    <span wicket:id="componentName">[componentName]</span>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <wicket:message key="base"/>
+                </div>
+                <div>
+                    <span wicket:id="base">[base]</span>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <wicket:message key="type"/>
+                </div>
+                <div>
+                    <span wicket:id="type">[type]</span>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <wicket:message key="depth"/>
+                </div>
+                <div>
+                    <span wicket:id="depth">[depth]</span>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <wicket:message key="size"/>
+                </div>
+                <div>
+                    <span wicket:id="size">[size]</span>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <wicket:message key="includeFolders"/>
+                </div>
+                <div>
+                    <span wicket:id="includeFolders">[includeFolders]</span>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset id="personal">
+            <legend>Filter</legend>
+            <span wicket:id="resourceFilterContainer">
+                <span wicket:id="searchView">
+                    <div>
+                        <b><span wicket:id="operationType"/></b>
+                        <input type="text" wicket:id="field"/>
+                        <select wicket:id="typeCond"/>
+                        <input type="text" wicket:id="filterValue"/>
+                        <input type="button" wicket:id="dropButton"/>
+                    </div>
+                </span>
+                <div>
+                    <input type="button" wicket:id="addAndButton"/>
+                    <input type="button" wicket:id="addOrButton"/>
+                </div>
+            </span>
+        </fieldset>
+        <fieldset id="personal">
+            <legend>Order By</legend>   
+            <span wicket:id="orderContainer">
+                <span wicket:id="orderView">
+                    <div>
+                        <select wicket:id="orderby"/>
+                        <input type="text" wicket:id="orderField"/>
+                        <input type="button" wicket:id="dropButton"/>
+                    </div>
+                </span>
+                <div>
+                    <input type="button" wicket:id="addOrderButton"/>
+                </div>
+            </span>
+        </fieldset>
+        <div>
+            <span wicket:id="returnFieldPanel"></span>
+        </div>
+    </wicket:panel>
+</html>

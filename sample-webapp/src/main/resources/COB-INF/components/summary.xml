@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hct:query xmlns:hct="http://forge.onehippo.org/gf/project/hct/1.0"
+           locale="$locale$" base="$base$" availability="$availability$"
+           type="hippostdpubwf:document" size="5" depth="1">
+  <hct:filter>
+    <hct:and>
+      <hct:notNull field="hippotranslation:locale"/>
+    </hct:and>
+  </hct:filter>
+  <hct:orderBy>
+    <hct:descending field="hippostdpubwf:creationDate"/>    
+  </hct:orderBy>
+  <hct:return>
+    <hct:field name="hippostd:stateSummary"/>    
+    <hct:images/>
+  </hct:return>
+</hct:query>

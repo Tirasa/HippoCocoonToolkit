@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xi="http://www.w3.org/2001/XInclude">
+    <top>
+        <xi:include href="servlet:/components/static/top.html"/>
+    </top>
+    <left>
+        <xi:include href="servlet:/components/resource?base=$base$&amp;locale=$locale$&amp;availability=$availability$"/>
+    </left>
+    <center>
+        <xi:include href="servlet:/components/summary?base=$base$&amp;locale=$locale$&amp;availability=$availability$"/>
+    </center>
+    <right>
+        <xi:include href="servlet:/components/collection?base=$base$&amp;locale=$locale$&amp;availability=$availability$"/>
+    </right>
+    <bottom>
+        <xi:include href="servlet:/components/static/bottom.html"/>
+    </bottom>
+</page>

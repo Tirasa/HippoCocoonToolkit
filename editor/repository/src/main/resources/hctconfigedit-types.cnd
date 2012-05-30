@@ -1,0 +1,28 @@
+<'hct'='http://forge.onehippo.org/gf/project/hct/1.0'>
+
+[hct:page]
+ mixin
+ - hct:description (string)
+ - hct:property1 (string)
+ - hct:property2 (string)
+ - * (string)
+
+[hct:component]
+ mixin
+ - hct:description (string)
+ - hct:property1 (string)
+ - hct:property2 (string)
+ - * (string)
+
+[hct:pages]
+ mixin
+ + hct:page
+
+[hct:components]
+ mixin
+ + hct:component
+
+[hct:hct] 
+ mixin
+  + hct:components
+  + hct:pages

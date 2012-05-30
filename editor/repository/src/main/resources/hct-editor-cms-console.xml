@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sv:node xmlns:frontend="http://www.onehippo.org/jcr/frontend/nt/2.0" xmlns:sv="http://www.jcp.org/jcr/sv/1.0" sv:name="hct-editor">
+    <sv:property sv:name="jcr:primaryType" sv:type="Name">
+        <sv:value>frontend:plugincluster</sv:value>
+    </sv:property>
+    <sv:node sv:name="root">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>frontend:plugin</sv:value>
+        </sv:property>
+        <sv:property sv:name="perspective.title" sv:type="String">
+            <sv:value>admin-perspective-title</sv:value>
+        </sv:property>
+        <sv:property sv:name="plugin.class" sv:type="String">
+            <sv:value>org.onehippo.forge.hct.editor.HctPerspective</sv:value>
+        </sv:property>
+        <sv:property sv:name="translator.id" sv:type="String">
+            <sv:value>service.translator.config</sv:value>
+        </sv:property>
+        <sv:property sv:name="wicket.id" sv:type="String">
+            <sv:value>service.tab</sv:value>
+        </sv:property>
+        <sv:node sv:name="layout.wireframe">
+            <sv:property sv:name="jcr:primaryType" sv:type="Name">
+                <sv:value>frontend:pluginconfig</sv:value>
+            </sv:property>
+            <sv:property sv:name="center" sv:type="String">
+                <sv:value>id=hippo-controlpanel-perspective-center,body=hippo-controlpanel-perspective-center-body,scroll=true</sv:value>
+            </sv:property>
+            <sv:property sv:name="linked.with.parent" sv:type="Boolean">
+                <sv:value>true</sv:value>
+            </sv:property>
+            <sv:property sv:name="root.id" sv:type="String">
+                <sv:value>hippo-controlpanel-perspective-wrapper</sv:value>
+            </sv:property>
+            <sv:property sv:name="top" sv:type="String">
+                <sv:value>id=hippo-controlpanel-perspective-top,body=hippo-controlpanel-perspective-top-body,height=60</sv:value>
+            </sv:property>
+        </sv:node>
+    </sv:node>
+    <sv:node sv:name="sites">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>frontend:plugin</sv:value>
+        </sv:property>
+        <sv:property sv:name="plugin.class" sv:type="String">
+            <sv:value>org.onehippo.forge.hct.editor.plugin.HctPluginSite</sv:value>
+        </sv:property>
+    </sv:node>
+</sv:node>

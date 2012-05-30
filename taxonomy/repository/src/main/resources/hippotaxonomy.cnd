@@ -1,0 +1,38 @@
+<'hippo'='http://www.onehippo.org/jcr/hippo/nt/2.0.4'>
+<'hippostd'='http://www.onehippo.org/jcr/hippostd/nt/2.0'>
+<'hippostdpubwf'='http://www.onehippo.org/jcr/hippostdpubwf/nt/1.0'>
+<'hippotaxonomy'='http://www.hippoecm.org/hippotaxonomy/nt/1.2'>
+<'hippofacnav'='http://www.onehippo.org/jcr/hippofacnav/nt/1.0.1'>
+<'nt'='http://www.jcp.org/jcr/nt/1.0'>
+
+[hippotaxonomy:classifiable]
+  mixin
+  - hippotaxonomy:keys (string) multiple
+
+[hippotaxonomy:canonised] > hippotaxonomy:classifiable
+  mixin
+  - hippotaxonomy:canonkey (string) mandatory
+
+[hippotaxonomy:category] > nt:base
+  orderable
+  - hippotaxonomy:key (string) mandatory
+  + * (hippotaxonomy:category) = hippotaxonomy:category
+
+[hippotaxonomy:container] > hippostd:folder
+  orderable
+
+[hippotaxonomy:taxonomy] > hippo:document, hippostdpubwf:document
+  orderable
+  + * (hippotaxonomy:category) = hippotaxonomy:category
+
+[hippotaxonomy:translation] > hippo:translation
+  - hippotaxonomy:synonyms (string) multiple
+  - hippotaxonomy:description (string)
+
+[hippotaxonomy:translated]
+  mixin
+  + hippotaxonomy:translation (hippotaxonomy:translation) multiple
+
+[hippotaxonomy:faceted]
+  mixin
+  + hippotaxonomy:documents (hippofacnav:facetnavigation)
