@@ -25,12 +25,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.onehippo.forge.hct</groupId>
+    <groupId>net.tirasa.hct</groupId>
     <artifactId>hct</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.onehippo.forge.hct</groupId>
   <artifactId>hct-sample-webapp</artifactId>
   <name>Hippo Cocoon Toolkit - Sample WebApp</name>
   <packaging>war</packaging>
@@ -63,7 +62,7 @@
     </dependency>
         
     <dependency>
-      <groupId>org.onehippo.forge.hct</groupId>
+      <groupId>net.tirasa.hct</groupId>
       <artifactId>hct-core</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -229,6 +228,19 @@
         <configuration>
           <webappProfile>ssf</webappProfile>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <inherited>true</inherited>
+        <executions>
+          <execution>
+            <phase>none</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

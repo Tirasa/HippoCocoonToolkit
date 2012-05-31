@@ -22,21 +22,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                              http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.onehippo.forge.hct</groupId>
-        <artifactId>hct</artifactId>
-        <version>0.4-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <groupId>net.tirasa.hct</groupId>
+    <artifactId>hct</artifactId>
+    <version>0.5-SNAPSHOT</version>
+  </parent>
 
-    <groupId>org.onehippo.forge.hct</groupId>
-    <artifactId>hct-editor</artifactId>
-    <name>Hippo Cocoon Toolkit - Editor</name>
-    <packaging>pom</packaging>
+  <artifactId>hct-editor</artifactId>
+  <name>Hippo Cocoon Toolkit - Editor</name>
+  <packaging>pom</packaging>
     
-    <modules>
-        <module>repository</module>
-        <module>frontend</module>
-    </modules>
+  <modules>
+    <module>repository</module>
+    <module>frontend</module>
+  </modules>
 </project>

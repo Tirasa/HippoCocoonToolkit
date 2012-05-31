@@ -61,7 +61,7 @@
           <map:parameter name="contextPath" value="{jexl:cocoon.request.contextPath}"/>
           <map:parameter name="availability" value="{jexl:cocoon.request.availability}"/>
           <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('org.onehippo.forge.hct.defaultLocale')
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
                                                : cocoon.request.lang}"/>
         </map:transform>
         <map:serialize/>
@@ -113,14 +113,14 @@
           <map:parameter name="availability" value="{map:1}"/>
           <map:parameter name="base" value="/content/taxonomies/it/it/{map:2}"/>
           <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('org.onehippo.forge.hct.defaultLocale')
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
                                                : cocoon.request.lang}"/>
         </map:generate>
         <map:transform type="xinclude"/>
         <map:transform src="pages/subindex2html.xsl"/>
         <map:transform type="i18n">
           <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('org.onehippo.forge.hct.defaultLocale')
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
                                                : cocoon.request.lang}"/>          
           <map:parameter name="bundle" value="COB-INF/i18n/messages" />
         </map:transform>
@@ -131,14 +131,14 @@
           <map:parameter name="availability" value="{map:1}"/>
           <map:parameter name="base" value="/content/documents/{map:2}"/>
           <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('org.onehippo.forge.hct.defaultLocale')
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
                                                : cocoon.request.lang}"/>        
         </map:generate>
         <map:transform type="xinclude"/>
         <map:transform src="pages/subindex2html.xsl"/>
         <map:transform type="i18n">
           <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('org.onehippo.forge.hct.defaultLocale')
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
                                                : cocoon.request.lang}"/>          
           <map:parameter name="bundle" value="COB-INF/i18n/messages" />
         </map:transform>
@@ -149,7 +149,7 @@
           <map:parameter name="availability" value="{map:1}"/>
           <map:parameter name="path" value="/content/taxonomies/it/it/{map:2}/hippotaxonomy:documents/hippo:resultset/{map:3}"/>
           <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('org.onehippo.forge.hct.defaultLocale')
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
                                                : cocoon.request.lang}"/>        
         </map:generate>
         <map:transform type="xinclude"/>
@@ -161,7 +161,7 @@
           <map:parameter name="availability" value="{map:1}"/>
           <map:parameter name="path" value="/content/documents/{map:2}/{map:3}"/>
           <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('org.onehippo.forge.hct.defaultLocale')
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
                                                : cocoon.request.lang}"/>        
         </map:generate>
         <map:transform type="xinclude"/>
@@ -173,7 +173,7 @@
           <map:parameter name="availability" value="{map:1}"/>
           <map:parameter name="path" value="/content/documents/{map:2}/{map:3}"/>
           <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('org.onehippo.forge.hct.defaultLocale')
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
                                                : cocoon.request.lang}"/>        
         </map:generate>
         <map:transform type="xinclude"/>

@@ -25,7 +25,7 @@
                            http://cocoon.apache.org/schema/servlet
                            http://cocoon.apache.org/schema/servlet/cocoon-servlet-1.0.xsd">
 
-    <bean name="org.onehippo.forge.hct.service" class="org.apache.cocoon.servlet.XMLSitemapServlet">
+    <bean name="net.tirasa.hct.service" class="org.apache.cocoon.servlet.XMLSitemapServlet">
         <servlet:context mount-path="" context-path="classpath:/COB-INF/"/>
     </bean>
 

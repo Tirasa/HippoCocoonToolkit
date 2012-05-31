@@ -31,7 +31,7 @@
     <configurator:property name="org.apache.cocoon.reloading.sitemap" value="true"/>
     <configurator:property name="org.apache.cocoon.containerencoding" value="UTF-8"/>
     <configurator:property name="org.apache.cocoon.exception.ProcessingException.unroll" value="true"/>
-    <configurator:property name="org.onehippo.forge.hct.defaultLocale" value="en"/>
+    <configurator:property name="net.tirasa.hct.defaultLocale" value="en"/>
   </configurator:settings>
 
   <!-- Configure Logback -->
@@ -43,6 +43,6 @@
   </bean>
     
     <!-- Using classpath: resources -->
-  <bean class="org.onehippo.forge.hct.cocoon.internal.ClasspathURLStreamHandlerFactory"/>
+  <bean class="net.tirasa.hct.cocoon.internal.ClasspathURLStreamHandlerFactory"/>
 
 </beans>

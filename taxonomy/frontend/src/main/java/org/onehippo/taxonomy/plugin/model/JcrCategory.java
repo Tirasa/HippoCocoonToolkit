@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.hippoecm.frontend.i18n.model.NodeTranslator;
 import org.hippoecm.frontend.model.JcrNodeModel;
 import org.hippoecm.repository.api.NodeNameCodec;
-import org.onehippo.forge.hct.taxonomy.frontend.HCTTaxonomyNodeTypes;
+import net.tirasa.hct.taxonomy.frontend.HCTTaxonomyNodeTypes;
 import org.onehippo.taxonomy.api.Category;
 import org.onehippo.taxonomy.api.TaxonomyNodeTypes;
 import org.onehippo.taxonomy.plugin.api.EditableCategory;

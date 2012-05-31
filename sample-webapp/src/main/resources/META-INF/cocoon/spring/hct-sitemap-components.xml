@@ -22,7 +22,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean name="reader:hippo" class="org.onehippo.forge.hct.cocoon.sax.HippoRepositoryReader" scope="prototype" />
+    <bean name="reader:hippo" class="net.tirasa.hct.cocoon.sax.HippoRepositoryReader" scope="prototype" />
     
-    <bean name="transformer:hippo" class="org.onehippo.forge.hct.cocoon.sax.HippoRepositoryTransformer" scope="prototype" />
+    <bean name="transformer:hippo" class="net.tirasa.hct.cocoon.sax.HippoRepositoryTransformer" scope="prototype" />
 </beans>
