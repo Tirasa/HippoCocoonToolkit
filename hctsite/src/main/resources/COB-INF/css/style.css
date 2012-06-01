@@ -1,0 +1,41 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: Verdana, Tahoma, sans-serif;
+  color: #333;
+  font-size: 63.5%;
+}
+
+#container {
+  width: 990px;
+  margin: auto;
+}
+
+#top {
+  width:100%;
+  text-align:center;
+  background-color:#ddd;
+}
+
+#center {
+  width: 500px;
+  padding: 0 10px; 
+  float:left;
+}
+
+#right {
+  width: 200px;
+  float: right;
+}
+
+#left {
+  width: 260px;
+  float:left;
+}
+
+#bottom {
+  width:100%;
+  text-align:center;
+  background-color:#ddd; 
+  clear:both;
+}
