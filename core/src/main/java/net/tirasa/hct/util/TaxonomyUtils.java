@@ -48,11 +48,13 @@ public final class TaxonomyUtils {
     public static List<HCTTaxonomyCategoryBean> getTaxonomies(final HCTConnManager connManager, final String[] keys) {
         final List<HCTTaxonomyCategoryBean> taxonomies = new ArrayList<HCTTaxonomyCategoryBean>();
 
-        for (String key : keys) {
-            try {
-                taxonomies.add(getTaxonomy(connManager, key));
-            } catch (Exception e) {
-                LOG.error("While getting taxonomy", e);
+        if (keys != null) {
+            for (String key : keys) {
+                try {
+                    taxonomies.add(getTaxonomy(connManager, key));
+                } catch (Exception e) {
+                    LOG.error("While getting taxonomy", e);
+                }
             }
         }
 
