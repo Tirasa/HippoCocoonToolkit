@@ -20,7 +20,7 @@
     <xi:include href="servlet:/components/static/top.html"/>
   </top>
   <left>
-    <xi:include href="servlet:/components/collection?base=$base$&amp;locale=$locale$&amp;availability=$availability$"/>
+    <xi:include href="servlet:/components/collection?base=$base$&amp;locale=$locale$&amp;availability=$availability$&amp;requestURI=$requestURI$"/>
   </left>
   <center>
     <xi:include href="servlet:/components/summary?base=$base$&amp;locale=$locale$&amp;availability=$availability$"/>
