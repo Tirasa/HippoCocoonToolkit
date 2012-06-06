@@ -53,6 +53,7 @@ import net.tirasa.hct.cocoon.sax.Constants.Element;
 import net.tirasa.hct.cocoon.sax.Constants.StartEndDocumentFilter;
 import net.tirasa.hct.cocoon.sax.Constants.State;
 import net.tirasa.hct.hstbeans.HCTTaxonomyCategoryBean;
+import net.tirasa.hct.hstbeans.HippoCompoundDocument;
 import net.tirasa.hct.hstbeans.HippoDate;
 import net.tirasa.hct.hstbeans.RelatedDocs;
 import net.tirasa.hct.repository.HCTConnManager;
@@ -153,6 +154,40 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         dumper.dumpAssets(assets, Element.ASSET.getName(), true, hctDocument.getDateFormat(), hctDocument.getLocale());
     }
 
+    private void compounds(final HippoDocument container, final HippoItemXMLDumper dumper, final XMLReader xmlReader)
+            throws SAXException, RepositoryException, ObjectBeanManagerException, IOException {
+
+        dumper.startHippoCompounds();
+        for (HippoDocument compound : container.getChildBeans(HippoCompoundDocument.class)) {
+            dumper.startHippoCompound(compound);
+
+            // 1 Compound properties
+            for (Entry<String, Object> entry : compound.getProperties().entrySet()) {
+                dumper.dumpField(entry, hctDocument.getDateFormat(), hctDocument.getLocale());
+            }
+
+            // 2 Compound date fields
+            for (HippoDate date : compound.getChildBeans(HippoDate.class)) {
+                dumper.dumpDate(date.getName(), date.getCalendar(),
+                        hctDocument.getDateFormat(), hctDocument.getLocale());
+            }
+
+            // 3 Compound HTML fields
+            for (HippoHtml rtf : compound.getChildBeans(HippoHtml.class)) {
+                dumper.dumpHtml(connManager.getObjMan(), rtf, xmlReader,
+                        hctDocument.getDateFormat(), hctDocument.getLocale());
+            }
+
+            // 4 Compound images and assets
+            findAndDumpImagesAndAssets(compound, dumper);
+
+            compounds(compound, dumper, xmlReader);
+
+            dumper.endHippoCompound(compound);
+        }
+        dumper.endHippoCompounds();
+    }
+
     private void document()
             throws ObjectBeanManagerException, SAXException, IOException, RepositoryException {
 
@@ -192,33 +227,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         findAndDumpImagesAndAssets(doc, dumper);
 
         // 6. Compounds
-        dumper.startHippoCompounds();
-        for (HippoDocument compound : doc.getChildBeans(HippoDocument.class)) {
-            dumper.startHippoCompound(compound);
-
-            // 6.1 Compound properties
-            for (Entry<String, Object> entry : compound.getProperties().entrySet()) {
-                dumper.dumpField(entry, hctDocument.getDateFormat(), hctDocument.getLocale());
-            }
-
-            // 6.2 Compound date fields
-            for (HippoDate date : compound.getChildBeans(HippoDate.class)) {
-                dumper.dumpDate(date.getName(), date.getCalendar(),
-                        hctDocument.getDateFormat(), hctDocument.getLocale());
-            }
-
-            // 6.3 Compound HTML fields
-            for (HippoHtml rtf : compound.getChildBeans(HippoHtml.class)) {
-                dumper.dumpHtml(connManager.getObjMan(), rtf, xmlReader,
-                        hctDocument.getDateFormat(), hctDocument.getLocale());
-            }
-
-            // 6.4 Compound images and assets
-            findAndDumpImagesAndAssets(compound, dumper);
-
-            dumper.endHippoCompound(compound);
-        }
-        dumper.endHippoCompounds();
+        compounds(doc, dumper, xmlReader);
 
         // 7. Related documents
         final List<HippoDocument> relDocs = new ArrayList<HippoDocument>();
