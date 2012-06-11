@@ -93,9 +93,9 @@
     <forge.taxonomy.version>1.08.03</forge.taxonomy.version>
     <forge.ecm-tagging.version>4.04.01</forge.ecm-tagging.version>
         
-    <wicket.version>1.5.6</wicket.version>
+    <wicket.version>1.5.7</wicket.version>
         
-    <slf4j.version>1.6.4</slf4j.version>
+    <slf4j.version>1.6.5</slf4j.version>
         
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -336,13 +336,6 @@
         <artifactId>wicket</artifactId>
         <version>${wicket.version}</version>
         <type>pom</type>
-      </dependency>
-    
-      <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-        <version>5.1.18</version>
-        <scope>runtime</scope>
       </dependency>
 
       <!--  Test dependencies -->
