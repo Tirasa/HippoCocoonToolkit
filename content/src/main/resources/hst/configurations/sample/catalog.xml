@@ -3,7 +3,7 @@
   <sv:property sv:name="jcr:primaryType" sv:type="Name">
     <sv:value>hst:catalog</sv:value>
   </sv:property>
-  <sv:node sv:name="hctsite-catalog">
+  <sv:node sv:name="sample-catalog">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hst:containeritempackage</sv:value>
     </sv:property>
@@ -28,7 +28,7 @@
       <sv:property sv:name="hst:parametervalues" sv:type="String">
         <sv:value>List</sv:value>
         <sv:value>3</sv:value>
-        <sv:value>hctsite:date</sv:value>
+        <sv:value>sample:date</sv:value>
       </sv:property>
       <sv:property sv:name="hst:template" sv:type="String">
         <sv:value>standard.main.list</sv:value>

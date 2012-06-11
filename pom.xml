@@ -5,14 +5,15 @@
   <parent>
     <groupId>org.onehippo.cms7</groupId>
     <artifactId>hippo-cms7-release</artifactId>
-    <version>7.7.2</version>
+    <version>7.7.3</version>
+    <relativePath/>
   </parent>
 
-  <name>Hippo Site Sample</name>
-  <description>Hippo Site Sample</description>
-  <groupId>net.tirasa.hct.sample</groupId>
-  <artifactId>hipposite</artifactId>
-  <version>1.01.00-SNAPSHOT</version>
+  <name>HippoCocoonToolkit Sample</name>
+  <description>HippoCocoonToolkit Sample</description>
+  <groupId>net.tirasa.hct</groupId>
+  <artifactId>sample</artifactId>
+  <version>0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- 
@@ -22,14 +23,26 @@
     DO NOT remove these tags but instead fill them in appropriately as needed, 
     UNLESS the inherited values are valid for your project.
   -->
-  <url/>
-  <inceptionYear/>
-  <organization/>
+  <url>http://tirasa.github.com/HippoCocoonToolkit</url>
+  <inceptionYear>2012</inceptionYear>
+  <organization>
+    <name>Tirasa</name>
+    <url>http://www.tirasa.net</url>
+  </organization>
   <licenses>
-    <license/>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
   </licenses>
   <mailingLists>
-    <mailingList/>
+    <mailingList>
+      <name>HCT</name>
+      <subscribe>hct-subscribe@tirasa.net</subscribe>
+      <unsubscribe>hct-unsubscribe@tirasa.net</unsubscribe>
+      <post>hct@tirasa.net</post>
+    </mailingList>
   </mailingLists>
   <developers>
     <developer/>
@@ -37,7 +50,10 @@
   <contributors>
     <contributor/>
   </contributors>
-  <issueManagement/>
+  <issueManagement>
+    <url>https://github.com/Tirasa/HippoCocoonToolkit/issues</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
   <!--
   <scm>
     <connection/>
@@ -45,7 +61,10 @@
     <url/>
   </scm>
   -->
-  <ciManagement/>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>http://jenkins.tirasa.net/job/HCT%20(trunk)/</url>
+  </ciManagement>
   <distributionManagement>
     <repository>
       <id/>
@@ -66,17 +85,11 @@
     <freemarker.version>2.3.18</freemarker.version>
     <hippo.cms.version>2.22.06</hippo.cms.version>
     <filesync.override>false</filesync.override>
-    <maven.plugins.filesync.version>1.0.0</maven.plugins.filesync.version>   
-    <hippo.cms.version>2.22.05</hippo.cms.version>
-    <commons.lang.version>2.6</commons.lang.version>
-    <junit.version>4.10</junit.version>
-    <freemarker.version>2.3.18</freemarker.version>
+    <maven.plugins.filesync.version>1.0.0</maven.plugins.filesync.version>
+    
+    <hct.version>0.5-SNAPSHOT</hct.version>
     <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
     <spring.version>3.1.1.RELEASE</spring.version>
-    <slf4j.version>1.6.4</slf4j.version>
-    <hippoecm.export.dir>${project.basedir}/content/src/main/resources</hippoecm.export.dir>   
-<!--    <mysql.version>5.1.18</mysql.version>-->
-    
   </properties>
 
   <repositories>
@@ -120,91 +133,6 @@
         <version>${taglibs.version}</version>
         <scope>runtime</scope>
       </dependency>
-      
-      <dependency> 
-        <groupId>javax.transaction</groupId> 
-        <artifactId>jta</artifactId> 
-        <version>1.1</version>
-        <scope>provided</scope>
-      </dependency>
-      
-      <dependency>
-        <groupId>net.tirasa.hct</groupId>
-        <artifactId>hct-core</artifactId>
-        <version>0.5-SNAPSHOT</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.apache.cocoon.sitemap</groupId>
-        <artifactId>cocoon-sitemap</artifactId>
-        <version>${cocoon.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.apache.cocoon.sax</groupId>
-        <artifactId>cocoon-sax</artifactId>
-        <version>${cocoon.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.apache.cocoon.servlet</groupId>
-        <artifactId>cocoon-servlet</artifactId>
-        <version>${cocoon.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.apache.cocoon.optional</groupId>
-        <artifactId>cocoon-optional</artifactId>
-        <version>${cocoon.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.apache.cocoon.stringtemplate</groupId>
-        <artifactId>cocoon-stringtemplate</artifactId>
-        <version>${cocoon.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.apache.xmlgraphics</groupId>
-        <artifactId>fop</artifactId>
-        <version>1.0</version>
-      </dependency>
-      
-      <!-- Spring (+ AOP support)-->
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-core</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context-support</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-aop</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
 
       <!-- other predefined compile scope versioned dependencies -->
       <dependency>
@@ -226,6 +154,82 @@
         <scope>test</scope>
       </dependency>
 
+      <!-- HCT deps -->
+      <dependency> 
+        <groupId>javax.transaction</groupId> 
+        <artifactId>jta</artifactId> 
+        <version>1.1</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>net.tirasa.hct</groupId>
+        <artifactId>hct-core</artifactId>
+        <version>${hct.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.apache.cocoon.servlet</groupId>
+        <artifactId>cocoon-servlet</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cocoon.sax</groupId>
+        <artifactId>cocoon-sax</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cocoon.optional</groupId>
+        <artifactId>cocoon-optional</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cocoon.stringtemplate</groupId>
+        <artifactId>cocoon-stringtemplate</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.apache.xmlgraphics</groupId>
+        <artifactId>fop</artifactId>
+        <version>1.0</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context-support</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -330,7 +334,7 @@
                     </properties>
                   </deployable>
                   <deployable>
-                    <location>${project.basedir}/hctsite/target/site.war</location>
+                    <location>${project.basedir}/hctsite/target/hctsite.war</location>
                     <type>war</type>
                     <properties>
                       <context>/hctsite</context>

@@ -5,8 +5,8 @@
   version="2.5"
   id="site">
 
-  <display-name>Hct Site Sample site</display-name>
-  <description>Hct Site Sample site</description>
+  <display-name>HippoCocoonToolkit Sample site</display-name>
+  <description>HippoCocoonToolkit Sample site</description>
 
   <jsp-config>
     <jsp-property-group>

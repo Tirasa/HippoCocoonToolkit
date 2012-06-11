@@ -128,13 +128,13 @@
       <!-- Navigation -->
       <!-- Root -->
       <map:match pattern="">
-        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/live/hctsite/index.html"/>
+        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/live/sample/index.html"/>
       </map:match>
       <map:match pattern="live/*">
-        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/live/hctsite/{map:1}"/>
+        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/live/sample/{map:1}"/>
       </map:match>
       <map:match pattern="preview/*">
-        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/preview/hctsite/{map:1}"/>
+        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/preview/sample/{map:1}"/>
       </map:match>
 
       <!-- Search -->
@@ -179,7 +179,7 @@
         <map:serialize type="html"/>
       </map:match>
 
-      <!-- Repository-based navigation: index page -->
+      <!-- Folder-based navigation: index page -->
       <map:match pattern="*/**/index.html">
         <map:generate type="string-template" src="pages/subindex.xml">
           <map:parameter name="availability" value="{map:1}"/>
@@ -214,7 +214,7 @@
         <map:serialize type="html"/>
       </map:match>
 
-      <!-- Repository-based navigation: document page -->
+      <!-- Folder-based navigation: document page -->
       <map:match pattern="*/**/*.html">
         <map:generate type="string-template" src="pages/document.xml">
           <map:parameter name="availability" value="{map:1}"/>

@@ -33,16 +33,8 @@
     <configurator:property name="org.apache.cocoon.exception.ProcessingException.unroll" value="true"/>
     <configurator:property name="net.tirasa.hct.defaultLocale" value="en"/>
   </configurator:settings>
-
-  <!-- Configure Logback -->
-  <bean name="org.apache.cocoon.spring.configurator.logback"
-        class="org.apache.cocoon.spring.configurator.logback.LogbackConfigurator"
-        scope="singleton">
-    <property name="settings" ref="org.apache.cocoon.configuration.Settings"/>
-    <property name="resource" value="/WEB-INF/classes/logback.xml"/>
-  </bean>
     
-    <!-- Using classpath: resources -->
+  <!-- Using classpath: resources -->
   <bean class="net.tirasa.hct.cocoon.internal.ClasspathURLStreamHandlerFactory"/>
 
 </beans>

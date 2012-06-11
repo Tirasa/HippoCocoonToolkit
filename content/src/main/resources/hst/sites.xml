@@ -5,7 +5,7 @@
     <sv:value>hst:sites</sv:value>
   </sv:property>
   
-  <sv:node sv:name="hctsite">
+  <sv:node sv:name="sample">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hst:site</sv:value>
     </sv:property>
@@ -27,7 +27,7 @@
       </sv:property>
     </sv:node>
   </sv:node>
-  <sv:node sv:name="hctsite-preview">
+  <sv:node sv:name="sample-preview">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hst:site</sv:value>
     </sv:property>

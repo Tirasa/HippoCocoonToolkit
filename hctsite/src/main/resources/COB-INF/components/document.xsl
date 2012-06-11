@@ -33,10 +33,15 @@
     
   <xsl:template match="hct:document">
     <div id="{@name}">
-      <div id="name">
-        <h2><xsl:value-of select="@localizedName"/></h2>
+      <h1>
+        <xsl:value-of select="hct:field[@name = 'sample:title']/hct:value"/>
+      </h1>
+      <div id="date" style="float:left;">
+        <emph>
+          <xsl:apply-templates select="hct:field[@name = 'sample:date']"/>
+        </emph>
       </div>
-      <div id="pdf">
+      <div id="pdf" style="text-align:right;">
         <a>
           <xsl:attribute name="href">
             <xsl:call-template name="str:substring-before-last">
@@ -48,12 +53,18 @@
             <xsl:text>.pdf?lang=</xsl:text>
             <xsl:value-of select="$locale"/>
           </xsl:attribute>
-          <xsl:text>Download PDF</xsl:text>
-        </a>  
+          <img src="images/pdf.png"/>
+        </a>
       </div>
-      <xsl:apply-templates select="hct:field"/>
-      <xsl:apply-templates select="hct:tags"/>
       <xsl:apply-templates select="hct:images"/>
+      <div id="content">
+        <h3>
+          <xsl:apply-templates select="hct:field[@name = 'sample:summary']"/>
+        </h3>
+        <xsl:apply-templates select="hct:field[@name = 'sample:body']"/>
+      </div>
+      <!--<xsl:apply-templates select="hct:field"/>-->
+      <xsl:apply-templates select="hct:tags"/>
       <xsl:apply-templates select="hct:relatedDocs"/>
     </div>    
   </xsl:template>
@@ -64,7 +75,7 @@
         <xsl:when test="not(html)">
           <xsl:for-each select="hct:value">
             <span>
-<!--             <xsl:value-of select="text()"/>-->
+              <xsl:value-of select="text()"/>
             </span>
           </xsl:for-each>
         </xsl:when>

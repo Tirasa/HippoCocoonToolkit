@@ -10,7 +10,7 @@ public interface GeneralListInfo  {
     @Parameter(name = "pageSize", displayName = "Page Size", defaultValue="10")
     int getPageSize();
 
-    @Parameter(name = "docType", displayName = "Document Type", defaultValue="hctsite:basedocument")
+    @Parameter(name = "docType", displayName = "Document Type", defaultValue="sample:basedocument")
     String getDocType();
 
     @Parameter(name = "sortBy", displayName = "Sort By Property")

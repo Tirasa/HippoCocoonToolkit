@@ -3,14 +3,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>net.tirasa.hct.sample</groupId>
-    <artifactId>hipposite</artifactId>
-    <version>1.01.00-SNAPSHOT</version>
+    <groupId>net.tirasa.hct</groupId>
+    <artifactId>sample</artifactId>
+    <version>0.1-SNAPSHOT</version>
   </parent>
 
-  <name>Hct Site Sample content</name>
-  <description>Hct Site Sample Content</description>
-  <artifactId>hctsite-content</artifactId>
+  <name>HippoCocoonToolkit Sample content</name>
+  <description>HippoCocoonToolkit Sample Content</description>
+  <artifactId>sample-content</artifactId>
 
   <build>
     <defaultGoal>install</defaultGoal>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sv:node sv:name="hctsite-subsite" xmlns:sv="http://www.jcp.org/jcr/sv/1.0">
+<sv:node sv:name="sample-subsite" xmlns:sv="http://www.jcp.org/jcr/sv/1.0">
   <sv:property sv:name="jcr:primaryType" sv:type="Name">
     <sv:value>hippostd:folder</sv:value>
   </sv:property>
@@ -31,7 +31,7 @@
     </sv:node>
     <sv:node sv:name="homepage">
       <sv:property sv:name="jcr:primaryType" sv:type="Name">
-        <sv:value>hctsite:textdocument</sv:value>
+        <sv:value>sample:textdocument</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
         <sv:value>hippo:harddocument</sv:value>
@@ -71,10 +71,10 @@
       <sv:property sv:name="hippotranslation:locale" sv:type="String">
         <sv:value>en</sv:value>
       </sv:property>
-      <sv:property sv:name="hctsite:summary" sv:type="String">
+      <sv:property sv:name="sample:summary" sv:type="String">
         <sv:value>This is an example subsite.</sv:value>
       </sv:property>
-      <sv:property sv:name="hctsite:title" sv:type="String">
+      <sv:property sv:name="sample:title" sv:type="String">
         <sv:value>Example subsite</sv:value>
       </sv:property>
       <sv:node sv:name="hippotranslation:translations">
@@ -82,7 +82,7 @@
           <sv:value>hippotranslation:translations</sv:value>
         </sv:property>
       </sv:node>
-      <sv:node sv:name="hctsite:body">
+      <sv:node sv:name="sample:body">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
           <sv:value>hippostd:html</sv:value>
         </sv:property>

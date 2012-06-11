@@ -3,7 +3,7 @@
   <sv:property sv:name="jcr:primaryType" sv:type="Name">
     <sv:value>hst:channels</sv:value>
   </sv:property>
-  <sv:node sv:name="hctsite">
+  <sv:node sv:name="sample">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hst:channel</sv:value>
     </sv:property>
@@ -11,7 +11,7 @@
       <sv:value>net.tirasa.hct.sample.channels.WebsiteInfo</sv:value>
     </sv:property>
     <sv:property sv:name="hst:name" sv:type="String">
-      <sv:value>Hct Site Sample</sv:value>
+      <sv:value>HippoCocoonToolkit Sample</sv:value>
     </sv:property>
     <sv:property sv:name="hst:type" sv:type="String">
       <sv:value>website</sv:value>

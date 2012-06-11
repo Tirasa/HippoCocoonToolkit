@@ -56,8 +56,10 @@
             </xsl:variable>
             <div id="{@name}">
               <a href="{$contextPath}/{$availability}/{$href}.html">
-                <xsl:value-of select="@localizedName"/>
+                <xsl:value-of select="hct:field[@name = 'sample:title']/hct:value"/>
               </a>
+              <br/>
+              <i><xsl:value-of select="hct:field[@name = 'sample:summary']/hct:value"/></i>
 <!--              <xsl:apply-templates select="hct:field"/>-->
               <xsl:apply-templates select="hct:tags"/>
               <xsl:apply-templates select="hct:taxonomies"/>

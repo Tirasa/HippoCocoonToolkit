@@ -3,14 +3,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>net.tirasa.hct.sample</groupId>
-    <artifactId>hipposite</artifactId>
-    <version>1.01.00-SNAPSHOT</version>
+    <groupId>net.tirasa.hct</groupId>
+    <artifactId>sample</artifactId>
+    <version>0.1-SNAPSHOT</version>
   </parent>
 
-  <name>Hct Site Sample CMS</name>
-  <description>Hct Site Sample CMS</description>
-  <artifactId>hctsite-cms</artifactId>
+  <name>HippoCocoonToolkit Sample CMS</name>
+  <description>HippoCocoonToolkit Sample CMS</description>
+  <artifactId>sample-cms</artifactId>
   <packaging>war</packaging>
 
   <dependencies>
@@ -37,6 +37,7 @@
       <artifactId>hst-addon-repository</artifactId>
     </dependency>
 
+    <!-- Had to comment this out because, together with HCT Site, made CMS webapp not able to edit docs
     <dependency>
       <groupId>org.onehippo.cms7</groupId>
       <artifactId>hippo-addon-channel-manager-frontend</artifactId>
@@ -45,7 +46,7 @@
     <dependency>
       <groupId>org.onehippo.cms7</groupId>
       <artifactId>hippo-addon-channel-manager-repository</artifactId>
-    </dependency>
+    </dependency>-->
 
     <dependency>
       <groupId>org.onehippo.cms7</groupId>
@@ -57,8 +58,8 @@
     </dependency>
 
     <dependency>
-      <groupId>net.tirasa.hct.sample</groupId>
-      <artifactId>hctsite-content</artifactId>
+      <groupId>net.tirasa.hct</groupId>
+      <artifactId>sample-content</artifactId>
       <version>${project.version}</version>
     </dependency>
     

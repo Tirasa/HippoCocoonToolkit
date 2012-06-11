@@ -6,8 +6,8 @@
     id="cms">
 
   <!-- General configuration -->
-  <display-name>Hct Site Sample CMS</display-name>
-  <description>Hct Site Sample CMS</description>
+  <display-name>HippoCocoonToolkit Sample CMS</display-name>
+  <description>HippoCocoonToolkit Sample CMS</description>
 
   <context-param>
     <description>The address of the repository</description>

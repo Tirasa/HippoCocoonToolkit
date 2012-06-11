@@ -25,14 +25,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>net.tirasa.hct.sample</groupId>
-    <artifactId>hipposite</artifactId>
-    <version>1.01.00-SNAPSHOT</version>
+    <groupId>net.tirasa.hct</groupId>
+    <artifactId>sample</artifactId>
+    <version>0.1-SNAPSHOT</version>
   </parent>
 
-  <name>Hct Site Sample</name>
+  <name>HippoCocoonToolkit Sample HCT Site</name>
   <artifactId>hctsite</artifactId>
-  <description>Hst Site Sample</description>
+  <description>HCT Site Sample</description>
   <packaging>war</packaging>
 
   <dependencies>
@@ -57,7 +57,6 @@
     <dependency>
       <groupId>net.tirasa.hct</groupId>
       <artifactId>hct-core</artifactId>
-      <version>0.5-SNAPSHOT</version>
     </dependency>
     
     <dependency>
@@ -147,69 +146,10 @@
       <groupId>org.apache.xmlgraphics</groupId>
       <artifactId>fop</artifactId>
     </dependency>
-
-    <!--  Logging dependencies -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <scope>runtime</scope>
-    </dependency>    
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <scope>runtime</scope>
-    </dependency>    
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-    </dependency>
-
-    <!-- Spring (+ AOP support)-->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context-support</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-aop</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-    </dependency>
-
-<!--    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <scope>runtime</scope>
-    </dependency>-->
   </dependencies>
 
   <build>
-    <finalName>site</finalName>
+    <finalName>hctsite</finalName>
     
     <plugins>
       <plugin>

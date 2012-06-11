@@ -24,7 +24,8 @@
     <hct:descending field="hippostdpubwf:creationDate"/>    
   </hct:orderBy>
   <hct:return>
-    <hct:field name="hippostd:stateSummary"/>    
+    <hct:field name="sample:title"/>    
+    <hct:field name="sample:summary"/>    
     <hct:images/>
   </hct:return>
 </hct:query>
