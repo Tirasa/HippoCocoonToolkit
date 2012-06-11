@@ -9,7 +9,7 @@
     <sv:value>hippo:translated</sv:value>
   </sv:property>
   <sv:property sv:name="jcr:uuid" sv:type="String">
-    <sv:value>5a6fddcd-e5c2-441d-9519-57a8aeebdcb1</sv:value>
+    <sv:value>59543094-d934-444e-8605-53626bc07b05</sv:value>
   </sv:property>
   <sv:property sv:name="hippo:related___pathreference" sv:type="String"/>
   <sv:property sv:name="hippostd:foldertype" sv:type="String" sv:multiple="true">
@@ -17,10 +17,10 @@
     <sv:value>new-document</sv:value>
   </sv:property>
   <sv:property sv:name="hippotranslation:id" sv:type="String">
-    <sv:value>hctsite-common-id</sv:value>
+    <sv:value>sample-common-id</sv:value>
   </sv:property>
   <sv:property sv:name="hippotranslation:locale" sv:type="String">
-    <sv:value>en</sv:value>
+    <sv:value>it</sv:value>
   </sv:property>
   <sv:node sv:name="hippotranslation:translations">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -47,7 +47,7 @@
       <sv:value>hippo:translated</sv:value>
     </sv:property>
     <sv:property sv:name="jcr:uuid" sv:type="String">
-      <sv:value>1caff20e-b05a-48a5-a2a7-7295e408fdf7</sv:value>
+      <sv:value>795c55fb-429d-4436-99b2-fad5036efb9f</sv:value>
     </sv:property>
     <sv:node sv:name="hippo:translation">
       <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -62,20 +62,14 @@
     </sv:node>
     <sv:node sv:name="homepage">
       <sv:property sv:name="jcr:primaryType" sv:type="Name">
-        <sv:value>hctsite:textdocument</sv:value>
+        <sv:value>sample:textdocument</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
         <sv:value>hippo:harddocument</sv:value>
         <sv:value>hippotranslation:translated</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:uuid" sv:type="String">
-        <sv:value>c7b3567e-f0c9-4617-8b1e-eeabfdf965ee</sv:value>
-      </sv:property>
-      <sv:property sv:name="hctsite:summary" sv:type="String">
-        <sv:value>This is the home page of the generated HST website.</sv:value>
-      </sv:property>
-      <sv:property sv:name="hctsite:title" sv:type="String">
-        <sv:value>hctsite Home Page</sv:value>
+        <sv:value>11ab5c8b-1385-4e54-80d7-ea5249101800</sv:value>
       </sv:property>
       <sv:property sv:name="hippo:availability" sv:type="String" sv:multiple="true">
         <sv:value>live</sv:value>
@@ -97,36 +91,51 @@
         <sv:value>admin</sv:value>
       </sv:property>
       <sv:property sv:name="hippostdpubwf:creationDate" sv:type="Date">
-        <sv:value>2010-01-21T12:34:11.055+02:00</sv:value>
+        <sv:value>2010-01-21T11:34:11.055+01:00</sv:value>
       </sv:property>
       <sv:property sv:name="hippostdpubwf:lastModificationDate" sv:type="Date">
-        <sv:value>2010-01-22T12:34:11.055+02:00</sv:value>
+        <sv:value>2012-06-11T14:21:04.171+02:00</sv:value>
       </sv:property>
       <sv:property sv:name="hippostdpubwf:lastModifiedBy" sv:type="String">
         <sv:value>admin</sv:value>
       </sv:property>
+      <sv:property sv:name="hippostdpubwf:publicationDate" sv:type="Date">
+        <sv:value>2012-06-11T14:21:07.251+02:00</sv:value>
+      </sv:property>
       <sv:property sv:name="hippotranslation:id" sv:type="String">
-        <sv:value>hctsite-common-homepage-id</sv:value>
+        <sv:value>sample-common-homepage-id</sv:value>
       </sv:property>
       <sv:property sv:name="hippotranslation:locale" sv:type="String">
-        <sv:value>en</sv:value>
+        <sv:value>it</sv:value>
+      </sv:property>
+      <sv:property sv:name="sample:summary" sv:type="String">
+        <sv:value>Questa è l'home page del sito HST generato.</sv:value>
+      </sv:property>
+      <sv:property sv:name="sample:title" sv:type="String">
+        <sv:value>Home Page di esempio</sv:value>
       </sv:property>
       <sv:node sv:name="hippotranslation:translations">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
           <sv:value>hippotranslation:translations</sv:value>
         </sv:property>
       </sv:node>
-      <sv:node sv:name="hctsite:body">
+      <sv:node sv:name="sample:body">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
           <sv:value>hippostd:html</sv:value>
         </sv:property>
         <sv:property sv:name="hippostd:content" sv:type="String">
-          <sv:value>&lt;html&gt;&lt;body&gt;&lt;p&gt;Now go ahead and build your own website!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</sv:value>
+          <sv:value>&lt;html&gt;
+&lt;body&gt;
+
+&lt;p&gt;Adesso procedi con la creazione del tuo nuovo sito!&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</sv:value>
         </sv:property>
       </sv:node>
     </sv:node>
   </sv:node>
-  <sv:node sv:name="about-us">
+  <sv:node sv:name="chi-siamo">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hippo:handle</sv:value>
     </sv:property>
@@ -135,7 +144,7 @@
       <sv:value>hippo:translated</sv:value>
     </sv:property>
     <sv:property sv:name="jcr:uuid" sv:type="String">
-      <sv:value>7ae1fcb2-2446-4209-9d5e-ef71aa3cbff0</sv:value>
+      <sv:value>77929669-2941-4591-9e1a-ddae9ade3162</sv:value>
     </sv:property>
     <sv:node sv:name="hippo:translation">
       <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -145,32 +154,26 @@
         <sv:value/>
       </sv:property>
       <sv:property sv:name="hippo:message" sv:type="String">
-        <sv:value>About Us</sv:value>
+        <sv:value>Chi siamo</sv:value>
       </sv:property>
     </sv:node>
-    <sv:node sv:name="about-us">
+    <sv:node sv:name="chi-siamo">
       <sv:property sv:name="jcr:primaryType" sv:type="Name">
-        <sv:value>hctsite:textdocument</sv:value>
+        <sv:value>sample:textdocument</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
         <sv:value>hippo:harddocument</sv:value>
         <sv:value>hippotranslation:translated</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:uuid" sv:type="String">
-        <sv:value>ac616919-cb14-4e55-92ba-b97c962ff88c</sv:value>
-      </sv:property>
-      <sv:property sv:name="hctsite:summary" sv:type="String">
-        <sv:value>Who we are.</sv:value>
-      </sv:property>
-      <sv:property sv:name="hctsite:title" sv:type="String">
-        <sv:value>About us</sv:value>
+        <sv:value>2aebfe05-1797-4915-b795-3cc7208af4cc</sv:value>
       </sv:property>
       <sv:property sv:name="hippo:availability" sv:type="String" sv:multiple="true">
         <sv:value>live</sv:value>
         <sv:value>preview</sv:value>
       </sv:property>
       <sv:property sv:name="hippo:related___pathreference" sv:type="String">
-        <sv:value>common/about-us</sv:value>
+        <sv:value>common/chi-siamo</sv:value>
       </sv:property>
       <sv:property sv:name="hippostd:holder" sv:type="String">
         <sv:value>admin</sv:value>
@@ -185,31 +188,48 @@
         <sv:value>admin</sv:value>
       </sv:property>
       <sv:property sv:name="hippostdpubwf:creationDate" sv:type="Date">
-        <sv:value>2010-01-21T12:34:11.055+02:00</sv:value>
+        <sv:value>2010-01-21T11:34:11.055+01:00</sv:value>
       </sv:property>
       <sv:property sv:name="hippostdpubwf:lastModificationDate" sv:type="Date">
-        <sv:value>2010-01-22T12:34:11.055+02:00</sv:value>
+        <sv:value>2012-06-11T14:22:24.772+02:00</sv:value>
       </sv:property>
       <sv:property sv:name="hippostdpubwf:lastModifiedBy" sv:type="String">
         <sv:value>admin</sv:value>
       </sv:property>
+      <sv:property sv:name="hippostdpubwf:publicationDate" sv:type="Date">
+        <sv:value>2012-06-11T14:22:26.633+02:00</sv:value>
+      </sv:property>
       <sv:property sv:name="hippotranslation:id" sv:type="String">
-        <sv:value>hctsite-common-about-us-id</sv:value>
+        <sv:value>sample-common-about-us-id</sv:value>
       </sv:property>
       <sv:property sv:name="hippotranslation:locale" sv:type="String">
-        <sv:value>en</sv:value>
+        <sv:value>it</sv:value>
+      </sv:property>
+      <sv:property sv:name="sample:summary" sv:type="String">
+        <sv:value>Vi spieghiamo chi siamo.</sv:value>
+      </sv:property>
+      <sv:property sv:name="sample:title" sv:type="String">
+        <sv:value>Chi siamo</sv:value>
       </sv:property>
       <sv:node sv:name="hippotranslation:translations">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
           <sv:value>hippotranslation:translations</sv:value>
         </sv:property>
       </sv:node>
-      <sv:node sv:name="hctsite:body">
+      <sv:node sv:name="sample:body">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
           <sv:value>hippostd:html</sv:value>
         </sv:property>
         <sv:property sv:name="hippostd:content" sv:type="String">
-          <sv:value>&lt;html&gt;&lt;body&gt;&lt;p&gt;We are Hippo! Come and visit us at &lt;a href="http://www.onehippo.com" target="_blank" title="Hippo website"&gt;www.onehippo.com&lt;/a&gt;!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</sv:value>
+          <sv:value>&lt;html&gt;
+&lt;body&gt;
+
+&lt;p&gt;Noi siamo Hippo! Vieni a trovarci all'indirizzo
+&lt;a title="Hippo website" target="_blank" href="http://www.onehippo.com"&gt;www.onehippo.com&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</sv:value>
         </sv:property>
       </sv:node>
     </sv:node>

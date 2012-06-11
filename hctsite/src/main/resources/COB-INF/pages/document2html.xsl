@@ -16,10 +16,15 @@
   limitations under the License.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:i18n="http://apache.org/cocoon/i18n/3.0"
                 version="1.0">
 
   <xsl:import href="../common/identity.xsl"/>
 
+  <xsl:param name="availability"/>
+  <xsl:param name="locale"/>
+  <xsl:param name="contextPath"/>
+  
   <xsl:output method="xml"/>
 
   <xsl:template match="/page">
@@ -29,6 +34,33 @@
       </head>
       <body>
         <div id="container">
+          <div style="float:left;">
+            <h3>
+              <i18n:text i18n:key="welcome"/>
+            </h3>
+          </div>
+          <div style="text-align:right;">
+            <xsl:choose>
+              <xsl:when test="$locale = 'en'">
+                <img src="images/en.png"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="#" onclick="if (document.getElementById('translation.en.{$availability}')) window.location.href = '{$contextPath}' + '/' + '{$availability}' + document.getElementById('translation.en.{$availability}').innerHTML.substring(18) + '.html'; else alert('Translation not available');">
+                  <img src="images/en.png"/>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="$locale = 'it'">
+                <img src="images/it.png"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="#" onclick="if (document.getElementById('translation.it.{$availability}')) window.location.href = '{$contextPath}' + '/' + '{$availability}' + document.getElementById('translation.it.{$availability}').innerHTML.substring(18) + '.html'; else alert('Translation not available');">
+                  <img src="images/it.png"/>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
           <xsl:apply-templates/>
         </div>
       </body>

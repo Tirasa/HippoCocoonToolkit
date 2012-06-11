@@ -21,6 +21,9 @@
 
   <xsl:import href="../common/identity.xsl"/>
 
+  <xsl:param name="locale"/>
+  <xsl:param name="requestURI"/>
+
   <xsl:output method="xml"/>
 
   <xsl:template match="/page">
@@ -30,9 +33,33 @@
       </head>
       <body>
         <div id="container">
-          <h3>
-            <i18n:text i18n:key="welcome"/>
-          </h3>
+          <div style="float:left;">
+            <h3>
+              <i18n:text i18n:key="welcome"/>
+            </h3>
+          </div>
+          <div style="text-align:right;">
+            <xsl:choose>
+              <xsl:when test="$locale = 'en'">
+                <img src="images/en.png"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="{substring-before($requestURI, 'sample_')}sample_en{substring-after($requestURI, concat('sample_', $locale))}">
+                  <img src="images/en.png"/>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="$locale = 'it'">
+                <img src="images/it.png"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="{substring-before($requestURI, 'sample_')}sample_it{substring-after($requestURI, concat('sample_', $locale))}">
+                  <img src="images/it.png"/>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
           <xsl:apply-templates/>
         </div>
       </body>

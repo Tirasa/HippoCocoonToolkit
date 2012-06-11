@@ -19,6 +19,7 @@
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:hct="http://www.tirasa.net/hct/1.0"
+                xmlns:i18n="http://apache.org/cocoon/i18n/3.0"
                 xmlns:str="http://xsltsl.org/string"
                 version="1.0">
 
@@ -34,12 +35,12 @@
   <xsl:template match="hct:queryResult">
     <div id="collection">
       <xsl:choose>
-	<xsl:when test="contains($requestURI, '/index.html')">
-	  <a href="../index.html">Go up one level</a>
-	</xsl:when>
-	<xsl:otherwise>
-	  <a href="index.html">Back to folder</a>
-	</xsl:otherwise>
+        <xsl:when test="contains($requestURI, '/index.html')">
+          <a href="../index.html"><i18n:text i18n:key="go_up_one_level"/></a>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="index.html"><i18n:text i18n:key="back_to_folder"/></a>
+        </xsl:otherwise>
       </xsl:choose>
       <ul>
         <xsl:apply-templates select="hct:folder|hct:taxonomy"/>

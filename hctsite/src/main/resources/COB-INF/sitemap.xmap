@@ -71,7 +71,7 @@
       <map:match pattern="components/search">
         <map:generate type="string-template" src="components/search.xml">
           <map:parameter name="has_query" value="{jexl:not empty(cocoon.request.query)}"/>
-	</map:generate>
+        </map:generate>
         <map:transform type="hippo"/>
         <map:transform src="components/search.xsl">
           <map:parameter name="contextPath" value="{jexl:cocoon.request.contextPath}"/>
@@ -128,35 +128,37 @@
       <!-- Navigation -->
       <!-- Root -->
       <map:match pattern="">
-        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/live/sample/index.html"/>
+        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/live/sample_en/index.html"/>
       </map:match>
       <map:match pattern="live/*">
-        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/live/sample/{map:1}"/>
+        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/live/sample_en/{map:1}"/>
       </map:match>
       <map:match pattern="preview/*">
-        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/preview/sample/{map:1}"/>
+        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/preview/sample_en/{map:1}"/>
       </map:match>
 
       <!-- Search -->
-      <map:match pattern="*/**/search">
+      <map:match pattern="*/sample_*/search">
         <map:generate type="string-template" src="pages/search.xml">
           <map:parameter name="availability" value="{map:1}"/>
           <map:parameter name="base" value="/content/documents/"/>
-          <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
-                                               : cocoon.request.lang}"/>        
+          <map:parameter name="locale" value="{map:2}"/>
           <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
           <map:parameter name="query" value="{jexl:cocoon.request.query}"/>
         </map:generate>
         <map:transform type="xinclude"/>
-        <map:transform src="pages/subindex2html.xsl"/>
+        <map:transform src="pages/subindex2html.xsl">
+          <map:parameter name="locale" value="{map:2}"/>  
+          <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
+        </map:transform>
         <map:transform type="i18n">
-          <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
-                                               : cocoon.request.lang}"/>          
+          <map:parameter name="locale" value="{map:2}"/>
           <map:parameter name="bundle" value="COB-INF/i18n/messages" />
         </map:transform>
         <map:serialize type="html"/>
+      </map:match>
+      <map:match pattern="*/sample_*/**/search">
+        <servlet:redirect-to uri="{jexl:cocoon.request.scheme}://{jexl:cocoon.request.serverName}:{jexl:cocoon.request.serverPort}{jexl:cocoon.request.contextPath}/{map:1}/sample_{map:2}/search?query={jexl:cocoon.request.query}"/>
       </map:match>
 
       <!-- Taxonomy-based navigation: index page -->
@@ -169,32 +171,54 @@
                                                : cocoon.request.lang}"/>
         </map:generate>
         <map:transform type="xinclude"/>
-        <map:transform src="pages/subindex2html.xsl"/>
+        <map:transform src="pages/subindex2html.xsl">
+          <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
+                                               : cocoon.request.lang}"/>  
+          <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
+        </map:transform>
         <map:transform type="i18n">
           <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
                                                ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
-                                               : cocoon.request.lang}"/>          
+                                               : cocoon.request.lang}"/>        
           <map:parameter name="bundle" value="COB-INF/i18n/messages" />
         </map:transform>
         <map:serialize type="html"/>
       </map:match>
 
       <!-- Folder-based navigation: index page -->
-      <map:match pattern="*/**/index.html">
+      <map:match pattern="*/sample_*/index.html">
         <map:generate type="string-template" src="pages/subindex.xml">
           <map:parameter name="availability" value="{map:1}"/>
-          <map:parameter name="base" value="/content/documents/{map:2}"/>
-          <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
-                                               : cocoon.request.lang}"/>        
+          <map:parameter name="base" value="/content/documents/sample_{map:2}/"/>
+          <map:parameter name="locale" value="{map:2}"/>
           <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
         </map:generate>
         <map:transform type="xinclude"/>
-        <map:transform src="pages/subindex2html.xsl"/>
+        <map:transform src="pages/subindex2html.xsl">
+          <map:parameter name="locale" value="{map:2}"/>
+          <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
+        </map:transform>
         <map:transform type="i18n">
-          <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
-                                               : cocoon.request.lang}"/>          
+          <map:parameter name="locale" value="{map:2}"/>
+          <map:parameter name="bundle" value="COB-INF/i18n/messages" />
+        </map:transform>
+        <map:serialize type="html"/>
+      </map:match>
+      <map:match pattern="*/sample_*/**/index.html">
+        <map:generate type="string-template" src="pages/subindex.xml">
+          <map:parameter name="availability" value="{map:1}"/>
+          <map:parameter name="base" value="/content/documents/sample_{map:2}/{map:3}"/>
+          <map:parameter name="locale" value="{map:2}"/>
+          <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
+        </map:generate>
+        <map:transform type="xinclude"/>
+        <map:transform src="pages/subindex2html.xsl">
+          <map:parameter name="locale" value="{map:2}"/>
+          <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
+        </map:transform>
+        <map:transform type="i18n">
+          <map:parameter name="locale" value="{map:2}"/>
           <map:parameter name="bundle" value="COB-INF/i18n/messages" />
         </map:transform>
         <map:serialize type="html"/>
@@ -210,34 +234,47 @@
                                                : cocoon.request.lang}"/>        
         </map:generate>
         <map:transform type="xinclude"/>
-        <map:transform src="pages/document2html.xsl"/>
+        <map:transform src="pages/document2html.xsl">
+          <map:parameter name="locale" value="{map:2}"/>
+          <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
+        </map:transform>
+        <map:transform type="i18n">
+          <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
+                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
+                                               : cocoon.request.lang}"/>          
+          <map:parameter name="bundle" value="COB-INF/i18n/messages" />
+        </map:transform>
         <map:serialize type="html"/>
       </map:match>
 
       <!-- Folder-based navigation: document page -->
-      <map:match pattern="*/**/*.html">
+      <map:match pattern="*/sample_*/**/*.html">
         <map:generate type="string-template" src="pages/document.xml">
           <map:parameter name="availability" value="{map:1}"/>
-          <map:parameter name="base" value="/content/documents/{map:2}"/>
-          <map:parameter name="path" value="/content/documents/{map:2}/{map:3}"/>
-          <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
-                                               : cocoon.request.lang}"/>        
+          <map:parameter name="base" value="/content/documents/sample_{map:2}/{map:3}"/>
+          <map:parameter name="path" value="/content/documents/sample_{map:2}/{map:3}/{map:4}"/>
+          <map:parameter name="locale" value="{map:2}"/>        
           <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
         </map:generate>
         <map:transform type="xinclude"/>
-        <map:transform src="pages/document2html.xsl"/>
+        <map:transform src="pages/document2html.xsl">
+          <map:parameter name="availability" value="{map:1}"/>
+          <map:parameter name="locale" value="{map:2}"/>
+          <map:parameter name="contextPath" value="{jexl:cocoon.request.contextPath}"/>
+        </map:transform>
+        <map:transform type="i18n">
+          <map:parameter name="locale" value="{map:2}"/>
+          <map:parameter name="bundle" value="COB-INF/i18n/messages" />
+        </map:transform>
         <map:serialize type="html"/>
       </map:match>
 
       <!-- PDF -->
-      <map:match pattern="*/**/*.pdf">
+      <map:match pattern="*/sample_*/**/*.pdf">
         <map:generate type="string-template" src="pages/pdf.xml">
           <map:parameter name="availability" value="{map:1}"/>
-          <map:parameter name="path" value="/content/documents/{map:2}/{map:3}"/>
-          <map:parameter name="locale" value="{jexl:empty(cocoon.request['lang'])
-                                               ? cocoon.settings.getProperty('net.tirasa.hct.defaultLocale')
-                                               : cocoon.request.lang}"/>        
+          <map:parameter name="path" value="/content/documents/sample_{map:2}/{map:3}/{map:4}"/>
+          <map:parameter name="locale" value="{map:2}"/>
         </map:generate>
         <map:transform type="xinclude"/>
         <map:transform src="pages/pdf2fo.xsl">

@@ -50,8 +50,7 @@
                                              substring-after(substring-after(substring-after(@path, '/'), '/'), '/'))"/>
               <xsl:with-param name="chars">/</xsl:with-param>
             </xsl:call-template>
-            <xsl:text>.pdf?lang=</xsl:text>
-            <xsl:value-of select="$locale"/>
+            <xsl:text>.pdf</xsl:text>
           </xsl:attribute>
           <img src="images/pdf.png"/>
         </a>
@@ -66,6 +65,7 @@
       <!--<xsl:apply-templates select="hct:field"/>-->
       <xsl:apply-templates select="hct:tags"/>
       <xsl:apply-templates select="hct:relatedDocs"/>
+      <xsl:apply-templates select="hct:translations"/>
     </div>    
   </xsl:template>
 
@@ -193,6 +193,18 @@
         </div>
       </xsl:for-each>
     </div>
+  </xsl:template>
+  
+  <xsl:template match="hct:translations">
+    <xsl:for-each select="hct:translation">
+      <xsl:variable name="translationLocale" select="@locale"/>
+      <xsl:variable name="translationPath" select="@path"/>
+      <xsl:for-each select="hct:field[@name = 'hippo:availability']/hct:value">
+        <div id="translation.{$translationLocale}.{text()}" style="display:none;">
+          <xsl:value-of select="$translationPath"/>
+        </div>
+      </xsl:for-each>
+    </xsl:for-each>
   </xsl:template>
 
 </xsl:stylesheet>
