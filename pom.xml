@@ -37,9 +37,13 @@
   <name>Hippo Cocoon Toolkit</name>
 
   <url>http://tirasa.github.com/HippoCocoonToolkit</url>
-  <prerequisites>
-    <maven>[3.0.3,)</maven>
-  </prerequisites>
+  
+  <inceptionYear>2012</inceptionYear>
+  
+  <organization>
+    <name>Tirasa</name>
+    <url>http://www.tirasa.net</url>
+  </organization>
 
   <licenses>
     <license>
@@ -55,11 +59,29 @@
     <developerConnection>scm:git:git@github.com:Tirasa/HippoCocoonToolkit.git</developerConnection>
   </scm>
 
+  <mailingLists>
+    <mailingList>
+      <name>HCT</name>
+      <subscribe>hct-subscribe@tirasa.net</subscribe>
+      <unsubscribe>hct-unsubscribe@tirasa.net</unsubscribe>
+      <post>hct@tirasa.net</post>
+    </mailingList>
+  </mailingLists>
+  
   <issueManagement>
     <url>https://github.com/Tirasa/HippoCocoonToolkit/issues</url>
     <system>GitHub Issues</system>
   </issueManagement>
 
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>http://jenkins.tirasa.net/job/HCT%20(trunk)/</url>
+  </ciManagement>
+    
+  <prerequisites>
+    <maven>[3.0.3,)</maven>
+  </prerequisites>
+  
   <properties>
     <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
     <spring.version>3.1.1.RELEASE</spring.version>
