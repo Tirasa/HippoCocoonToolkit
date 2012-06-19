@@ -127,7 +127,7 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
             }
         } else {
             LOG.warn("Unexpected node type: {}", obj.getClass().getName());
-            this.lastmodified = 0;
+            this.lastmodified = -1;
             this.node = null;
         }
     }
