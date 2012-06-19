@@ -24,8 +24,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import javax.jcr.Node;
+import net.tirasa.hct.repository.HCTConnManager;
 import org.apache.cocoon.pipeline.ProcessingException;
+import org.apache.cocoon.pipeline.SetupException;
 import org.apache.cocoon.pipeline.caching.CacheKey;
+import org.apache.cocoon.pipeline.caching.TimestampCacheKey;
 import org.apache.cocoon.pipeline.component.CachingPipelineComponent;
 import org.apache.cocoon.sitemap.component.AbstractReader;
 import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
@@ -34,7 +37,6 @@ import org.hippoecm.hst.content.beans.standard.HippoGalleryImageBean;
 import org.hippoecm.hst.content.beans.standard.HippoGalleryImageSet;
 import org.hippoecm.hst.content.beans.standard.HippoResource;
 import org.hippoecm.hst.servlet.utils.ResourceUtils;
-import net.tirasa.hct.repository.HCTConnManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +52,10 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
     private static final Logger LOG = LoggerFactory.getLogger(HippoRepositoryReader.class);
 
     private transient HCTConnManager connManager;
+
+    private transient Node node;
+
+    private transient long lastmodified;
 
     private transient String contentType;
 
@@ -71,14 +77,58 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
         if (parameters == null) {
             return;
         }
+
         if (parameters.containsKey("source")) {
             super.setSource((URL) parameters.get("source"));
+        }
+        if (this.source == null) {
+            throw new SetupException(getClass().getSimpleName() + " has no source configured to read from.");
         }
 
         if (connManager == null) {
             synchronized (this) {
                 connManager = HCTConnManager.getBinaryInstance();
             }
+        }
+
+        // Take original URL from the file:/ for to an absolute path in the Hippo repository
+        String nodePath = this.source.toExternalForm().substring(source.toExternalForm().indexOf(':') + 1);
+
+        // Try to guess if this is an image (and adapt path on repository accordingly)
+        ImageType imageType = nodePath.endsWith(":" + ImageType.thumbnail.name())
+                ? ImageType.thumbnail : ImageType.original;
+        if (nodePath.endsWith(":" + imageType.name())) {
+            LOG.debug("Selected image type is {}", imageType);
+
+            nodePath = nodePath.substring(0, nodePath.lastIndexOf(':'));
+        }
+
+        Object obj;
+        try {
+            obj = connManager.getObjMan().getObject(nodePath);
+            if (obj == null) {
+                throw new HippoRepositoryNotFoundException("Could not read " + nodePath);
+            }
+        } catch (ObjectBeanManagerException e) {
+            throw new ProcessingException("While reading " + nodePath, e);
+        }
+
+        if (obj instanceof HippoGalleryImageSet) {
+            HippoGalleryImageBean imgBean = imageType == ImageType.thumbnail
+                    ? ((HippoGalleryImageSet) obj).getThumbnail() : ((HippoGalleryImageSet) obj).getOriginal();
+            this.lastmodified = imgBean.getLastModified().getTimeInMillis();
+            this.node = imgBean.getNode();
+        } else if (obj instanceof HippoAsset) {
+            final List<HippoResource> resources = ((HippoAsset) obj).getChildBeans(HippoResource.class);
+            if (resources != null && !resources.isEmpty()) {
+                HippoResource asset = resources.get(0);
+                this.lastmodified = asset.getLastModified().getTimeInMillis();
+                this.node = asset.getNode();
+            }
+        } else {
+            LOG.warn("Unexpected node type: {}", obj.getClass().getName());
+            this.lastmodified = 0;
+            this.node = null;
         }
     }
 
@@ -91,14 +141,29 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
         super.finish();
     }
 
-    private void readFromRepositoryAndWriteToOutputStream(final Node node) {
-        if (node == null) {
-            throw new ProcessingException("Null Node to be read");
+    @Override
+    public String getContentType() {
+        return contentType;
+    }
+
+    @Override
+    public CacheKey constructCacheKey() {
+        if (this.source == null) {
+            throw new SetupException(getClass().getSimpleName() + " has no source configured to read from.");
+        }
+
+        return new TimestampCacheKey(this.source, this.lastmodified);
+    }
+
+    @Override
+    public void execute() {
+        if (this.node == null) {
+            throw new IllegalArgumentException(getClass().getSimpleName() + " wasn't able to read from given URL.");
         }
 
         BufferedInputStream repositoryIS = null;
         try {
-            contentType = node.getProperty(ResourceUtils.DEFAULT_BINARY_MIME_TYPE_PROP_NAME).getString();
+            this.contentType = this.node.getProperty(ResourceUtils.DEFAULT_BINARY_MIME_TYPE_PROP_NAME).getString();
 
             repositoryIS = new BufferedInputStream(node.getProperty(
                     ResourceUtils.DEFAULT_BINARY_DATA_PROP_NAME).getBinary().getStream());
@@ -118,65 +183,5 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
                 }
             }
         }
-    }
-
-    private Node getImageNode(final Object obj, final ImageType type) {
-        final HippoGalleryImageSet img = (HippoGalleryImageSet) obj;
-        final HippoGalleryImageBean actualImg = type == ImageType.original
-                ? img.getOriginal() : img.getThumbnail();
-
-        return actualImg.getNode();
-    }
-
-    @Override
-    public void execute() {
-        if (this.source == null) {
-            throw new IllegalArgumentException(getClass().getSimpleName() + " has no source configured to read from.");
-        }
-
-        // Take original URL from the file:/ for to an absolute path in the
-        // Hippo repository
-        String stringSource = source.toExternalForm().substring(source.toExternalForm().indexOf(':') + 1);
-
-        // Try to guess if this is an image (and adapt path on 
-        // repository accordingly
-        final ImageType imageType = stringSource.endsWith(":" + ImageType.thumbnail.name())
-                ? ImageType.thumbnail : ImageType.original;
-        if (stringSource.endsWith(":" + imageType.name())) {
-            LOG.debug("Selected image type is {}", imageType);
-
-            stringSource = stringSource.substring(0, stringSource.lastIndexOf(':'));
-        }
-
-        Object obj;
-        try {
-            obj = connManager.getObjMan().getObject(stringSource);
-            if (obj == null) {
-                throw new HippoRepositoryNotFoundException("Could not read at " + source);
-            }
-        } catch (ObjectBeanManagerException e) {
-            throw new ProcessingException("While reading image", e);
-        }
-
-        Node node = null;
-        if (obj instanceof HippoGalleryImageSet) {
-            node = getImageNode(obj, imageType);
-        } else if (obj instanceof HippoAsset) {
-            final List<HippoResource> resources = ((HippoAsset) obj).getChildBeans(HippoResource.class);
-            if (resources != null && !resources.isEmpty()) {
-                node = resources.get(0).getNode();
-            }
-        }
-        readFromRepositoryAndWriteToOutputStream(node);
-    }
-
-    @Override
-    public String getContentType() {
-        return contentType;
-    }
-
-    @Override
-    public CacheKey constructCacheKey() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
