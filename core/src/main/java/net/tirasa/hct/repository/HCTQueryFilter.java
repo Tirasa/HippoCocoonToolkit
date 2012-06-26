@@ -15,11 +15,11 @@ package net.tirasa.hct.repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import net.tirasa.hct.cocoon.sax.Constants;
 import net.tirasa.hct.cocoon.sax.Constants.Attribute;
 import net.tirasa.hct.cocoon.sax.Constants.Element;
 import net.tirasa.hct.cocoon.sax.Constants.State;
+import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.Attributes;
 
 public class HCTQueryFilter {
@@ -100,12 +100,14 @@ public class HCTQueryFilter {
     }
 
     private String getEqualTo(final Attributes atts) {
-        return new StringBuilder().append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']').
+        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" = '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
     }
 
     private String getNotEqualTo(final Attributes atts) {
-        return new StringBuilder().append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']').
+        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" <> '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
     }
 
@@ -114,9 +116,10 @@ public class HCTQueryFilter {
 
         String field = atts.getValue(Attribute.FIELD.getName());
         if (StringUtils.isBlank(field)) {
-            result.append("type.*");
+            result.append(Constants.QUERY_RETURN_TYPE).append(".*");
         } else {
-            result.append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']');
+            result.append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                    append(atts.getValue(Attribute.FIELD.getName())).append(']');
         }
 
         result.append(", '").append(atts.getValue(Attribute.VALUE.getName())).append("')");
@@ -129,7 +132,8 @@ public class HCTQueryFilter {
     }
 
     private String getLike(final Attributes atts) {
-        return new StringBuilder().append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']').
+        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" LIKE '%").append(atts.getValue(Attribute.VALUE.getName())).append("%'").toString();
     }
 
@@ -138,7 +142,8 @@ public class HCTQueryFilter {
     }
 
     private String getIsNull(final Attributes atts) {
-        return new StringBuilder().append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']').
+        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" IS NULL").toString();
     }
 
@@ -147,22 +152,26 @@ public class HCTQueryFilter {
     }
 
     private String getGreaterOrEqualThan(final Attributes atts) {
-        return new StringBuilder().append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']').
+        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" >= '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
     }
 
     private String getGreaterThan(final Attributes atts) {
-        return new StringBuilder().append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']').
+        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" > '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
     }
 
     private String getLessOrEqualThan(final Attributes atts) {
-        return new StringBuilder().append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']').
+        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" <= '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
     }
 
     private String getLessThan(final Attributes atts) {
-        return new StringBuilder().append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']').
+        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" < '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
     }
 

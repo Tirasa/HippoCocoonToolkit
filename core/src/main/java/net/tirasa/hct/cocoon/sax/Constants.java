@@ -160,6 +160,10 @@ public class Constants {
 
     public static final String PREFIX_HCT = "hct";
 
+    public static final String QUERY_RETURN_TYPE = "type";
+
+    public static final String QUERY_RETURN_SUBTYPE_PREFIX = "subtype";
+
     /**
      * Duplicate of ObjectConverterUtils, since there this field is private.
      *

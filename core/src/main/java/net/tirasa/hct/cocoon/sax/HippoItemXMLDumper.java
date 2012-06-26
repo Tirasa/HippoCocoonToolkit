@@ -23,6 +23,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import javax.jcr.RepositoryException;
+import static net.tirasa.hct.cocoon.sax.Constants.*;
+import net.tirasa.hct.cocoon.sax.Constants.Attribute;
+import net.tirasa.hct.cocoon.sax.Constants.Element;
+import net.tirasa.hct.cocoon.sax.Constants.StartEndDocumentFilter;
+import net.tirasa.hct.hstbeans.HCTTaxonomyCategoryBean;
+import net.tirasa.hct.hstbeans.HippoDate;
+import net.tirasa.hct.hstbeans.ImageLinkBean;
+import net.tirasa.hct.hstbeans.RelatedDocs;
+import net.tirasa.hct.repository.HCTConnManager;
+import net.tirasa.hct.repository.HCTQuery;
+import net.tirasa.hct.repository.HCTQueryResult;
+import net.tirasa.hct.util.TaxonomyUtils;
 import org.apache.cocoon.sax.SAXConsumer;
 import org.apache.cocoon.sax.util.XMLUtils;
 import org.apache.commons.collections.keyvalue.DefaultMapEntry;
@@ -38,18 +50,6 @@ import org.hippoecm.hst.content.beans.standard.HippoHtml;
 import org.hippoecm.hst.content.beans.standard.HippoItem;
 import org.hippoecm.repository.api.HippoNodeType;
 import org.onehippo.forge.ecmtagging.TaggingNodeType;
-import static net.tirasa.hct.cocoon.sax.Constants.*;
-import net.tirasa.hct.cocoon.sax.Constants.Attribute;
-import net.tirasa.hct.cocoon.sax.Constants.Element;
-import net.tirasa.hct.cocoon.sax.Constants.StartEndDocumentFilter;
-import net.tirasa.hct.hstbeans.HCTTaxonomyCategoryBean;
-import net.tirasa.hct.hstbeans.HippoDate;
-import net.tirasa.hct.hstbeans.ImageLinkBean;
-import net.tirasa.hct.hstbeans.RelatedDocs;
-import net.tirasa.hct.repository.HCTConnManager;
-import net.tirasa.hct.repository.HCTQuery;
-import net.tirasa.hct.repository.HCTQueryResult;
-import net.tirasa.hct.util.TaxonomyUtils;
 import org.onehippo.taxonomy.api.TaxonomyNodeTypes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -69,7 +69,7 @@ public class HippoItemXMLDumper {
 
         final AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute(NS_EMPTY, Attribute.SIZE.getName(),
-                Attribute.SIZE.getName(), XSD_LONG, String.valueOf(result.getSize()));
+                Attribute.SIZE.getName(), XSD_LONG, String.valueOf(result.getUuids().size()));
         attrs.addAttribute(NS_EMPTY, Attribute.PAGE.getName(),
                 Attribute.PAGE.getName(), XSD_LONG, String.valueOf(result.getPage()));
         attrs.addAttribute(NS_EMPTY, Attribute.TOTAL_PAGES.getName(),
@@ -412,7 +412,7 @@ public class HippoItemXMLDumper {
     public void dumpDate(final String name, final Calendar calendar, final String dateFormat, final Locale locale)
             throws SAXException {
 
-        dumpField(new DefaultMapEntry(name, calendar.getTime()), dateFormat, locale);
+        dumpField(new DefaultMapEntry(name, calendar), dateFormat, locale);
     }
 
     public void dumpHtml(final ObjectBeanManager objMan, final HippoHtml rtf, final XMLReader xmlReader,

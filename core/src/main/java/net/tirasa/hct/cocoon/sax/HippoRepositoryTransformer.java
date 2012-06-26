@@ -253,9 +253,8 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         if (hctQuery.isIncludeFolders()) {
             // 1. group matching documents by folder / taxonomy
             final Map<HippoItem, List<HippoItem>> resultByFolder = new HashMap<HippoItem, List<HippoItem>>();
-            while (queryResult.getResult().hasNext()) {
-                final HippoItem item =
-                        (HippoItem) connManager.getObjConv().getObject(queryResult.getResult().nextNode());
+            for (String uuid : queryResult.getUuids()) {
+                final HippoItem item = (HippoItem) connManager.getObjMan().getObjectByUuid(uuid);
 
                 if (hctQuery.getType() == HCTQuery.Type.TAXONOMY_DOCS) {
                     final String[] keys = item.getProperty(TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS);
@@ -297,9 +296,8 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                 }
             }
         } else {
-            while (queryResult.getResult().hasNext()) {
-                final HippoItem item =
-                        (HippoItem) connManager.getObjConv().getObject(queryResult.getResult().nextNode());
+            for (String uuid : queryResult.getUuids()) {
+                final HippoItem item = (HippoItem) connManager.getObjMan().getObjectByUuid(uuid);
 
                 switch (hctQuery.getType()) {
                     case TAXONOMIES:
