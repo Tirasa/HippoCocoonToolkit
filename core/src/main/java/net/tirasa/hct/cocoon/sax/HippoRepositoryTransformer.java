@@ -455,7 +455,11 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                         Attribute.FIELD.getName(), Constants.XSD_STRING, "hippostd:foldertype");
                 localAtts.addAttribute(Constants.NS_EMPTY, Attribute.VALUE.getName(),
                         Attribute.VALUE.getName(), Constants.XSD_STRING, "new-translated-folder");
-                hctQuery.getFilter().addCond(State.INSIDE_FILTER_AND, Element.EQUALTO, localAtts);
+                try {
+                    hctQuery.getFilter().addCond(State.INSIDE_FILTER_AND, Element.EQUALTO, localAtts);
+                } catch (RepositoryException e) {
+                    throw new SAXException(e);
+                }
             }
         }
 
@@ -510,7 +514,11 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
 
                 throw new InvalidHCTRequestException(Attribute.FIELD.getName() + " must be specified for " + localName);
             }
-            hctQuery.getFilter().addCond(state, element, atts);
+            try {
+                hctQuery.getFilter().addCond(state, element, atts);
+            } catch (RepositoryException e) {
+                throw new SAXException(e);
+            }
         }
 
         if (element == Element.ORDERBY) {

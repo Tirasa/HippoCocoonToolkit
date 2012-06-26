@@ -14,12 +14,15 @@
 package net.tirasa.hct.repository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import javax.jcr.RepositoryException;
 import net.tirasa.hct.cocoon.sax.Constants;
 import net.tirasa.hct.cocoon.sax.Constants.Attribute;
 import net.tirasa.hct.cocoon.sax.Constants.Element;
 import net.tirasa.hct.cocoon.sax.Constants.State;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jackrabbit.value.ValueFactoryImpl;
 import org.xml.sax.Attributes;
 
 public class HCTQueryFilter {
@@ -28,7 +31,7 @@ public class HCTQueryFilter {
 
     private final List<String> orConds = new ArrayList<String>();
 
-    public void addCond(final State state, final Element element, final Attributes atts) {
+    public void addCond(final State state, final Element element, final Attributes atts) throws RepositoryException {
         if (state != State.INSIDE_FILTER_AND && state != State.INSIDE_FILTER_OR) {
             throw new IllegalArgumentException(
                     "Only " + State.INSIDE_FILTER_AND + " and " + State.INSIDE_FILTER_OR + " are allowed");
@@ -99,7 +102,7 @@ public class HCTQueryFilter {
         }
     }
 
-    private String buildComparableValue(final Attributes atts) {
+    private String buildComparableValue(final Attributes atts) throws RepositoryException {
         String propertyTypeString = atts.getValue(Constants.Attribute.TYPE.getName());
         if (StringUtils.isBlank(propertyTypeString)) {
             propertyTypeString = Constants.PropertyType.STRING.name();
@@ -109,10 +112,18 @@ public class HCTQueryFilter {
         String result;
         switch (propertyType) {
             case BOOLEAN:
-            case DATE:
             case DOUBLE:
             case LONG:
                 result = "CAST('" + atts.getValue(Attribute.VALUE.getName()) + "' AS " + propertyType.name() + ")";
+                break;
+
+            case DATE:
+                String value = atts.getValue(Attribute.VALUE.getName());
+                if (Constants.QUERY_FUNCTION_NOW.equals(value)) {
+                    value = ValueFactoryImpl.getInstance().createValue(Calendar.getInstance()).getString();
+                }
+
+                result = "CAST('" + value + "' AS " + propertyType.name() + ")";
                 break;
 
             case STRING:
@@ -123,13 +134,13 @@ public class HCTQueryFilter {
         return result;
     }
 
-    private String getEqualTo(final Attributes atts) {
+    private String getEqualTo(final Attributes atts) throws RepositoryException {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" = ").append(buildComparableValue(atts)).toString();
     }
 
-    private String getNotEqualTo(final Attributes atts) {
+    private String getNotEqualTo(final Attributes atts) throws RepositoryException {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" <> ").append(buildComparableValue(atts)).toString();
@@ -175,25 +186,25 @@ public class HCTQueryFilter {
         return new StringBuilder().append("NOT ").append(getIsNull(atts)).toString();
     }
 
-    private String getGreaterOrEqualThan(final Attributes atts) {
+    private String getGreaterOrEqualThan(final Attributes atts) throws RepositoryException {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" >= ").append(buildComparableValue(atts)).toString();
     }
 
-    private String getGreaterThan(final Attributes atts) {
+    private String getGreaterThan(final Attributes atts) throws RepositoryException {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" > ").append(buildComparableValue(atts)).toString();
     }
 
-    private String getLessOrEqualThan(final Attributes atts) {
+    private String getLessOrEqualThan(final Attributes atts) throws RepositoryException {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" <= ").append(buildComparableValue(atts)).toString();
     }
 
-    private String getLessThan(final Attributes atts) {
+    private String getLessThan(final Attributes atts) throws RepositoryException {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" < ").append(buildComparableValue(atts)).toString();

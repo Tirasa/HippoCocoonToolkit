@@ -164,6 +164,8 @@ public class Constants {
 
     public static final String QUERY_RETURN_SUBTYPE_PREFIX = "subtype";
 
+    public static final String QUERY_FUNCTION_NOW = "now()";
+
     /**
      * Duplicate of ObjectConverterUtils, since there this field is private.
      *
