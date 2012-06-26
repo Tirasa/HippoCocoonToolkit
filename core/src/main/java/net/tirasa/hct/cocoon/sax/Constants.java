@@ -230,6 +230,25 @@ public class Constants {
         }
     }
 
+    public static enum PropertyType {
+
+        STRING(javax.jcr.PropertyType.STRING),
+        LONG(javax.jcr.PropertyType.LONG),
+        DOUBLE(javax.jcr.PropertyType.DOUBLE),
+        BOOLEAN(javax.jcr.PropertyType.BOOLEAN),
+        DATE(javax.jcr.PropertyType.DATE);
+
+        private int id;
+
+        PropertyType(final int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+    }
+
     static public class StartEndDocumentFilter extends XMLFilterImpl {
 
         public StartEndDocumentFilter(final XMLReader xmlReader) {

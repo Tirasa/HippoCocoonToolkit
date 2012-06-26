@@ -99,16 +99,40 @@ public class HCTQueryFilter {
         }
     }
 
+    private String buildComparableValue(final Attributes atts) {
+        String propertyTypeString = atts.getValue(Constants.Attribute.TYPE.getName());
+        if (StringUtils.isBlank(propertyTypeString)) {
+            propertyTypeString = Constants.PropertyType.STRING.name();
+        }
+        Constants.PropertyType propertyType = Constants.PropertyType.valueOf(propertyTypeString);
+
+        String result;
+        switch (propertyType) {
+            case BOOLEAN:
+            case DATE:
+            case DOUBLE:
+            case LONG:
+                result = "CAST('" + atts.getValue(Attribute.VALUE.getName()) + "' AS " + propertyType.name() + ")";
+                break;
+
+            case STRING:
+            default:
+                result = "'" + atts.getValue(Attribute.VALUE.getName()) + "'";
+        }
+
+        return result;
+    }
+
     private String getEqualTo(final Attributes atts) {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
-                append(" = '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
+                append(" = ").append(buildComparableValue(atts)).toString();
     }
 
     private String getNotEqualTo(final Attributes atts) {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
-                append(" <> '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
+                append(" <> ").append(buildComparableValue(atts)).toString();
     }
 
     private String getContains(final Attributes atts) {
@@ -154,25 +178,25 @@ public class HCTQueryFilter {
     private String getGreaterOrEqualThan(final Attributes atts) {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
-                append(" >= '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
+                append(" >= ").append(buildComparableValue(atts)).toString();
     }
 
     private String getGreaterThan(final Attributes atts) {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
-                append(" > '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
+                append(" > ").append(buildComparableValue(atts)).toString();
     }
 
     private String getLessOrEqualThan(final Attributes atts) {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
-                append(" <= '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
+                append(" <= ").append(buildComparableValue(atts)).toString();
     }
 
     private String getLessThan(final Attributes atts) {
         return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
-                append(" < '").append(atts.getValue(Attribute.VALUE.getName())).append('\'').toString();
+                append(" < ").append(buildComparableValue(atts)).toString();
     }
 
     public List<String> getAndConds() {
