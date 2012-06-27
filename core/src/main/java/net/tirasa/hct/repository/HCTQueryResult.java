@@ -18,29 +18,36 @@
  */
 package net.tirasa.hct.repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.query.RowIterator;
+import net.tirasa.hct.cocoon.sax.Constants;
+import org.apache.jackrabbit.JcrConstants;
 
 public class HCTQueryResult {
 
     private transient final Locale locale;
 
-    private transient final long size;
-
     private transient final long page;
 
     private transient final long totalPages;
 
-    private transient final NodeIterator result;
+    private transient final List<String> uuids;
 
-    public HCTQueryResult(final Locale locale, final long size, final long page, final long totalPages,
-            final NodeIterator result) {
+    public HCTQueryResult(final Locale locale, final long page, final long totalPages,
+            final RowIterator result) throws RepositoryException {
 
         this.locale = locale;
-        this.size = size;
         this.page = page;
         this.totalPages = totalPages;
-        this.result = result;
+
+        this.uuids = new ArrayList<String>();
+        while (result.hasNext()) {
+            this.uuids.add(result.nextRow().
+                    getValue(Constants.QUERY_DEFAULT_SELECTOR + "." + JcrConstants.JCR_UUID).getString());
+        }
     }
 
     public Locale getLocale() {
@@ -51,12 +58,8 @@ public class HCTQueryResult {
         return page;
     }
 
-    public NodeIterator getResult() {
-        return result;
-    }
-
-    public long getSize() {
-        return size;
+    public List<String> getUuids() {
+        return uuids;
     }
 
     public long getTotalPages() {

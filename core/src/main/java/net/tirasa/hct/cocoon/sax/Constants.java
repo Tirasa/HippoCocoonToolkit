@@ -160,6 +160,10 @@ public class Constants {
 
     public static final String PREFIX_HCT = "hct";
 
+    public static final String QUERY_DEFAULT_SELECTOR = "type";
+
+    public static final String QUERY_FUNCTION_NOW = "now()";
+
     /**
      * Duplicate of ObjectConverterUtils, since there this field is private.
      *
@@ -201,6 +205,8 @@ public class Constants {
         DEPTH("depth"),
         FIELD("field"),
         VALUE("value"),
+        CHILD_NAME("childName"),
+        CHILD_TYPE("childType"),
         LEFT("left"),
         RIGHT("right"),
         NAME("name"),
@@ -223,6 +229,25 @@ public class Constants {
 
         public String getName() {
             return name;
+        }
+    }
+
+    public static enum PropertyType {
+
+        STRING(javax.jcr.PropertyType.STRING),
+        LONG(javax.jcr.PropertyType.LONG),
+        DOUBLE(javax.jcr.PropertyType.DOUBLE),
+        BOOLEAN(javax.jcr.PropertyType.BOOLEAN),
+        DATE(javax.jcr.PropertyType.DATE);
+
+        private int id;
+
+        PropertyType(final int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
         }
     }
 
