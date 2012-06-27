@@ -180,7 +180,7 @@ public class HCTQueryFilter {
         StringBuilder result = new StringBuilder().append("CONTAINS(").append(selector).append('.');
 
         String field = atts.getValue(Attribute.FIELD.getName());
-        if (!StringUtils.isBlank(field)) {
+        if (StringUtils.isBlank(field)) {
             result.append('*');
         } else {
             result.append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']');
