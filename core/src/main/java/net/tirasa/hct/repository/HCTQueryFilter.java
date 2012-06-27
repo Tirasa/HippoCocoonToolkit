@@ -15,7 +15,9 @@ package net.tirasa.hct.repository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.jcr.RepositoryException;
 import net.tirasa.hct.cocoon.sax.Constants;
 import net.tirasa.hct.cocoon.sax.Constants.Attribute;
@@ -31,6 +33,9 @@ public class HCTQueryFilter {
 
     private final List<String> orConds = new ArrayList<String>();
 
+    private final Map<HCTDocumentChildNode, ChildQueryFilter> childConds =
+            new HashMap<HCTDocumentChildNode, ChildQueryFilter>();
+
     public void addCond(final State state, final Element element, final Attributes atts) throws RepositoryException {
         if (state != State.INSIDE_FILTER_AND && state != State.INSIDE_FILTER_OR) {
             throw new IllegalArgumentException(
@@ -41,64 +46,89 @@ public class HCTQueryFilter {
             throw new IllegalArgumentException(element + " not in " + Constants.FILTER_ELEMENTS);
         }
 
+        String childName = atts.getValue(Constants.Attribute.CHILD_NAME.getName());
+        String childType = atts.getValue(Constants.Attribute.CHILD_TYPE.getName());
+        HCTDocumentChildNode child = null;
+        if (!StringUtils.isBlank(childName) && !StringUtils.isBlank(childType)) {
+            child = new HCTDocumentChildNode(childName, childType);
+
+            if (!childConds.containsKey(child)) {
+                childConds.put(child, new ChildQueryFilter());
+            }
+        }
+
+        String selector = child == null ? Constants.QUERY_DEFAULT_SELECTOR : child.getSelector();
+
         String condition = null;
         switch (element) {
             case EQUALTO:
-                condition = getEqualTo(atts);
+                condition = getEqualTo(atts, selector);
                 break;
 
             case NOT_EQUALTO:
-                condition = getNotEqualTo(atts);
+                condition = getNotEqualTo(atts, selector);
                 break;
 
             case CONTAINS:
-                condition = getContains(atts);
+                condition = getContains(atts, selector);
                 break;
 
             case NOT_CONTAINS:
-                condition = getNotContains(atts);
+                condition = getNotContains(atts, selector);
                 break;
 
             case LIKE:
-                condition = getLike(atts);
+                condition = getLike(atts, selector);
                 break;
 
             case NOT_LIKE:
-                condition = getNotLike(atts);
+                condition = getNotLike(atts, selector);
                 break;
 
             case ISNULL:
-                condition = getIsNull(atts);
+                condition = getIsNull(atts, selector);
                 break;
 
             case NOT_NULL:
-                condition = getNotNull(atts);
+                condition = getNotNull(atts, selector);
                 break;
 
             case GREATER_OR_EQUAL:
-                condition = getGreaterOrEqualThan(atts);
+                condition = getGreaterOrEqualThan(atts, selector);
                 break;
 
             case GREATER:
-                condition = getGreaterThan(atts);
+                condition = getGreaterThan(atts, selector);
                 break;
 
             case LESS_OR_EQUAL:
-                condition = getLessOrEqualThan(atts);
+                condition = getLessOrEqualThan(atts, selector);
                 break;
 
             case LESS:
-                condition = getLessThan(atts);
+                condition = getLessThan(atts, selector);
                 break;
 
             default:
         }
 
-        if (condition != null && state == State.INSIDE_FILTER_AND) {
-            andConds.add(condition);
+        if (condition == null) {
+            throw new IllegalArgumentException("Could not build condition from " + element);
         }
-        if (condition != null && state == State.INSIDE_FILTER_OR) {
-            orConds.add(condition);
+
+        if (state == State.INSIDE_FILTER_AND) {
+            if (child == null) {
+                andConds.add(condition);
+            } else {
+                childConds.get(child).getAndConds().add(condition);
+            }
+        }
+        if (state == State.INSIDE_FILTER_OR) {
+            if (child == null) {
+                orConds.add(condition);
+            } else {
+                childConds.get(child).getOrConds().add(condition);
+            }
         }
     }
 
@@ -134,27 +164,26 @@ public class HCTQueryFilter {
         return result;
     }
 
-    private String getEqualTo(final Attributes atts) throws RepositoryException {
-        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+    private String getEqualTo(final Attributes atts, final String selector) throws RepositoryException {
+        return new StringBuilder().append(selector).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" = ").append(buildComparableValue(atts)).toString();
     }
 
-    private String getNotEqualTo(final Attributes atts) throws RepositoryException {
-        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+    private String getNotEqualTo(final Attributes atts, final String selector) throws RepositoryException {
+        return new StringBuilder().append(selector).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" <> ").append(buildComparableValue(atts)).toString();
     }
 
-    private String getContains(final Attributes atts) {
-        StringBuilder result = new StringBuilder().append("CONTAINS(");
+    private String getContains(final Attributes atts, final String selector) {
+        StringBuilder result = new StringBuilder().append("CONTAINS(").append(selector).append('.');
 
         String field = atts.getValue(Attribute.FIELD.getName());
-        if (StringUtils.isBlank(field)) {
-            result.append(Constants.QUERY_RETURN_TYPE).append(".*");
+        if (!StringUtils.isBlank(field)) {
+            result.append('*');
         } else {
-            result.append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
-                    append(atts.getValue(Attribute.FIELD.getName())).append(']');
+            result.append('[').append(atts.getValue(Attribute.FIELD.getName())).append(']');
         }
 
         result.append(", '").append(atts.getValue(Attribute.VALUE.getName())).append("')");
@@ -162,50 +191,50 @@ public class HCTQueryFilter {
         return result.toString();
     }
 
-    private String getNotContains(final Attributes atts) {
-        return new StringBuilder().append("NOT ").append(getContains(atts)).toString();
+    private String getNotContains(final Attributes atts, final String selector) {
+        return new StringBuilder().append("NOT ").append(getContains(atts, selector)).toString();
     }
 
-    private String getLike(final Attributes atts) {
-        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+    private String getLike(final Attributes atts, final String selector) {
+        return new StringBuilder().append(selector).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" LIKE '%").append(atts.getValue(Attribute.VALUE.getName())).append("%'").toString();
     }
 
-    private String getNotLike(final Attributes atts) {
-        return new StringBuilder().append("NOT ").append(getLike(atts)).toString();
+    private String getNotLike(final Attributes atts, final String selector) {
+        return new StringBuilder().append("NOT ").append(getLike(atts, selector)).toString();
     }
 
-    private String getIsNull(final Attributes atts) {
-        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+    private String getIsNull(final Attributes atts, final String selector) {
+        return new StringBuilder().append(selector).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" IS NULL").toString();
     }
 
-    private String getNotNull(final Attributes atts) {
-        return new StringBuilder().append("NOT ").append(getIsNull(atts)).toString();
+    private String getNotNull(final Attributes atts, final String selector) {
+        return new StringBuilder().append("NOT ").append(getIsNull(atts, selector)).toString();
     }
 
-    private String getGreaterOrEqualThan(final Attributes atts) throws RepositoryException {
-        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+    private String getGreaterOrEqualThan(final Attributes atts, final String selector) throws RepositoryException {
+        return new StringBuilder().append(selector).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" >= ").append(buildComparableValue(atts)).toString();
     }
 
-    private String getGreaterThan(final Attributes atts) throws RepositoryException {
-        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+    private String getGreaterThan(final Attributes atts, final String selector) throws RepositoryException {
+        return new StringBuilder().append(selector).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" > ").append(buildComparableValue(atts)).toString();
     }
 
-    private String getLessOrEqualThan(final Attributes atts) throws RepositoryException {
-        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+    private String getLessOrEqualThan(final Attributes atts, final String selector) throws RepositoryException {
+        return new StringBuilder().append(selector).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" <= ").append(buildComparableValue(atts)).toString();
     }
 
-    private String getLessThan(final Attributes atts) throws RepositoryException {
-        return new StringBuilder().append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+    private String getLessThan(final Attributes atts, final String selector) throws RepositoryException {
+        return new StringBuilder().append(selector).append('.').append('[').
                 append(atts.getValue(Attribute.FIELD.getName())).append(']').
                 append(" < ").append(buildComparableValue(atts)).toString();
     }
@@ -216,5 +245,24 @@ public class HCTQueryFilter {
 
     public List<String> getOrConds() {
         return orConds;
+    }
+
+    public Map<HCTDocumentChildNode, ChildQueryFilter> getChildConds() {
+        return childConds;
+    }
+
+    public class ChildQueryFilter {
+
+        private final List<String> andConds = new ArrayList<String>();
+
+        private final List<String> orConds = new ArrayList<String>();
+
+        public List<String> getAndConds() {
+            return andConds;
+        }
+
+        public List<String> getOrConds() {
+            return orConds;
+        }
     }
 }

@@ -20,6 +20,7 @@ package net.tirasa.hct.repository;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.jcr.Node;
@@ -190,12 +191,12 @@ public class HCTQuery extends AbstractHCTEntity {
     }
 
     public void addOrderByAscending(final String propertyName) {
-        orderBy.append(Constants.QUERY_RETURN_TYPE).append('.').append('[').append(propertyName).append(']').
+        orderBy.append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').append(propertyName).append(']').
                 append(" ASC, ");
     }
 
     public void addOrderByDescending(final String propertyName) {
-        orderBy.append(Constants.QUERY_RETURN_TYPE).append('.').append('[').append(propertyName).append(']').
+        orderBy.append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').append(propertyName).append(']').
                 append(" DESC, ");
     }
 
@@ -214,6 +215,7 @@ public class HCTQuery extends AbstractHCTEntity {
     public HCTQueryResult execute() throws InvalidQueryException, RepositoryException {
         buildSQLQuery();
         LOG.debug("Elaborated JCR/SQL2 query: {}", getSqlQuery());
+        LOG.info("AAAAAAAAAAAAAAA {}", getSqlQuery());
         final Query query = session.getWorkspace().getQueryManager().createQuery(getSqlQuery(), Query.JCR_SQL2);
 
         // first execute without boundaries (only to take total result size)
@@ -270,13 +272,44 @@ public class HCTQuery extends AbstractHCTEntity {
         }
     }
 
+    private void addCondsToWhereClause(final List<String> conds, final StringBuilder clause, final String op) {
+        boolean firstItem = clause.length() == 0;
+        for (String cond : conds) {
+            clause.insert(0, '(');
+            if (!firstItem) {
+                clause.append(op).append(' ');
+            }
+
+            clause.append(cond).append(") ");
+        }
+    }
+
+    private void addJoinsAndCondsToQuery(final Map<HCTDocumentChildNode, HCTQueryFilter.ChildQueryFilter> children,
+            final StringBuilder query, final StringBuilder whereClause, final StringBuilder andCondClause,
+            final StringBuilder orCondClause) {
+
+        for (Map.Entry<HCTDocumentChildNode, HCTQueryFilter.ChildQueryFilter> entry : children.entrySet()) {
+            query.append("INNER JOIN [").append(entry.getKey().getType()).append("] AS ").
+                    append(entry.getKey().getSelector()).append(" ON ISCHILDNODE(").append(entry.getKey().getSelector()).
+                    append(", ").append(Constants.QUERY_DEFAULT_SELECTOR).append(") ");
+
+            whereClause.insert(0, '(');
+            whereClause.append("AND NAME(").append(entry.getKey().getSelector()).append(") = '").
+                    append(entry.getKey().getName()).append("') ");
+
+            addCondsToWhereClause(entry.getValue().getAndConds(), andCondClause, "AND");
+            addCondsToWhereClause(entry.getValue().getOrConds(), orCondClause, "OR");
+        }
+    }
+
     private void buildSQLQuery() throws RepositoryException {
         LOG.debug("Query type: {}", getType());
         final String actualBase = getType() == Type.TAXONOMY_DOCS ? "/content/documents" : base;
         LOG.debug("Search base: {}", actualBase);
 
-        final StringBuilder whereClause = new StringBuilder("ISDESCENDANTNODE(").append(Constants.QUERY_RETURN_TYPE).
-                append(",'").append(actualBase).append("') ");
+        final StringBuilder whereClause =
+                new StringBuilder("ISDESCENDANTNODE(").append(Constants.QUERY_DEFAULT_SELECTOR).append(", '").
+                append(actualBase).append("') ");
 
         final Node baseNode = session.getNode(actualBase);
         if (getType() == Type.TAXONOMY_DOCS) {
@@ -297,7 +330,7 @@ public class HCTQuery extends AbstractHCTEntity {
                 }
 
                 taxonomySubclause.insert(0, '(');
-                taxonomySubclause.append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+                taxonomySubclause.append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').
                         append(TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS).append("] = '").append(taxonomy).append("') ");
             }
             whereClause.insert(0, '(');
@@ -309,39 +342,45 @@ public class HCTQuery extends AbstractHCTEntity {
             findDepthFrontier(baseNode, depthFrontier, baseNode.getDepth() + depth);
             for (String depthFrontierPath : depthFrontier) {
                 whereClause.insert(0, '(');
-                whereClause.append("AND NOT ISDESCENDANTNODE(").append(Constants.QUERY_RETURN_TYPE).append(",'").
+                whereClause.append("AND NOT ISDESCENDANTNODE(").append(Constants.QUERY_DEFAULT_SELECTOR).append(",'").
                         append(depthFrontierPath).append("')) ");
             }
         }
 
         if (availability != null) {
             whereClause.insert(0, '(');
-            whereClause.append("AND ").append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+            whereClause.append("AND ").append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').
                     append(HippoNodeType.HIPPO_AVAILABILITY).append("] = '").append(availability.name()).append("') ");
         }
 
         if (getType() != Type.TAXONOMIES) {
             whereClause.insert(0, '(');
-            whereClause.append("AND ").append(Constants.QUERY_RETURN_TYPE).append('.').append('[').
+            whereClause.append("AND ").append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').
                     append(HippoTranslationNodeType.LOCALE).append("] = '").append(locale).append("') ");
         }
 
-        for (String cond : filter.getAndConds()) {
-            whereClause.insert(0, '(');
-            whereClause.append("AND ").append(cond).append(") ");
-        }
-        for (String cond : filter.getOrConds()) {
-            whereClause.insert(0, '(');
-            whereClause.append("OR ").append(cond).append(") ");
-        }
+        StringBuilder andCondClause = new StringBuilder();
+        StringBuilder orCondClause = new StringBuilder();
 
-        final StringBuilder query = new StringBuilder("SELECT ").append(Constants.QUERY_RETURN_TYPE).
+        addCondsToWhereClause(filter.getAndConds(), andCondClause, "AND");
+        addCondsToWhereClause(filter.getOrConds(), orCondClause, "OR");
+
+        final StringBuilder query = new StringBuilder("SELECT ").append(Constants.QUERY_DEFAULT_SELECTOR).
                 append(".[").append(JcrConstants.JCR_UUID).append("] FROM [").append(returnType).append("] AS ").
-                append(Constants.QUERY_RETURN_TYPE).append(" WHERE ");
-        query.append(whereClause);
+                append(Constants.QUERY_DEFAULT_SELECTOR).append(' ');
+
+        addJoinsAndCondsToQuery(filter.getChildConds(), query, whereClause, andCondClause, orCondClause);
+
+        query.append("WHERE ").append(whereClause);
+        if (andCondClause.length() > 0) {
+            query.append("AND ").append(andCondClause);
+        }
+        if (orCondClause.length() > 0) {
+            query.append("OR ").append(orCondClause);
+        }
 
         if (orderBy.length() > 2) {
-            query.append(" ORDER BY ").append(orderBy.toString().substring(0, orderBy.length() - 2));
+            query.append("ORDER BY ").append(orderBy.toString().substring(0, orderBy.length() - 2));
         }
 
         sqlQuery = query.toString();

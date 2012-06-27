@@ -46,7 +46,7 @@ public class HCTQueryResult {
         this.uuids = new ArrayList<String>();
         while (result.hasNext()) {
             this.uuids.add(result.nextRow().
-                    getValue(Constants.QUERY_RETURN_TYPE + "." + JcrConstants.JCR_UUID).getString());
+                    getValue(Constants.QUERY_DEFAULT_SELECTOR + "." + JcrConstants.JCR_UUID).getString());
         }
     }
 

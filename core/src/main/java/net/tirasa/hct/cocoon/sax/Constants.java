@@ -160,9 +160,7 @@ public class Constants {
 
     public static final String PREFIX_HCT = "hct";
 
-    public static final String QUERY_RETURN_TYPE = "type";
-
-    public static final String QUERY_RETURN_SUBTYPE_PREFIX = "subtype";
+    public static final String QUERY_DEFAULT_SELECTOR = "type";
 
     public static final String QUERY_FUNCTION_NOW = "now()";
 
@@ -207,6 +205,8 @@ public class Constants {
         DEPTH("depth"),
         FIELD("field"),
         VALUE("value"),
+        CHILD_NAME("childName"),
+        CHILD_TYPE("childType"),
         LEFT("left"),
         RIGHT("right"),
         NAME("name"),
