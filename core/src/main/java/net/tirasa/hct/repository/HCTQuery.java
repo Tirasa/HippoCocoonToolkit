@@ -215,7 +215,6 @@ public class HCTQuery extends AbstractHCTEntity {
     public HCTQueryResult execute() throws InvalidQueryException, RepositoryException {
         buildSQLQuery();
         LOG.debug("Elaborated JCR/SQL2 query: {}", getSqlQuery());
-        LOG.info("AAAAAAAAAAAAAAA {}", getSqlQuery());
         final Query query = session.getWorkspace().getQueryManager().createQuery(getSqlQuery(), Query.JCR_SQL2);
 
         // first execute without boundaries (only to take total result size)
