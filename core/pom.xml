@@ -50,7 +50,11 @@
       <groupId>org.apache.cocoon.sax</groupId>
       <artifactId>cocoon-sax</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.apache.cocoon.rest</groupId>
+      <artifactId>cocoon-rest</artifactId>
+    </dependency>
+    
     <!--  Hippo dependencies -->
     <dependency>
       <groupId>org.onehippo.cms7</groupId>

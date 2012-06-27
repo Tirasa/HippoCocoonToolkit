@@ -134,6 +134,11 @@
         <version>${cocoon.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.cocoon.rest</groupId>
+        <artifactId>cocoon-rest</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.cocoon.servlet</groupId>
         <artifactId>cocoon-servlet</artifactId>
         <version>${cocoon.version}</version>

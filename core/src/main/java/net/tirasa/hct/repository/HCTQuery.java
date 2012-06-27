@@ -20,6 +20,7 @@ package net.tirasa.hct.repository;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.jcr.Node;
@@ -28,6 +29,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.Query;
+import net.tirasa.hct.cocoon.sax.Constants.Availability;
 import org.hippoecm.repository.HippoStdNodeType;
 import org.hippoecm.repository.api.HippoNodeType;
 import org.hippoecm.repository.translation.HippoTranslationNodeType;
@@ -206,8 +208,10 @@ public class HCTQuery extends AbstractHCTEntity {
                 : Type.DOCS;
     }
 
-    public HCTQueryResult execute() throws InvalidQueryException, RepositoryException {
-        buildSQLQuery();
+    public HCTQueryResult execute(final Locale locale, final Availability availability)
+            throws InvalidQueryException, RepositoryException {
+
+        buildSQLQuery(locale, availability);
         LOG.debug("Elaborated JCR/SQL2 query: {}", getSqlQuery());
         final Query query = session.getWorkspace().getQueryManager().createQuery(getSqlQuery(), Query.JCR_SQL2);
 
@@ -222,10 +226,9 @@ public class HCTQuery extends AbstractHCTEntity {
         LOG.debug("About to execute {}", query.getStatement());
         final NodeIterator result = query.execute().getNodes();
 
-	final long totalPages = page == 0 ? 1L : 
-	    (totalResultSize % size == 0
-	     ? totalResultSize / size
-	     : totalResultSize / size + 1);
+        final long totalPages = page == 0 ? 1L : (totalResultSize % size == 0
+                ? totalResultSize / size
+                : totalResultSize / size + 1);
         return new HCTQueryResult(locale, result.getSize(), page, totalPages, result);
     }
 
@@ -266,7 +269,7 @@ public class HCTQuery extends AbstractHCTEntity {
         }
     }
 
-    private void buildSQLQuery() throws RepositoryException {
+    private void buildSQLQuery(final Locale locale, final Availability availability) throws RepositoryException {
         LOG.debug("Query type: {}", getType());
         final String actualBase = getType() == Type.TAXONOMY_DOCS ? "/content/documents" : base;
         LOG.debug("Search base: {}", actualBase);
@@ -297,7 +300,7 @@ public class HCTQuery extends AbstractHCTEntity {
             }
             whereClause.insert(0, '(');
             whereClause.append("AND ").append(taxonomySubclause).append(") ");
-            
+
             LOG.debug("Searching with taxonomies: {}", taxonomies);
         } else if (depth > 0) {
             final Set<String> depthFrontier = new HashSet<String>();
@@ -308,7 +311,7 @@ public class HCTQuery extends AbstractHCTEntity {
             }
         }
 
-        if (availability != null) {            
+        if (availability != null) {
             whereClause.insert(0, '(');
             whereClause.append("AND [" + HippoNodeType.HIPPO_AVAILABILITY + "] = '").
                     append(availability.name()).append("') ");

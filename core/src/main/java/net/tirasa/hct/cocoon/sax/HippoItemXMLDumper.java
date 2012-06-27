@@ -450,8 +450,8 @@ public class HippoItemXMLDumper {
         saxConsumer.endElement(NS_HCT, Element.FIELD.getName(), PREFIX_HCT + ":" + Element.FIELD.getName());
     }
 
-    public void dumpItem(final HippoItem item, final String itemPath,
-            final HCTConnManager connManager, final HCTQuery hctQuery)
+    public void dumpItem(final HippoItem item, final String itemPath, final HCTConnManager connManager,
+            final HCTQuery hctQuery, final Locale locale)
             throws SAXException, RepositoryException, IOException, ObjectBeanManagerException {
 
         final XMLReader xmlReader = new StartEndDocumentFilter(XMLUtils.createXMLReader(saxConsumer));
@@ -467,19 +467,17 @@ public class HippoItemXMLDumper {
 
                 if (rtfs != null && !rtfs.isEmpty()) {
                     for (HippoHtml rtf : rtfs) {
-                        dumpHtml(connManager.getObjMan(), rtf, xmlReader,
-                                hctQuery.getDateFormat(), hctQuery.getLocale());
+                        dumpHtml(connManager.getObjMan(), rtf, xmlReader, hctQuery.getDateFormat(), locale);
                     }
                 }
 
                 if (dates != null && !dates.isEmpty()) {
                     for (HippoDate date : dates) {
-                        dumpDate(fieldName, date.getCalendar(), hctQuery.getDateFormat(), hctQuery.getLocale());
+                        dumpDate(fieldName, date.getCalendar(), hctQuery.getDateFormat(), locale);
                     }
                 }
             } else {
-                dumpField(new DefaultMapEntry(fieldName, fieldValue),
-                        hctQuery.getDateFormat(), hctQuery.getLocale());
+                dumpField(new DefaultMapEntry(fieldName, fieldValue), hctQuery.getDateFormat(), locale);
             }
         }
 
@@ -489,8 +487,7 @@ public class HippoItemXMLDumper {
 
         if (hctQuery.isReturnTaxonomies()) {
             dumpTaxonomies(TaxonomyUtils.getTaxonomies(connManager,
-                    (String[]) item.getProperty(TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS)),
-                    hctQuery.getLocale());
+                    (String[]) item.getProperty(TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS)), locale);
         }
 
         if (hctQuery.isReturnImages()) {
