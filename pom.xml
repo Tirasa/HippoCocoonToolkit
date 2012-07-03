@@ -86,11 +86,11 @@
     <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
     <spring.version>3.1.1.RELEASE</spring.version>
 
-    <hippo.repository.version>2.22.06</hippo.repository.version>
-    <hippo.cms.version>2.22.05</hippo.cms.version>
-    <hippo.hst.version>2.24.04</hippo.hst.version>
+    <hippo.repository.version>2.22.07</hippo.repository.version>
+    <hippo.cms.version>2.22.07</hippo.cms.version>
+    <hippo.hst.version>2.24.05</hippo.hst.version>
         
-    <forge.taxonomy.version>1.08.03</forge.taxonomy.version>
+    <forge.taxonomy.version>1.08.04</forge.taxonomy.version>
     <forge.ecm-tagging.version>4.04.01</forge.ecm-tagging.version>
         
     <wicket.version>1.5.7</wicket.version>
@@ -131,6 +131,11 @@
       <dependency>
         <groupId>org.apache.cocoon.sax</groupId>
         <artifactId>cocoon-sax</artifactId>
+        <version>${cocoon.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.cocoon.rest</groupId>
+        <artifactId>cocoon-rest</artifactId>
         <version>${cocoon.version}</version>
       </dependency>
       <dependency>
@@ -450,24 +455,20 @@
       <url>http://maven.onehippo.com/maven2/</url>
     </repository>
     <repository>
-      <id>apache.snapshots</id>
-      <name>Apache Snapshot Repository</name>
-      <url>http://repository.apache.org/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-    <repository>
       <id>hippo-forge</id>
       <name>Hippo Forge maven 2 repository.</name>
       <url>http://maven.onehippo.com/maven2-forge/</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
+    </repository>
+    <repository>
+      <id>apache.snapshots</id>
+      <name>Apache Snapshot Repository</name>
+      <url>http://repository.apache.org/snapshots</url>
       <releases>
-        <updatePolicy>never</updatePolicy>
+        <enabled>false</enabled>
       </releases>
-      <layout>default</layout>
     </repository>
   </repositories>
     

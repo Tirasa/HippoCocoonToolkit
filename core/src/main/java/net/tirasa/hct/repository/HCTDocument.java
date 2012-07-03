@@ -18,13 +18,15 @@
  */
 package net.tirasa.hct.repository;
 
+import java.util.Locale;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
+import net.tirasa.hct.cocoon.sax.Constants.Availability;
+import net.tirasa.hct.cocoon.sax.HippoRepositoryNotFoundException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
 import org.hippoecm.hst.content.beans.standard.HippoDocument;
-import net.tirasa.hct.cocoon.sax.HippoRepositoryNotFoundException;
 
 public class HCTDocument extends AbstractHCTEntity {
 
@@ -48,7 +50,8 @@ public class HCTDocument extends AbstractHCTEntity {
         this.uuid = uuid;
     }
 
-    public HippoDocument getHippoDocument(final HCTConnManager connManager)
+    public HippoDocument getHippoDocument(final HCTConnManager connManager,
+            final Locale locale, final Availability availability)
             throws ObjectBeanManagerException, HippoRepositoryNotFoundException, RepositoryException {
 
         HippoDocument baseDoc = (HippoDocument) (path == null

@@ -21,6 +21,7 @@ package net.tirasa.hct.repository;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.jcr.Node;
@@ -31,6 +32,7 @@ import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.Query;
 import javax.jcr.query.RowIterator;
 import net.tirasa.hct.cocoon.sax.Constants;
+import net.tirasa.hct.cocoon.sax.Constants.Availability;
 import org.apache.jackrabbit.JcrConstants;
 import org.hippoecm.repository.HippoStdNodeType;
 import org.hippoecm.repository.api.HippoNodeType;
@@ -212,8 +214,10 @@ public class HCTQuery extends AbstractHCTEntity {
                 : Type.DOCS;
     }
 
-    public HCTQueryResult execute() throws InvalidQueryException, RepositoryException {
-        buildSQLQuery();
+    public HCTQueryResult execute(final Locale locale, final Availability availability)
+            throws InvalidQueryException, RepositoryException {
+
+        buildSQLQuery(locale, availability);
         LOG.debug("Elaborated JCR/SQL2 query: {}", getSqlQuery());
         final Query query = session.getWorkspace().getQueryManager().createQuery(getSqlQuery(), Query.JCR_SQL2);
 
@@ -301,7 +305,7 @@ public class HCTQuery extends AbstractHCTEntity {
         }
     }
 
-    private void buildSQLQuery() throws RepositoryException {
+    private void buildSQLQuery(final Locale locale, final Availability availability) throws RepositoryException {
         LOG.debug("Query type: {}", getType());
         final String actualBase = getType() == Type.TAXONOMY_DOCS ? "/content/documents" : base;
         LOG.debug("Search base: {}", actualBase);

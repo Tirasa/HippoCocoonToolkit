@@ -197,7 +197,6 @@ public class Constants {
         PATH("path"),
         UUID("uuid"),
         BASE("base"),
-        AVAILABILITY("availability"),
         TYPE("type"),
         SIZE("size"),
         PAGE("page"),

@@ -18,33 +18,9 @@
  */
 package net.tirasa.hct.repository;
 
-import java.util.Locale;
-import net.tirasa.hct.cocoon.sax.Constants;
-import net.tirasa.hct.cocoon.sax.Constants.Availability;
-
 public abstract class AbstractHCTEntity {
 
     protected String dateFormat;
-
-    protected Locale locale;
-
-    protected Constants.Availability availability;
-
-    public Constants.Availability getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(final Availability availability) {
-        this.availability = availability;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(final Locale locale) {
-        this.locale = locale;
-    }
 
     public String getDateFormat() {
         return dateFormat;

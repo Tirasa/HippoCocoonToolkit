@@ -16,17 +16,23 @@
 package org.onehippo.taxonomy.plugin.model;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
+import net.tirasa.hct.taxonomy.frontend.HCTTaxonomyNodeTypes;
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.map.LazyMap;
 import org.apache.wicket.model.IModel;
 import org.hippoecm.frontend.i18n.model.NodeTranslator;
 import org.hippoecm.frontend.model.JcrNodeModel;
 import org.hippoecm.repository.api.NodeNameCodec;
-import net.tirasa.hct.taxonomy.frontend.HCTTaxonomyNodeTypes;
 import org.onehippo.taxonomy.api.Category;
+import org.onehippo.taxonomy.api.CategoryInfo;
 import org.onehippo.taxonomy.api.TaxonomyNodeTypes;
 import org.onehippo.taxonomy.plugin.api.EditableCategory;
 import org.onehippo.taxonomy.plugin.api.EditableCategoryInfo;
@@ -38,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * Copied from original SVN for adding call to HCT custom taxonomy document navigation.
  *
  * @see
- * https://forge.onehippo.org/svn/taxonomy/taxonomy/tags/taxonomy-1.08.03/addon/frontend/src/main/java/org/onehippo/taxonomy/plugin/model/JcrCategory.java
+ * https://forge.onehippo.org/svn/taxonomy/taxonomy/tags/taxonomy-1.08.04/addon/frontend/src/main/java/org/onehippo/taxonomy/plugin/model/JcrCategory.java
  */
 public class JcrCategory extends TaxonomyObject implements EditableCategory {
     private static final long serialVersionUID = 1L;
@@ -158,7 +164,7 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
                         return new JcrCategoryInfo(new JcrNodeModel(child), editable);
                     }
                 }
-            }         
+            }
             if (editable) {
                 if (!JcrHelper.isNodeType(node, TaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_TRANSLATED)) {
                     node.addMixin(TaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_TRANSLATED);
@@ -192,6 +198,10 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
                     public void setSynonyms(String[] synonyms) throws TaxonomyException {
                     }
 
+                    public Node getNode() throws ItemNotFoundException {
+                        return null;
+                    }
+
                     public String getDescription() {
                         return "";
                     }
@@ -208,12 +218,46 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
                         return new String[0];
                     }
 
+                    public Map<String, Object> getProperties() {
+                        return Collections.emptyMap();
+                    }
+
+                    public String getString(String property) {
+                        return "";
+                    }
+
+                    public String getString(String property, String defaultValue) {
+                        return "";
+                    }
+
+                    public String[] getStringArray(String property) {
+                        return new String[0];
+                    }
+
+                    public void setString(String property, String value) throws TaxonomyException {
+                    }
+
+                    public void setStringArray(String property, String[] values) throws TaxonomyException {
+                    }
                 };
             }
         } catch (RepositoryException ex) {
             log.error(ex.getMessage());
         }
         return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, ? extends CategoryInfo> getInfos() {
+        Map<String, ? extends CategoryInfo> map = new HashMap<String, EditableCategoryInfo>();
+        return LazyMap.decorate(map,
+                new Transformer() {
+                    @Override
+                    public Object transform(Object language) {
+                        return getInfo((String) language);
+                    }
+        });
     }
 
     @Override

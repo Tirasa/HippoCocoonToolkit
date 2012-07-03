@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.jcr.RepositoryException;
+import net.tirasa.hct.cocoon.cache.AvailabilityLocaleCacheKey;
 import net.tirasa.hct.cocoon.sax.Constants.Attribute;
 import net.tirasa.hct.cocoon.sax.Constants.Availability;
 import net.tirasa.hct.cocoon.sax.Constants.Element;
@@ -73,11 +74,17 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
 
     private static final Logger LOG = LoggerFactory.getLogger(HippoRepositoryTransformer.class);
 
-    private transient Locale defaultLocale;
+    private static final String PARAM_LOCALE = "locale";
 
-    private transient State state;
+    private static final String PARAM_AVAILABILITY = "availability";
 
-    private transient HCTConnManager connManager;
+    private Locale locale;
+
+    private Availability availability;
+
+    private State state;
+
+    private HCTConnManager connManager;
 
     private transient HCTDocument hctDocument;
 
@@ -94,6 +101,21 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             return;
         }
 
+        if (!parameters.containsKey(PARAM_AVAILABILITY)) {
+            availability = Availability.live;
+
+            LOG.warn("No availability specified, reverting to " + availability);
+        } else {
+            try {
+                availability = Availability.valueOf((String) parameters.get(PARAM_AVAILABILITY));
+            } catch (IllegalArgumentException e) {
+                availability = Availability.live;
+
+                LOG.warn("Invalid availability specified, reverting to " + availability, e);
+            }
+        }
+
+        Locale defaultLocale;
         if (parameters.containsKey(Settings.ROLE)) {
             final Settings settings = (Settings) parameters.get(Settings.ROLE);
             final String localeString =
@@ -101,8 +123,23 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             try {
                 defaultLocale = LocaleUtils.toLocale(localeString);
             } catch (IllegalArgumentException e) {
-                LOG.error("Could not parse provided '{}' as Locale", localeString, e);
                 defaultLocale = Locale.getDefault();
+
+                LOG.error("Could not parse provided '{}' as default Locale", localeString, e);
+            }
+        } else {
+            defaultLocale = Locale.getDefault();
+        }
+
+        if (!parameters.containsKey(PARAM_LOCALE)) {
+            locale = defaultLocale;
+        } else {
+            try {
+                locale = LocaleUtils.toLocale((String) parameters.get(PARAM_LOCALE));
+            } catch (IllegalArgumentException e) {
+                locale = defaultLocale;
+
+                LOG.error("Could not parse provided '{}' as Locale", parameters.get(PARAM_LOCALE), e);
             }
         }
 
@@ -127,7 +164,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
 
     @Override
     public CacheKey constructCacheKey() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new AvailabilityLocaleCacheKey(availability, locale);
     }
 
     private void findAndDumpImagesAndAssets(final HippoDocument doc, final HippoItemXMLDumper dumper)
@@ -151,7 +188,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             }
         }
         dumper.dumpImages(images, Element.IMAGE.getName(), true);
-        dumper.dumpAssets(assets, Element.ASSET.getName(), true, hctDocument.getDateFormat(), hctDocument.getLocale());
+        dumper.dumpAssets(assets, Element.ASSET.getName(), true, hctDocument.getDateFormat(), locale);
     }
 
     private void compounds(final HippoDocument container, final HippoItemXMLDumper dumper, final XMLReader xmlReader)
@@ -163,19 +200,17 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
 
             // 1 Compound properties
             for (Entry<String, Object> entry : compound.getProperties().entrySet()) {
-                dumper.dumpField(entry, hctDocument.getDateFormat(), hctDocument.getLocale());
+                dumper.dumpField(entry, hctDocument.getDateFormat(), locale);
             }
 
             // 2 Compound date fields
             for (HippoDate date : compound.getChildBeans(HippoDate.class)) {
-                dumper.dumpDate(date.getName(), date.getCalendar(),
-                        hctDocument.getDateFormat(), hctDocument.getLocale());
+                dumper.dumpDate(date.getName(), date.getCalendar(), hctDocument.getDateFormat(), locale);
             }
 
             // 3 Compound HTML fields
             for (HippoHtml rtf : compound.getChildBeans(HippoHtml.class)) {
-                dumper.dumpHtml(connManager.getObjMan(), rtf, xmlReader,
-                        hctDocument.getDateFormat(), hctDocument.getLocale());
+                dumper.dumpHtml(connManager.getObjMan(), rtf, xmlReader, hctDocument.getDateFormat(), locale);
             }
 
             // 4 Compound images and assets
@@ -191,7 +226,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
     private void document()
             throws ObjectBeanManagerException, SAXException, IOException, RepositoryException {
 
-        final HippoDocument doc = hctDocument.getHippoDocument(connManager);
+        final HippoDocument doc = hctDocument.getHippoDocument(connManager, locale, availability);
 
         final HippoItemXMLDumper dumper = new HippoItemXMLDumper(this.getSAXConsumer());
 
@@ -203,24 +238,22 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             if (TaggingNodeType.PROP_TAGS.equals(entry.getKey())) {
                 dumper.dumpTags((String[]) entry.getValue());
             } else if (TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS.equals(entry.getKey())) {
-                dumper.dumpTaxonomies(TaxonomyUtils.getTaxonomies(connManager, (String[]) entry.getValue()),
-                        hctDocument.getLocale());
+                dumper.dumpTaxonomies(TaxonomyUtils.getTaxonomies(connManager, (String[]) entry.getValue()), locale);
             } else {
-                dumper.dumpField(entry, hctDocument.getDateFormat(), hctDocument.getLocale());
+                dumper.dumpField(entry, hctDocument.getDateFormat(), locale);
             }
         }
 
         // 3. Date fields
         for (HippoDate date : doc.getChildBeans(HippoDate.class)) {
-            dumper.dumpDate(date.getName(), date.getCalendar(), hctDocument.getDateFormat(), hctDocument.getLocale());
+            dumper.dumpDate(date.getName(), date.getCalendar(), hctDocument.getDateFormat(), locale);
         }
 
         // 4. HTML fields
         final XMLReader xmlReader = new StartEndDocumentFilter(XMLUtils.createXMLReader(this.getSAXConsumer()));
         xmlReader.setContentHandler(this.getSAXConsumer());
         for (HippoHtml rtf : doc.getChildBeans(HippoHtml.class)) {
-            dumper.dumpHtml(connManager.getObjMan(), rtf, xmlReader,
-                    hctDocument.getDateFormat(), hctDocument.getLocale());
+            dumper.dumpHtml(connManager.getObjMan(), rtf, xmlReader, hctDocument.getDateFormat(), locale);
         }
 
         // 5. Images and Assets
@@ -242,7 +275,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
     }
 
     private void query() throws SAXException, RepositoryException, IOException, ObjectBeanManagerException {
-        final HCTQueryResult queryResult = hctQuery.execute();
+        final HCTQueryResult queryResult = hctQuery.execute(locale, availability);
         LOG.debug("Query is {}", hctQuery.getSqlQuery());
 
         final HippoItemXMLDumper dumper = new HippoItemXMLDumper(this.getSAXConsumer());
@@ -260,7 +293,8 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                     final String[] keys = item.getProperty(TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS);
                     for (int i = 0; keys != null && i < keys.length; i++) {
                         if (hctQuery.getTaxonomies().keySet().contains(keys[i])) {
-                            final HCTTaxonomyCategoryBean taxonomy = (HCTTaxonomyCategoryBean) connManager.getObjMan().
+                            final HCTTaxonomyCategoryBean taxonomy =
+                                    (HCTTaxonomyCategoryBean) connManager.getObjMan().
                                     getObject(hctQuery.getTaxonomies().get(keys[i]));
                             if (!resultByFolder.containsKey(taxonomy)) {
                                 resultByFolder.put(taxonomy, new ArrayList<HippoItem>());
@@ -280,17 +314,17 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             // 2. output results by folder / taxonomy
             for (Map.Entry<HippoItem, List<HippoItem>> entry : resultByFolder.entrySet()) {
                 if (hctQuery.getType() == HCTQuery.Type.TAXONOMY_DOCS) {
-                    dumper.startTaxonomy((HCTTaxonomyCategoryBean) entry.getKey(), hctQuery.getLocale());
+                    dumper.startTaxonomy((HCTTaxonomyCategoryBean) entry.getKey(), locale);
                     for (HippoItem item : entry.getValue()) {
                         dumper.dumpItem(item,
                                 TaxonomyUtils.buildPathInTaxonomy(entry.getKey().getPath(), item.getName()),
-                                connManager, hctQuery);
+                                connManager, hctQuery, locale);
                     }
                     dumper.endTaxonomy();
                 } else {
                     dumper.startHippoItem(entry.getKey(), entry.getKey().getPath());
                     for (HippoItem item : entry.getValue()) {
-                        dumper.dumpItem(item, item.getPath(), connManager, hctQuery);
+                        dumper.dumpItem(item, item.getPath(), connManager, hctQuery, locale);
                     }
                     dumper.endHippoItem(entry.getKey());
                 }
@@ -301,7 +335,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
 
                 switch (hctQuery.getType()) {
                     case TAXONOMIES:
-                        dumper.startTaxonomy((HCTTaxonomyCategoryBean) item, hctQuery.getLocale());
+                        dumper.startTaxonomy((HCTTaxonomyCategoryBean) item, locale);
                         dumper.endTaxonomy();
                         break;
 
@@ -310,7 +344,8 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                         for (int i = 0; keys != null && i < keys.length; i++) {
                             if (hctQuery.getTaxonomies().keySet().contains(keys[i])) {
                                 dumper.dumpItem(item, TaxonomyUtils.buildPathInTaxonomy(
-                                        hctQuery.getTaxonomies().get(keys[i]), item.getName()), connManager, hctQuery);
+                                        hctQuery.getTaxonomies().get(keys[i]), item.getName()),
+                                        connManager, hctQuery, locale);
                             }
                         }
                         break;
@@ -318,29 +353,12 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                     case DOCS:
                     case FOLDERS:
                     default:
-                        dumper.dumpItem(item, item.getPath(), connManager, hctQuery);
+                        dumper.dumpItem(item, item.getPath(), connManager, hctQuery, locale);
                 }
             }
         }
 
         dumper.endQueryResult();
-    }
-
-    private Locale parseLocale(final Attributes atts) {
-        Locale locale;
-        final String localeString = atts.getValue(Attribute.LOCALE.getName());
-        if (StringUtils.isBlank(localeString)) {
-            locale = defaultLocale;
-        } else {
-            try {
-                locale = LocaleUtils.toLocale(localeString);
-            } catch (IllegalArgumentException e) {
-                LOG.error("Could not parse provided '{}' as Locale", localeString, e);
-                locale = Locale.getDefault();
-            }
-        }
-
-        return locale;
     }
 
     private String parseDateFormat(final Attributes atts) {
@@ -350,19 +368,6 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         }
 
         return dateFormat;
-    }
-
-    private Availability parseAvailability(final Attributes atts) {
-        Availability availability;
-        try {
-            availability = Availability.valueOf(atts.getValue(Attribute.AVAILABILITY.getName()));
-        } catch (IllegalArgumentException e) {
-            availability = Availability.live;
-
-            LOG.warn("Invalid availability specified, reverting to " + availability, e);
-        }
-
-        return availability;
     }
 
     private int parseDepth(final Attributes atts) {
@@ -428,9 +433,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             hctDocument = new HCTDocument();
             hctDocument.setPath(atts.getValue(Attribute.PATH.getName()));
             hctDocument.setUuid(atts.getValue(Attribute.UUID.getName()));
-            hctDocument.setLocale(parseLocale(atts));
             hctDocument.setDateFormat(parseDateFormat(atts));
-            hctDocument.setAvailability(parseAvailability(atts));
         }
 
         if (element == Element.FOLDERS) {
@@ -443,7 +446,6 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                     ? "/" : atts.getValue(Attribute.BASE.getName()));
             hctQuery.setReturnType(hctQuery.getBase().startsWith("/content/taxonomies/")
                     ? TaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_CATEGORY : HippoStdNodeType.NT_FOLDER);
-            hctQuery.setLocale(parseLocale(atts));
             hctQuery.setDateFormat(parseDateFormat(atts));
             hctQuery.setDepth(parseDepth(atts));
             hctQuery.setSize(parseSize(atts));
@@ -474,9 +476,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                     ? "/" : atts.getValue(Attribute.BASE.getName()));
             hctQuery.setReturnType(atts.getValue(Attribute.TYPE.getName()) == null
                     ? "nt:base" : atts.getValue(Attribute.TYPE.getName()));
-            hctQuery.setLocale(parseLocale(atts));
             hctQuery.setDateFormat(parseDateFormat(atts));
-            hctQuery.setAvailability(parseAvailability(atts));
             hctQuery.setDepth(parseDepth(atts));
             hctQuery.setSize(parseSize(atts));
             hctQuery.setPage(parsePage(atts));
