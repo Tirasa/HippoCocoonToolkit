@@ -350,7 +350,7 @@ public class HCTQuery extends AbstractHCTEntity {
             }
         }
 
-        if (availability != null) {
+        if (getType() != Type.FOLDERS && availability != null) {
             whereClause.insert(0, '(');
             whereClause.append("AND ").append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').
                     append(HippoNodeType.HIPPO_AVAILABILITY).append("] = '").append(availability.name()).append("') ");
