@@ -18,4 +18,4 @@
   under the License.
 -->
 <hct:folders xmlns:hct="http://www.tirasa.net/hct/1.0"
-             locale="$locale$" base="$base$" depth="1"/>
+             base="$base$" depth="1"/>

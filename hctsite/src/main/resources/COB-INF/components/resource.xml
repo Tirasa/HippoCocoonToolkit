@@ -18,7 +18,7 @@
   under the License.
 -->
 <hct:query xmlns:hct="http://www.tirasa.net/hct/1.0"
-           locale="$locale$" base="$base$" availability="$availability$"
+           base="$base$"
            type="hippostdpubwf:document" size="5" depth="0"
            includeFolders="true">
   <hct:filter>

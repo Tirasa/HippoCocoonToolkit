@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.onehippo.cms7</groupId>
     <artifactId>hippo-cms7-release</artifactId>
-    <version>7.7.3</version>
+    <version>7.7.4</version>
     <relativePath/>
   </parent>
 
@@ -83,7 +83,6 @@
     <commons.lang.version>2.6</commons.lang.version>
     <junit.version>4.10</junit.version>
     <freemarker.version>2.3.18</freemarker.version>
-    <hippo.cms.version>2.22.06</hippo.cms.version>
     <filesync.override>false</filesync.override>
     <maven.plugins.filesync.version>1.0.0</maven.plugins.filesync.version>
     
