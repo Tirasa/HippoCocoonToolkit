@@ -74,6 +74,12 @@
         </exclusion>
       </exclusions>
     </dependency>
+    
+    <!-- HCT Event Listener -->
+    <dependency>
+      <groupId>net.tirasa.hct</groupId>
+      <artifactId>hct-repository-event-listener-repository</artifactId>
+    </dependency>
    
   </dependencies>
 

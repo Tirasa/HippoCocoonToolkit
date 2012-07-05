@@ -35,5 +35,8 @@
     
   <!-- Using classpath: resources -->
   <bean class="net.tirasa.hct.cocoon.internal.ClasspathURLStreamHandlerFactory"/>
+  
+  <!-- Utility -->
+  <bean class="net.tirasa.hct.util.ApplicationContextProvider"/>
 
 </beans>

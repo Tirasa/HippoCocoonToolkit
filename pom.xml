@@ -181,7 +181,17 @@
         <artifactId>hct-core</artifactId>
         <version>${hct.version}</version>
       </dependency>
-      
+      <dependency>
+        <groupId>net.tirasa.hct</groupId>
+        <artifactId>hct-repository-event-listener-hst</artifactId>
+        <version>${hct.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.tirasa.hct</groupId>
+        <version>${hct.version}</version>
+        <artifactId>hct-repository-event-listener-repository</artifactId>
+      </dependency>
+
       <dependency>
         <groupId>org.apache.cocoon.servlet</groupId>
         <artifactId>cocoon-servlet</artifactId>
