@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,8 +15,8 @@
  */
 package net.tirasa.hct.cocoon.sax;
 
-import org.apache.cocoon.pipeline.ProcessingException;
 import net.tirasa.hct.cocoon.sax.Constants.State;
+import org.apache.cocoon.pipeline.ProcessingException;
 
 public class InvalidHCTRequestException extends ProcessingException {
 

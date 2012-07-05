@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (C) 2012 Tirasa
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>net.tirasa.hct</groupId>
+    <artifactId>hct-repository-event-listener</artifactId>
+    <version>0.5-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>hct-repository-event-listener-repository</artifactId>
+  <name>Hippo Cocoon Toolkit - Event Listener (repository)</name>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.onehippo.forge.repository-event-listener</groupId>
+      <artifactId>repository-event-listener-repository</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <inherited>true</inherited>
+        <configuration>
+          <artifactSet>
+            <includes>
+              <include>org.onehippo.forge.repository-event-listener:repository-event-listener-repository</include>
+            </includes>
+          </artifactSet>
+          <!--<filters>
+            <filter>
+              <artifact>org.onehippo.forge.repository-event-listener:repository-event-listener-repository</artifact>
+              <excludes>
+                <exclude>hippotaxonomy.cnd</exclude>
+              </excludes>
+            </filter>
+          </filters>-->
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+    
+</project>
