@@ -221,11 +221,14 @@ public class HCTQuery extends AbstractHCTEntity {
         // first execute without boundaries (only to take total result size)
         final long totalResultSize = page == 0 ? 0 : query.execute().getRows().getSize();
 
-        // then execute with page and offset, for actual result
-        query.setLimit(size);
-        if (page > 0) {
-            query.setOffset((page - 1) * size);
+        // then execute with page and offset, for actual result - ONLY if size > 0 was provided
+        if (size > 0) {
+            query.setLimit(size);
+            if (page > 0) {
+                query.setOffset((page - 1) * size);
+            }
         }
+
         LOG.debug("About to execute {}", query.getStatement());
         final RowIterator result = query.execute().getRows();
 
