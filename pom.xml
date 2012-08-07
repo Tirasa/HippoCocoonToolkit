@@ -81,11 +81,11 @@
   
   <properties>
     <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
-    <spring.version>3.1.1.RELEASE</spring.version>
+    <spring.version>3.1.2.RELEASE</spring.version>
 
-    <hippo.repository.version>2.22.07</hippo.repository.version>
-    <hippo.cms.version>2.22.07</hippo.cms.version>
-    <hippo.hst.version>2.24.05</hippo.hst.version>
+    <hippo.repository.version>2.22.08</hippo.repository.version>
+    <hippo.cms.version>2.22.08</hippo.cms.version>
+    <hippo.hst.version>2.24.06</hippo.hst.version>
         
     <forge.taxonomy.version>1.08.04</forge.taxonomy.version>
     <forge.ecm-tagging.version>4.04.01</forge.ecm-tagging.version>
