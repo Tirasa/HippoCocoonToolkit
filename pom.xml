@@ -85,7 +85,7 @@
 
     <hippo.repository.version>2.22.09</hippo.repository.version>
     <hippo.cms.version>2.22.10</hippo.cms.version>
-    <hippo.hst.version>2.24.06</hippo.hst.version>
+    <hippo.hst.version>2.24.07</hippo.hst.version>
         
     <forge.taxonomy.version>1.08.04</forge.taxonomy.version>
     <forge.ecm-tagging.version>4.04.01</forge.ecm-tagging.version>
@@ -93,7 +93,7 @@
         
     <javax.jcr.version>2.0</javax.jcr.version>
         
-    <wicket.version>1.5.7</wicket.version>
+    <wicket.version>1.5.8</wicket.version>
         
     <slf4j.version>1.6.6</slf4j.version>
         
