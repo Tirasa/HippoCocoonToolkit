@@ -38,28 +38,20 @@ import org.onehippo.taxonomy.api.TaxonomyNodeTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HCTQuery extends AbstractHCTEntity {
+public class HCTQuery extends HCTTraversal {
 
     public enum Type {
 
-        DOCS,
-        FOLDERS,
-        TAXONOMY_DOCS,
-        TAXONOMIES
+        FOLDER_DOCS,
+        TAXONOMY_DOCS
 
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(HCTQuery.class);
 
-    private String base;
-
     private transient String returnType;
 
-    private int depth;
-
     private long page;
-
-    private long size;
 
     private final transient Set<String> returnFields;
 
@@ -91,22 +83,6 @@ public class HCTQuery extends AbstractHCTEntity {
         filter = new HCTQueryFilter();
         orderBy = new StringBuilder();
         taxonomies = new HashMap<String, String>();
-    }
-
-    public String getBase() {
-        return base;
-    }
-
-    public void setBase(final String base) {
-        this.base = base;
-    }
-
-    public int getDepth() {
-        return depth;
-    }
-
-    public void setDepth(final int depth) {
-        this.depth = depth;
     }
 
     public boolean isIncludeFolders() {
@@ -157,14 +133,6 @@ public class HCTQuery extends AbstractHCTEntity {
         this.returnRelatedDocs = returnRelatedDocs;
     }
 
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(final long size) {
-        this.size = size;
-    }
-
     public String getReturnType() {
         return returnType;
     }
@@ -200,23 +168,19 @@ public class HCTQuery extends AbstractHCTEntity {
     }
 
     public Type getType() {
-        return returnType == null || base == null
+        return base == null
                 ? null
-                : HippoStdNodeType.NT_FOLDER.equals(returnType)
-                ? Type.FOLDERS
-                : TaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_CATEGORY.equals(returnType)
-                ? Type.TAXONOMIES
                 : base.startsWith("/content/taxonomies")
                 ? Type.TAXONOMY_DOCS
-                : Type.DOCS;
+                : Type.FOLDER_DOCS;
     }
 
     public HCTQueryResult execute(final Locale locale, final Availability availability)
-            throws InvalidQueryException, RepositoryException {
+            throws RepositoryException {
 
         buildSQLQuery(locale, availability);
-        LOG.debug("Elaborated JCR/SQL2 query: {}", getSqlQuery());
-        final Query query = session.getWorkspace().getQueryManager().createQuery(getSqlQuery(), Query.JCR_SQL2);
+        LOG.debug("Elaborated JCR/SQL2 query: {}", getSQLQuery());
+        final Query query = session.getWorkspace().getQueryManager().createQuery(getSQLQuery(), Query.JCR_SQL2);
 
         // first execute without boundaries (only to take total result size)
         final long totalResultSize = page == 0 ? 0 : query.execute().getRows().getSize();
@@ -265,9 +229,10 @@ public class HCTQuery extends AbstractHCTEntity {
         } else {
             for (final NodeIterator nodes = node.getNodes(); nodes.hasNext();) {
                 final Node child = nodes.nextNode();
-                if (HippoStdNodeType.NT_FOLDER.equals(child.getPrimaryNodeType().getName())
-                        || TaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_CATEGORY.equals(
-                        child.getPrimaryNodeType().getName())) {
+                if (HippoStdNodeType.NT_FOLDER.
+                        equals(child.getPrimaryNodeType().getName())
+                        || TaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_CATEGORY.
+                        equals(child.getPrimaryNodeType().getName())) {
 
                     findDepthFrontier(child, frontier, targetDepth);
                 }
@@ -276,7 +241,7 @@ public class HCTQuery extends AbstractHCTEntity {
     }
 
     private void addCondsToWhereClause(final List<String> conds, final StringBuilder clause, final String op) {
-        boolean firstItem = clause.length() == 0;
+        final boolean firstItem = clause.length() == 0;
         for (String cond : conds) {
             clause.insert(0, '(');
             if (!firstItem) {
@@ -350,20 +315,18 @@ public class HCTQuery extends AbstractHCTEntity {
             }
         }
 
-        if (getType() != Type.FOLDERS && availability != null) {
-            whereClause.insert(0, '(');
-            whereClause.append("AND ").append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').
-                    append(HippoNodeType.HIPPO_AVAILABILITY).append("] = '").append(availability.name()).append("') ");
-        }
+        // locale
+        whereClause.insert(0, '(');
+        whereClause.append("AND ").append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').
+                append(HippoTranslationNodeType.LOCALE).append("] = '").append(locale).append("') ");
 
-        if (getType() != Type.TAXONOMIES) {
-            whereClause.insert(0, '(');
-            whereClause.append("AND ").append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').
-                    append(HippoTranslationNodeType.LOCALE).append("] = '").append(locale).append("') ");
-        }
+        // availability
+        whereClause.insert(0, '(');
+        whereClause.append("AND ").append(Constants.QUERY_DEFAULT_SELECTOR).append('.').append('[').
+                append(HippoNodeType.HIPPO_AVAILABILITY).append("] = '").append(availability.name()).append("') ");
 
-        StringBuilder andCondClause = new StringBuilder();
-        StringBuilder orCondClause = new StringBuilder();
+        final StringBuilder andCondClause = new StringBuilder();
+        final StringBuilder orCondClause = new StringBuilder();
 
         addCondsToWhereClause(filter.getAndConds(), andCondClause, "AND");
         addCondsToWhereClause(filter.getOrConds(), orCondClause, "OR");
@@ -389,7 +352,7 @@ public class HCTQuery extends AbstractHCTEntity {
         sqlQuery = query.toString();
     }
 
-    public String getSqlQuery() {
+    public String getSQLQuery() {
         return sqlQuery;
     }
 }

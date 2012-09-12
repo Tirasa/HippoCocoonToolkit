@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import javax.jcr.Node;
 import net.tirasa.hct.repository.HCTConnManager;
+import net.tirasa.hct.util.ObjectUtils;
 import org.apache.cocoon.pipeline.ProcessingException;
 import org.apache.cocoon.pipeline.SetupException;
 import org.apache.cocoon.pipeline.caching.CacheKey;
@@ -32,6 +33,7 @@ import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
 import org.hippoecm.hst.content.beans.standard.HippoAsset;
 import org.hippoecm.hst.content.beans.standard.HippoGalleryImageBean;
 import org.hippoecm.hst.content.beans.standard.HippoGalleryImageSet;
+import org.hippoecm.hst.content.beans.standard.HippoItem;
 import org.hippoecm.hst.content.beans.standard.HippoResource;
 import org.hippoecm.hst.servlet.utils.ResourceUtils;
 import org.slf4j.Logger;
@@ -92,7 +94,7 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
         String nodePath = this.source.toExternalForm().substring(source.toExternalForm().indexOf(':') + 1);
 
         // Try to guess if this is an image (and adapt path on repository accordingly)
-        ImageType imageType = nodePath.endsWith(":" + ImageType.thumbnail.name())
+        final ImageType imageType = nodePath.endsWith(":" + ImageType.thumbnail.name())
                 ? ImageType.thumbnail : ImageType.original;
         if (nodePath.endsWith(":" + imageType.name())) {
             LOG.debug("Selected image type is {}", imageType);
@@ -100,9 +102,9 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
             nodePath = nodePath.substring(0, nodePath.lastIndexOf(':'));
         }
 
-        Object obj;
+        HippoItem obj;
         try {
-            obj = connManager.getObjMan().getObject(nodePath);
+            obj = ObjectUtils.getHippoItem(connManager, nodePath);
             if (obj == null) {
                 throw new HippoRepositoryNotFoundException("Could not read " + nodePath);
             }
@@ -111,14 +113,14 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
         }
 
         if (obj instanceof HippoGalleryImageSet) {
-            HippoGalleryImageBean imgBean = imageType == ImageType.thumbnail
+            final HippoGalleryImageBean imgBean = imageType == ImageType.thumbnail
                     ? ((HippoGalleryImageSet) obj).getThumbnail() : ((HippoGalleryImageSet) obj).getOriginal();
             this.lastmodified = imgBean.getLastModified().getTimeInMillis();
             this.node = imgBean.getNode();
         } else if (obj instanceof HippoAsset) {
             final List<HippoResource> resources = ((HippoAsset) obj).getChildBeans(HippoResource.class);
             if (resources != null && !resources.isEmpty()) {
-                HippoResource asset = resources.get(0);
+                final HippoResource asset = resources.get(0);
                 this.lastmodified = asset.getLastModified().getTimeInMillis();
                 this.node = asset.getNode();
             }

@@ -15,6 +15,8 @@
  */
 package net.tirasa.hct.hstbeans;
 
+import java.util.List;
+import java.util.Locale;
 import org.hippoecm.hst.content.beans.Node;
 import org.hippoecm.hst.content.beans.standard.HippoItem;
 
@@ -25,11 +27,21 @@ public class HCTTaxonomyCategoryBean extends HippoItem {
         return getProperty("hippotaxonomy:key");
     }
 
+    @Override
+    public String getLocalizedName() {
+        return getLocalizedName(Locale.getDefault().getLanguage());
+    }
+
     public String getLocalizedName(final String language) {
         String localizedName = getKey();
-        for (HCTTaxonomyTranslation translation : getChildBeans(HCTTaxonomyTranslation.class)) {
-            if (translation.getLanguage().equals(language)) {
-                localizedName = translation.getMessage();
+        final List<HCTTaxonomyTranslation> translations = getChildBeans(HCTTaxonomyTranslation.class);
+        if (translations.size() == 1) {
+            localizedName = translations.iterator().next().getMessage();
+        } else {
+            for (HCTTaxonomyTranslation translation : getChildBeans(HCTTaxonomyTranslation.class)) {
+                if (translation.getLanguage().equals(language)) {
+                    localizedName = translation.getMessage();
+                }
             }
         }
 

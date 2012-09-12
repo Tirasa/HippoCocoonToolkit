@@ -21,6 +21,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import net.tirasa.hct.cocoon.sax.Constants.Availability;
 import net.tirasa.hct.cocoon.sax.HippoRepositoryNotFoundException;
+import net.tirasa.hct.util.ObjectUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
 import org.hippoecm.hst.content.beans.standard.HippoDocument;
@@ -51,9 +52,9 @@ public class HCTDocument extends AbstractHCTEntity {
             final Locale locale, final Availability availability)
             throws ObjectBeanManagerException, HippoRepositoryNotFoundException, RepositoryException {
 
-        HippoDocument baseDoc = (HippoDocument) (path == null
-                ? connManager.getObjMan().getObjectByUuid(uuid)
-                : connManager.getObjMan().getObject(path));
+        HippoDocument baseDoc = path == null
+                ? ObjectUtils.getHippoItemByUuid(connManager, uuid, HippoDocument.class)
+                : ObjectUtils.getHippoItem(connManager, path, HippoDocument.class);
 
         // Check existence
         if (baseDoc == null) {
@@ -77,8 +78,8 @@ public class HCTDocument extends AbstractHCTEntity {
         for (final NodeIterator itor = parent.getNodes(baseDoc.getPath().
                 substring(baseDoc.getPath().lastIndexOf('/') + 1)); itor.hasNext();) {
 
-            final HippoDocument version = (HippoDocument) connManager.getObjMan().
-                    getObjectByUuid(itor.nextNode().getIdentifier());
+            final HippoDocument version = ObjectUtils.getHippoItemByUuid(
+                    connManager, itor.nextNode().getIdentifier(), HippoDocument.class);
             if (ArrayUtils.contains((String[]) version.getProperty("hippo:availability"), availability.toString())) {
                 doc = version;
             }

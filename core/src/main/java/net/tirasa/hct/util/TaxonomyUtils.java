@@ -72,6 +72,6 @@ public final class TaxonomyUtils {
             throw new PathNotFoundException("Taxonomy category with key " + key);
         }
 
-        return (HCTTaxonomyCategoryBean) connManager.getObjConv().getObject(result.nextNode());
+        return ObjectUtils.getHippoItem(connManager, result.nextNode(), HCTTaxonomyCategoryBean.class);
     }
 }

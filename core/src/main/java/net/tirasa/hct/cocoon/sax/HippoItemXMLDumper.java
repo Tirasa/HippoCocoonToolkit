@@ -36,13 +36,13 @@ import net.tirasa.hct.hstbeans.RelatedDocs;
 import net.tirasa.hct.repository.HCTConnManager;
 import net.tirasa.hct.repository.HCTQuery;
 import net.tirasa.hct.repository.HCTQueryResult;
+import net.tirasa.hct.util.ObjectUtils;
 import net.tirasa.hct.util.TaxonomyUtils;
 import org.apache.cocoon.sax.SAXConsumer;
 import org.apache.cocoon.sax.util.XMLUtils;
 import org.apache.commons.collections.keyvalue.DefaultMapEntry;
 import org.apache.commons.lang3.StringUtils;
 import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
-import org.hippoecm.hst.content.beans.manager.ObjectBeanManager;
 import org.hippoecm.hst.content.beans.standard.HippoAsset;
 import org.hippoecm.hst.content.beans.standard.HippoDocument;
 import org.hippoecm.hst.content.beans.standard.HippoFacetSelect;
@@ -417,7 +417,7 @@ public class HippoItemXMLDumper {
         dumpField(new DefaultMapEntry(name, calendar), dateFormat, locale);
     }
 
-    public void dumpHtml(final ObjectBeanManager objMan, final HippoHtml rtf, final XMLReader xmlReader,
+    public void dumpHtml(final HCTConnManager connManager, final HippoHtml rtf, final XMLReader xmlReader,
             final String dateFormat, final Locale locale)
             throws SAXException, IOException, ObjectBeanManagerException {
 
@@ -431,7 +431,7 @@ public class HippoItemXMLDumper {
         final List<HippoAsset> assets = new ArrayList<HippoAsset>();
         final List<HippoDocument> docs = new ArrayList<HippoDocument>();
         for (HippoFacetSelect facetSelect : rtf.getChildBeans(HippoFacetSelect.class)) {
-            final Object subElement = objMan.getObjectByUuid(
+            final HippoItem subElement = ObjectUtils.getHippoItemByUuid(connManager,
                     (String) facetSelect.getProperty(HippoNodeType.HIPPO_DOCBASE));
             if (subElement instanceof HippoGalleryImageSet) {
                 images.add((HippoGalleryImageSet) subElement);
@@ -452,7 +452,7 @@ public class HippoItemXMLDumper {
         saxConsumer.endElement(NS_HCT, Element.FIELD.getName(), PREFIX_HCT + ":" + Element.FIELD.getName());
     }
 
-    public void dumpItem(final HippoItem item, final String itemPath, final HCTConnManager connManager,
+    public void dumpHippoItem(final HCTConnManager connManager, final HippoItem item, final String itemPath,
             final HCTQuery hctQuery, final Locale locale)
             throws SAXException, RepositoryException, IOException, ObjectBeanManagerException {
 
@@ -469,7 +469,7 @@ public class HippoItemXMLDumper {
 
                 if (rtfs != null && !rtfs.isEmpty()) {
                     for (HippoHtml rtf : rtfs) {
-                        dumpHtml(connManager.getObjMan(), rtf, xmlReader, hctQuery.getDateFormat(), locale);
+                        dumpHtml(connManager, rtf, xmlReader, hctQuery.getDateFormat(), locale);
                     }
                 }
 
@@ -495,8 +495,8 @@ public class HippoItemXMLDumper {
         if (hctQuery.isReturnImages()) {
             final List<HippoGalleryImageSet> images = new ArrayList<HippoGalleryImageSet>();
             for (ImageLinkBean imgLink : item.getChildBeans(ImageLinkBean.class)) {
-                final HippoGalleryImageSet image =
-                        (HippoGalleryImageSet) connManager.getObjMan().getObjectByUuid(imgLink.getImageSetUuid());
+                final HippoGalleryImageSet image = ObjectUtils.getHippoItemByUuid(connManager,
+                        imgLink.getImageSetUuid(), HippoGalleryImageSet.class);
                 if (image != null) {
                     images.add(image);
                 }
@@ -508,7 +508,7 @@ public class HippoItemXMLDumper {
             final List<HippoDocument> relDocs = new ArrayList<HippoDocument>();
             for (RelatedDocs docs : item.getChildBeans(RelatedDocs.class)) {
                 for (String relDocUuid : docs.getRelatedDocsUuids()) {
-                    relDocs.add((HippoDocument) connManager.getObjMan().getObjectByUuid(relDocUuid));
+                    relDocs.add(ObjectUtils.getHippoItemByUuid(connManager, relDocUuid, HippoDocument.class));
                 }
             }
             dumpRelatedDocs(relDocs, Element.DOCUMENT.getName(), true);

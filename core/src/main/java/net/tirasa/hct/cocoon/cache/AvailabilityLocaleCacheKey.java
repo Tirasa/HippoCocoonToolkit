@@ -24,11 +24,13 @@ import org.apache.cocoon.util.murmurhash.MurmurHashCodeBuilder;
 
 public class AvailabilityLocaleCacheKey extends AbstractCacheKey {
 
+    private static final long serialVersionUID = -2826221049544275274L;
+
     private final Availability availability;
 
     private final Locale locale;
 
-    public AvailabilityLocaleCacheKey(Availability availability, Locale locale) {
+    public AvailabilityLocaleCacheKey(final Availability availability, final Locale locale) {
         this.availability = availability;
         this.locale = locale;
     }
@@ -52,12 +54,12 @@ public class AvailabilityLocaleCacheKey extends AbstractCacheKey {
     }
 
     @Override
-    public boolean isValid(CacheKey cacheKey) {
+    public boolean isValid(final CacheKey cacheKey) {
         return this.equals(cacheKey);
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
