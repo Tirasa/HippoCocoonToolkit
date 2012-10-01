@@ -30,6 +30,7 @@ import net.tirasa.hct.cocoon.sax.Constants.Attribute;
 import net.tirasa.hct.cocoon.sax.Constants.Element;
 import net.tirasa.hct.cocoon.sax.Constants.StartEndDocumentFilter;
 import net.tirasa.hct.hstbeans.HCTTaxonomyCategoryBean;
+import net.tirasa.hct.hstbeans.HippoCompoundDocument;
 import net.tirasa.hct.hstbeans.HippoDate;
 import net.tirasa.hct.hstbeans.ImageLinkBean;
 import net.tirasa.hct.hstbeans.RelatedDocs;
@@ -462,7 +463,18 @@ public class HippoItemXMLDumper {
         startHippoItem(item, itemPath);
 
         for (final String fieldName : hctQuery.getReturnFields()) {
-            final Object fieldValue = item.getProperty(fieldName);
+            Object fieldValue = null;
+            if (fieldName.contains("/")) {
+                final String[] splitted = fieldName.split("/");
+                final List<HippoCompoundDocument> compounds =
+                        item.getChildBeansByName(splitted[0], HippoCompoundDocument.class);
+                if (!compounds.isEmpty()) {
+                    fieldValue = compounds.iterator().next().getProperty(splitted[1]);
+                }
+            } else {
+                fieldValue = item.getProperty(fieldName);
+            }
+
             if (fieldValue == null) {
                 final List<HippoHtml> rtfs = item.getChildBeansByName(fieldName, HippoHtml.class);
                 final List<HippoDate> dates = item.getChildBeansByName(fieldName, HippoDate.class);
