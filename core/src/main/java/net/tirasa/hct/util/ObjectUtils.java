@@ -25,7 +25,7 @@ public class ObjectUtils {
     private ObjectUtils() {
     }
 
-    public HippoItem getHippoItem(final HCTConnManager connManager, final Node node)
+    public static HippoItem getHippoItem(final HCTConnManager connManager, final Node node)
             throws ObjectBeanManagerException {
 
         return getHippoItem(connManager, node, HippoItem.class);

@@ -24,6 +24,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import static net.tirasa.hct.cocoon.sax.Constants.*;
 import net.tirasa.hct.cocoon.sax.Constants.Attribute;
@@ -507,10 +508,17 @@ public class HippoItemXMLDumper {
         if (hctQuery.isReturnImages()) {
             final List<HippoGalleryImageSet> images = new ArrayList<HippoGalleryImageSet>();
             for (ImageLinkBean imgLink : item.getChildBeans(ImageLinkBean.class)) {
-                final HippoGalleryImageSet image = ObjectUtils.getHippoItemByUuid(connManager,
-                        imgLink.getImageSetUuid(), HippoGalleryImageSet.class);
-                if (image != null) {
-                    images.add(image);
+                Node imgLinkNode = null;
+                try {
+                    imgLinkNode = connManager.getSession().getNodeByIdentifier(imgLink.getImageSetUuid());
+                } catch (RepositoryException e) {
+                    // ignore
+                }
+                if (imgLinkNode != null) {
+                    final HippoItem imgLinkItem = ObjectUtils.getHippoItem(connManager, imgLinkNode);
+                    if (imgLinkItem instanceof HippoGalleryImageSet) {
+                        images.add((HippoGalleryImageSet) imgLinkItem);
+                    }
                 }
             }
             dumpImages(images, Element.IMAGE.getName(), true);
