@@ -95,4 +95,10 @@ public final class HCTConnManager {
     public Session getSession() {
         return session;
     }
+
+    public void logout() {
+        if (session != null) {
+            session.logout();
+        }
+    }
 }

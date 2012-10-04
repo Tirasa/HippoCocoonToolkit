@@ -73,11 +73,10 @@ public class HCTQuery extends HCTTraversal {
 
     private final transient Map<String, String> taxonomies;
 
-    private final transient Session session;
+    private transient Session session;
 
-    public HCTQuery(final Session session) {
+    public HCTQuery() {
         super();
-        this.session = session;
 
         returnFields = new HashSet<String>();
         filter = new HCTQueryFilter();
@@ -173,6 +172,10 @@ public class HCTQuery extends HCTTraversal {
                 : base.startsWith("/content/taxonomies")
                 ? Type.TAXONOMY_DOCS
                 : Type.FOLDER_DOCS;
+    }
+
+    public void setSession(final Session session) {
+        this.session = session;
     }
 
     public HCTQueryResult execute(final Locale locale, final Availability availability)

@@ -81,8 +81,6 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
 
     private State state;
 
-    private HCTConnManager connManager;
-
     private transient HCTDocument hctDocument;
 
     private transient HCTTraversal hctTraversal;
@@ -144,20 +142,11 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             LOG.warn("No locale specified, reverting to " + locale);
         }
 
-        synchronized (this) {
-            if (connManager == null) {
-                connManager = HCTConnManager.getContentInstance();
-                state = State.OUTSIDE;
-            }
-        }
+        state = State.OUTSIDE;
     }
 
     @Override
     public void finish() {
-        if (connManager.getSession() != null) {
-            connManager.getSession().logout();
-        }
-
         state = null;
 
         super.finish();
@@ -168,7 +157,8 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         return new AvailabilityLocaleCacheKey(availability, locale);
     }
 
-    private void findAndDumpImagesAndAssets(final HippoDocument doc, final HippoItemXMLDumper dumper)
+    private void findAndDumpImagesAndAssets(final HCTConnManager connManager, final HippoDocument doc,
+            final HippoItemXMLDumper dumper)
             throws ObjectBeanManagerException, SAXException {
 
         final List<HippoGalleryImageSet> images = new ArrayList<HippoGalleryImageSet>();
@@ -192,7 +182,8 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         dumper.dumpAssets(assets, Element.ASSET.getName(), true, hctDocument.getDateFormat(), locale);
     }
 
-    private void compounds(final HippoDocument container, final HippoItemXMLDumper dumper, final XMLReader xmlReader)
+    private void compounds(final HCTConnManager connManager, final HippoDocument container,
+            final HippoItemXMLDumper dumper, final XMLReader xmlReader)
             throws SAXException, RepositoryException, ObjectBeanManagerException, IOException {
 
         dumper.startHippoCompounds();
@@ -215,16 +206,16 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             }
 
             // 4 Compound images and assets
-            findAndDumpImagesAndAssets(compound, dumper);
+            findAndDumpImagesAndAssets(connManager, compound, dumper);
 
-            compounds(compound, dumper, xmlReader);
+            compounds(connManager, compound, dumper, xmlReader);
 
             dumper.endHippoCompound(compound);
         }
         dumper.endHippoCompounds();
     }
 
-    private void document()
+    private void document(final HCTConnManager connManager)
             throws ObjectBeanManagerException, SAXException, IOException, RepositoryException {
 
         final HippoDocument doc = hctDocument.getHippoDocument(connManager, locale, availability);
@@ -258,10 +249,10 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         }
 
         // 5. Images and Assets
-        findAndDumpImagesAndAssets(doc, dumper);
+        findAndDumpImagesAndAssets(connManager, doc, dumper);
 
         // 6. Compounds
-        compounds(doc, dumper, xmlReader);
+        compounds(connManager, doc, dumper, xmlReader);
 
         // 7. Related documents
         final List<HippoDocument> relDocs = new ArrayList<HippoDocument>();
@@ -290,7 +281,8 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         dumper.endHippoItem(item);
     }
 
-    private void traverse() throws ObjectBeanManagerException, SAXException, RepositoryException {
+    private void traverse(final HCTConnManager connManager) throws ObjectBeanManagerException, SAXException,
+            RepositoryException {
         if (hctTraversal == null) {
             throw new IllegalArgumentException("HCTTraversal is null");
         }
@@ -303,10 +295,13 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         recursiveTraversal(base, traversalType, hctTraversal.getDepth(), dumper);
     }
 
-    private void query() throws SAXException, RepositoryException, IOException, ObjectBeanManagerException {
+    private void query(final HCTConnManager connManager)
+            throws SAXException, RepositoryException, IOException, ObjectBeanManagerException {
+
         if (hctQuery == null) {
             throw new IllegalArgumentException("HCTQuery is null");
         }
+        hctQuery.setSession(connManager.getSession());
 
         final HCTQueryResult queryResult = hctQuery.execute(locale, availability);
         LOG.debug("Query is {}", hctQuery.getSQLQuery());
@@ -479,7 +474,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             }
             state = State.INSIDE_QUERY;
 
-            hctQuery = new HCTQuery(connManager.getSession());
+            hctQuery = new HCTQuery();
             hctQuery.setBase(atts.getValue(Attribute.BASE.getName()) == null
                     ? "/" : atts.getValue(Attribute.BASE.getName()));
             hctQuery.setReturnType(atts.getValue(Attribute.TYPE.getName()) == null
@@ -660,10 +655,13 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             }
             state = State.OUTSIDE;
 
+            HCTConnManager connManager = HCTConnManager.getContentInstance();
             try {
-                query();
+                query(connManager);
             } catch (Exception e) {
                 throw new ProcessingException("While performing query " + hctQuery.getSQLQuery(), e);
+            } finally {
+                connManager.logout();
             }
         }
 
@@ -672,11 +670,15 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                 throw new InvalidHCTRequestException(localName, state);
             }
 
+            HCTConnManager connManager = HCTConnManager.getContentInstance();
             try {
-                traverse();
+                traverse(connManager);
             } catch (Exception e) {
                 throw new ProcessingException("While performing traversal " + hctTraversal, e);
+            } finally {
+                connManager.logout();
             }
+
         }
 
         if (element == Element.DOCUMENT) {
@@ -684,10 +686,13 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                 throw new InvalidHCTRequestException(localName, state);
             }
 
+            HCTConnManager connManager = HCTConnManager.getContentInstance();
             try {
-                document();
+                document(connManager);
             } catch (Exception e) {
                 throw new ProcessingException("While fetching document", e);
+            } finally {
+                connManager.logout();
             }
         }
     }

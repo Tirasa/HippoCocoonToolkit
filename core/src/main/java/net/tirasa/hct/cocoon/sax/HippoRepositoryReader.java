@@ -84,12 +84,6 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
             throw new SetupException(getClass().getSimpleName() + " has no source configured to read from.");
         }
 
-        if (connManager == null) {
-            synchronized (this) {
-                connManager = HCTConnManager.getBinaryInstance();
-            }
-        }
-
         // Take original URL from the file:/ for to an absolute path in the Hippo repository
         String nodePath = this.source.toExternalForm().substring(source.toExternalForm().indexOf(':') + 1);
 
@@ -102,6 +96,7 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
             nodePath = nodePath.substring(0, nodePath.lastIndexOf(':'));
         }
 
+        connManager = HCTConnManager.getBinaryInstance();
         HippoItem obj;
         try {
             obj = ObjectUtils.getHippoItem(connManager, nodePath);
@@ -133,8 +128,8 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
 
     @Override
     public void finish() {
-        if (connManager.getSession() != null) {
-            connManager.getSession().logout();
+        if (connManager != null) {
+            connManager.logout();
         }
 
         super.finish();
