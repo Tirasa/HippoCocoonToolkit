@@ -45,14 +45,11 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
 
         thumbnail,
         original
-
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(HippoRepositoryReader.class);
 
-    private transient HCTConnManager connManager;
-
-    private transient Node node;
+    private transient String uuid;
 
     private transient long lastmodified;
 
@@ -96,44 +93,38 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
             nodePath = nodePath.substring(0, nodePath.lastIndexOf(':'));
         }
 
-        connManager = HCTConnManager.getBinaryInstance();
+        final HCTConnManager connManager = HCTConnManager.getBinaryInstance();
         HippoItem obj;
         try {
             obj = ObjectUtils.getHippoItem(connManager, nodePath);
             if (obj == null) {
                 throw new HippoRepositoryNotFoundException("Could not read " + nodePath);
             }
-        } catch (ObjectBeanManagerException e) {
-            throw new ProcessingException("While reading " + nodePath, e);
-        }
 
-        if (obj instanceof HippoGalleryImageSet) {
-            final HippoGalleryImageBean imgBean = imageType == ImageType.thumbnail
-                    ? ((HippoGalleryImageSet) obj).getThumbnail() : ((HippoGalleryImageSet) obj).getOriginal();
-            this.lastmodified = imgBean.getLastModified().getTimeInMillis();
-            this.node = imgBean.getNode();
-        } else if (obj instanceof HippoAsset) {
-            final List<HippoResource> resources = ((HippoAsset) obj).getChildBeans(HippoResource.class);
-            if (resources != null && !resources.isEmpty()) {
-                final HippoResource asset = resources.get(0);
-                this.lastmodified = asset.getLastModified().getTimeInMillis();
-                this.node = asset.getNode();
+            if (obj instanceof HippoGalleryImageSet) {
+                final HippoGalleryImageBean imgBean = imageType == ImageType.thumbnail
+                        ? ((HippoGalleryImageSet) obj).getThumbnail() : ((HippoGalleryImageSet) obj).getOriginal();
+                this.lastmodified = imgBean.getLastModified().getTimeInMillis();
+                this.uuid = imgBean.getNode().getIdentifier();
+            } else if (obj instanceof HippoAsset) {
+                final List<HippoResource> resources = ((HippoAsset) obj).getChildBeans(HippoResource.class);
+                if (resources != null && !resources.isEmpty()) {
+                    final HippoResource asset = resources.get(0);
+                    this.lastmodified = asset.getLastModified().getTimeInMillis();
+                    this.uuid = asset.getNode().getIdentifier();
+                }
+            } else {
+                LOG.warn("Unexpected node type: {}", obj.getClass().getName());
+                this.lastmodified = -1;
+                this.uuid = null;
             }
-        } else {
-            LOG.warn("Unexpected node type: {}", obj.getClass().getName());
-            this.lastmodified = -1;
-            this.node = null;
-        }
-    }
-
-    @Override
-    public void finish() {
-        if (connManager != null) {
+        } catch (Exception e) {
+            throw new ProcessingException("While reading " + nodePath, e);
+        } finally {
             connManager.logout();
         }
-
-        super.finish();
     }
+
 
     @Override
     public String getContentType() {
@@ -151,13 +142,15 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
 
     @Override
     public void execute() {
-        if (this.node == null) {
+        if (this.uuid == null) {
             throw new IllegalArgumentException(getClass().getSimpleName() + " wasn't able to read from given URL.");
         }
 
+        final HCTConnManager connManager = HCTConnManager.getBinaryInstance();
         BufferedInputStream repositoryIS = null;
         try {
-            this.contentType = this.node.getProperty(ResourceUtils.DEFAULT_BINARY_MIME_TYPE_PROP_NAME).getString();
+            final Node node = connManager.getSession().getNodeByIdentifier(this.uuid);
+            this.contentType = node.getProperty(ResourceUtils.DEFAULT_BINARY_MIME_TYPE_PROP_NAME).getString();
 
             repositoryIS = new BufferedInputStream(node.getProperty(
                     ResourceUtils.DEFAULT_BINARY_DATA_PROP_NAME).getBinary().getStream());
@@ -176,6 +169,7 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
                     LOG.error("While closing InputSTream", ioe);
                 }
             }
+            connManager.logout();
         }
     }
 }
