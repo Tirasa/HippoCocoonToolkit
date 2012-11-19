@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.tirasa.hct.repository.event;
+package net.tirasa.hct.cocoon.cache;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -21,7 +21,6 @@ import java.util.Set;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
-import net.tirasa.hct.cocoon.cache.AvailabilityLocaleCacheKey;
 import net.tirasa.hct.cocoon.sax.Constants;
 import net.tirasa.hct.util.ApplicationContextProvider;
 import org.apache.cocoon.pipeline.caching.Cache;
@@ -48,13 +47,13 @@ public class CacheExpirerRepositoryEventSubscriber extends BaseHippoEventSubscri
             final Constants.Availability availability, final String locale) {
 
         if (cacheKey instanceof AvailabilityLocaleCacheKey) {
-            AvailabilityLocaleCacheKey alck = (AvailabilityLocaleCacheKey) cacheKey;
+            final AvailabilityLocaleCacheKey alck = (AvailabilityLocaleCacheKey) cacheKey;
 
             return alck.getAvailability().equals(availability)
                     && alck.getLocale().equals(LocaleUtils.toLocale(locale));
         }
         if (cacheKey instanceof CompoundCacheKey) {
-            CompoundCacheKey compound = (CompoundCacheKey) cacheKey;
+            final CompoundCacheKey compound = (CompoundCacheKey) cacheKey;
             boolean found = false;
             for (CacheKey inner : compound.getCacheKeys()) {
                 found |= findExpiredCacheKeys(inner, availability, locale);
@@ -62,8 +61,8 @@ public class CacheExpirerRepositoryEventSubscriber extends BaseHippoEventSubscri
             return found;
         }
         if (cacheKey instanceof ParameterCacheKey) {
-            ParameterCacheKey pck = (ParameterCacheKey) cacheKey;
-            Map<String, String> parameters = pck.getParameters();
+            final ParameterCacheKey pck = (ParameterCacheKey) cacheKey;
+            final Map<String, String> parameters = pck.getParameters();
 
             return parameters.containsKey("availability") && parameters.get("availability").equals(availability.name())
                     && parameters.containsKey("locale") && parameters.get("locale").equals(locale);
@@ -73,13 +72,13 @@ public class CacheExpirerRepositoryEventSubscriber extends BaseHippoEventSubscri
     }
 
     @Override
-    public void onEvent(HippoEvent event) {
+    public void onEvent(final HippoEvent event) {
         LOG.debug("Event '{}' received about {}", event.getType(), event.getPath());
 
         String locale = null;
         try {
-            Node node = getSession().getNodeByIdentifier(event.getIdentifier());
-            for (NodeIterator itor = node.getNodes(); itor.hasNext() && locale == null;) {
+            final Node node = getSession().getNodeByIdentifier(event.getIdentifier());
+            for (final NodeIterator itor = node.getNodes(); itor.hasNext() && locale == null;) {
                 locale = itor.nextNode().getProperty("hippotranslation:locale").getString();
             }
         } catch (RepositoryException e) {
@@ -92,23 +91,21 @@ public class CacheExpirerRepositoryEventSubscriber extends BaseHippoEventSubscri
 
         Constants.Availability availability;
         switch (event.getType()) {
-            case publish:
-            case depublish:
+            case PUBLISHED:
+            case UNPUBLISHED:
                 availability = Constants.Availability.live;
                 break;
 
-            case obtainEditableInstance:
-            case commitEditableInstance:
             default:
                 availability = Constants.Availability.preview;
         }
 
         LOG.debug("Expiring {} {}", locale, availability);
 
-        Cache cache = ApplicationContextProvider.getApplicationContext().getBean(Cache.class);
+        final Cache cache = ApplicationContextProvider.getApplicationContext().getBean(Cache.class);
         LOG.debug("Cocoon cache obtained: {}", cache);
 
-        Set<CacheKey> expired = new HashSet<CacheKey>();
+        final Set<CacheKey> expired = new HashSet<CacheKey>();
         for (CacheKey key : cache.keySet()) {
             if (findExpiredCacheKeys(key, availability, locale)) {
                 expired.add(key);
