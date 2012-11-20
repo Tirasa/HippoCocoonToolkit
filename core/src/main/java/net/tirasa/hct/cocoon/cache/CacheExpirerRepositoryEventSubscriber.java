@@ -18,9 +18,6 @@ package net.tirasa.hct.cocoon.cache;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
 import net.tirasa.hct.cocoon.sax.Constants;
 import net.tirasa.hct.util.ApplicationContextProvider;
 import org.apache.cocoon.pipeline.caching.Cache;
@@ -29,6 +26,8 @@ import org.apache.cocoon.pipeline.caching.CompoundCacheKey;
 import org.apache.cocoon.pipeline.caching.ParameterCacheKey;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
+import org.hippoecm.hst.content.beans.standard.HippoDocument;
 import org.onehippo.forge.repositoryeventlistener.hst.events.BaseHippoEventSubscriber;
 import org.onehippo.forge.repositoryeventlistener.hst.hippo.HippoEvent;
 import org.slf4j.Logger;
@@ -77,12 +76,10 @@ public class CacheExpirerRepositoryEventSubscriber extends BaseHippoEventSubscri
 
         String locale = null;
         try {
-            final Node node = getSession().getNodeByIdentifier(event.getIdentifier());
-            for (final NodeIterator itor = node.getNodes(); itor.hasNext() && locale == null;) {
-                locale = itor.nextNode().getProperty("hippotranslation:locale").getString();
-            }
-        } catch (RepositoryException e) {
-            LOG.error("Could not get JCR node for UUID {} or locale property", event.getIdentifier(), e);
+            HippoDocument doc = (HippoDocument) getObjectBeanManager().getObject(event.getPath());
+            locale = doc.getLocaleString();
+        } catch(ObjectBeanManagerException e) {
+            LOG.error("Could not get HippoDocument for {}", event.getPath(), e);
         }
 
         if (StringUtils.isBlank(locale)) {
