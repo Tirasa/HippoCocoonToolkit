@@ -16,7 +16,6 @@
 package net.tirasa.hct.repository;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import net.tirasa.hct.cocoon.sax.Constants.Attribute;
 import net.tirasa.hct.cocoon.sax.Constants.Element;
 import net.tirasa.hct.cocoon.sax.Constants.State;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jackrabbit.value.ValueFactoryImpl;
 import org.xml.sax.Attributes;
 
 public class HCTQueryFilter {
@@ -48,8 +46,8 @@ public class HCTQueryFilter {
             throw new IllegalArgumentException(element + " not in " + Constants.FILTER_ELEMENTS);
         }
 
-        String childName = atts.getValue(Constants.Attribute.CHILD_NAME.getName());
-        String childType = atts.getValue(Constants.Attribute.CHILD_TYPE.getName());
+        final String childName = atts.getValue(Constants.Attribute.CHILD_NAME.getName());
+        final String childType = atts.getValue(Constants.Attribute.CHILD_TYPE.getName());
         HCTDocumentChildNode child = null;
         if (!StringUtils.isBlank(childName) && !StringUtils.isBlank(childType)) {
             child = new HCTDocumentChildNode(childName, childType);
@@ -59,7 +57,7 @@ public class HCTQueryFilter {
             }
         }
 
-        String selector = child == null ? Constants.QUERY_DEFAULT_SELECTOR : child.getSelector();
+        final String selector = child == null ? Constants.QUERY_DEFAULT_SELECTOR : child.getSelector();
 
         String condition = null;
         switch (element) {
@@ -135,32 +133,28 @@ public class HCTQueryFilter {
     }
 
     private String buildComparableValue(final Attributes atts) throws RepositoryException {
-        String propertyTypeString = atts.getValue(Constants.Attribute.TYPE.getName());
-        if (StringUtils.isBlank(propertyTypeString)) {
-            propertyTypeString = Constants.PropertyType.STRING.name();
+        String propTypeString = atts.getValue(Constants.Attribute.TYPE.getName());
+        if (StringUtils.isBlank(propTypeString)) {
+            propTypeString = Constants.PropertyType.STRING.name();
         }
-        Constants.PropertyType propertyType = Constants.PropertyType.valueOf(propertyTypeString);
+        final Constants.PropertyType propType = Constants.PropertyType.valueOf(propTypeString);
 
+        final String value = atts.getValue(Attribute.VALUE.getName());
         String result;
-        switch (propertyType) {
+        switch (propType) {
             case BOOLEAN:
             case DOUBLE:
             case LONG:
-                result = "CAST('" + atts.getValue(Attribute.VALUE.getName()) + "' AS " + propertyType.name() + ")";
+                result = "CAST('" + value + "' AS " + propType.name() + ")";
                 break;
 
             case DATE:
-                String value = atts.getValue(Attribute.VALUE.getName());
-                if (Constants.QUERY_FUNCTION_NOW.equals(value)) {
-                    value = ValueFactoryImpl.getInstance().createValue(Calendar.getInstance()).getString();
-                }
-
-                result = "CAST('" + value + "' AS " + propertyType.name() + ")";
+                result = "CAST('" + QueryFunction.call(value) + "' AS " + propType.name() + ")";
                 break;
 
             case STRING:
             default:
-                result = "'" + atts.getValue(Attribute.VALUE.getName()) + "'";
+                result = "'" + value + "'";
         }
 
         return result;
@@ -179,9 +173,9 @@ public class HCTQueryFilter {
     }
 
     private String getContains(final Attributes atts, final String selector) {
-        StringBuilder result = new StringBuilder().append("CONTAINS(").append(selector).append('.');
+        final StringBuilder result = new StringBuilder().append("CONTAINS(").append(selector).append('.');
 
-        String field = atts.getValue(Attribute.FIELD.getName());
+        final String field = atts.getValue(Attribute.FIELD.getName());
         if (StringUtils.isBlank(field)) {
             result.append('*');
         } else {

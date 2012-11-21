@@ -164,8 +164,6 @@ public class Constants {
 
     public static final String QUERY_DEFAULT_SELECTOR = "type";
 
-    public static final String QUERY_FUNCTION_NOW = "now()";
-
     /**
      * Duplicate of ObjectConverterUtils, since there this field is private.
      *
