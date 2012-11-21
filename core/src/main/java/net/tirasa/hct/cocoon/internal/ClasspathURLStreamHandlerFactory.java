@@ -15,6 +15,7 @@
  */
 package net.tirasa.hct.cocoon.internal;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -42,6 +43,9 @@ public class ClasspathURLStreamHandlerFactory implements URLStreamHandlerFactory
                 throws IOException {
 
             final URL resourceUrl = Thread.currentThread().getContextClassLoader().getResource(url.getPath());
+            if (resourceUrl == null) {
+                throw new FileNotFoundException(url.toExternalForm());
+            }
 
             return resourceUrl.openConnection();
         }
