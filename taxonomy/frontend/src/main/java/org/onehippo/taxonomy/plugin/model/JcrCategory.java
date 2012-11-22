@@ -52,9 +52,7 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
     private static final long serialVersionUID = 1L;
     
     static final Logger log = LoggerFactory.getLogger(JcrCategory.class);
-    
-    private static final long hippoFacNavLimit = 10000;
-    
+            
     public JcrCategory(IModel<Node> nodeModel, boolean editable) {
         super(nodeModel, editable);
         try {
@@ -179,15 +177,19 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
                 child.setProperty("hippo:message", NodeNameCodec.decode(node.getName()));
 
                 // <HCT>
-                if (!JcrHelper.isNodeType(node, HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED)) {
-                    node.addMixin(HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED);
+                final NodeIterator docChidlren = node.getNodes(HCTTaxonomyNodeTypes.NODENAME_HIPPOTAXONOMY_DOCUMENTS);
+                if (docChidlren == null || !docChidlren.hasNext()) {
+                    if (!JcrHelper.isNodeType(node, HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED)) {
+                        node.addMixin(HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED);
+                    }
+                    final Node documents = node.addNode(HCTTaxonomyNodeTypes.NODENAME_HIPPOTAXONOMY_DOCUMENTS,
+                            "hippofacnav:facetnavigation");
+                    documents.setProperty("hippo:docbase", 
+                            node.getSession().getNode("/content/documents").getIdentifier());
+                    documents.setProperty("hippofacnav:facets", new String[]{"hippotaxonomy:keys"});
+                    documents.setProperty("hippofacnav:filters", new String[]{"hippotaxonomy:keys=" + node.getName()});
+                    documents.setProperty("hippofacnav:limit", 10000);
                 }
-                Node documents = node.addNode(HCTTaxonomyNodeTypes.NODENAME_HIPPOTAXONOMY_DOCUMENTS,
-                        "hippofacnav:facetnavigation");
-                documents.setProperty("hippo:docbase", node.getSession().getNode("/content/documents").getIdentifier());
-                documents.setProperty("hippofacnav:facets", new String[]{"hippotaxonomy:keys"});
-                documents.setProperty("hippofacnav:filters", new String[]{"hippotaxonomy:keys=" + node.getName()});
-                documents.setProperty("hippofacnav:limit", hippoFacNavLimit);
                 // </HCT>   
                 
                 return new JcrCategoryInfo(new JcrNodeModel(child), editable);
