@@ -244,11 +244,13 @@ public class HCTQuery extends HCTTraversal {
     }
 
     private void addCondsToWhereClause(final List<String> conds, final StringBuilder clause, final String op) {
-        final boolean firstItem = clause.length() == 0;
+        boolean firstItem = clause.length() == 0;
         for (String cond : conds) {
             clause.insert(0, '(');
             if (!firstItem) {
                 clause.append(op).append(' ');
+            } else {
+                firstItem = false;
             }
 
             clause.append(cond).append(") ");
