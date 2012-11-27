@@ -237,6 +237,8 @@ public class HippoItemXMLDumper {
             final AttributesImpl attrs = new AttributesImpl();
             attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                     Attribute.NAME.getName(), XSD_STRING, asset.getName());
+            attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
+                    Attribute.NAME.getName(), XSD_STRING, asset.getLocalizedName());
             attrs.addAttribute(NS_EMPTY, Attribute.PATH.getName(),
                     Attribute.PATH.getName(), XSD_STRING, asset.getPath());
             attrs.addAttribute(NS_EMPTY, Attribute.MIMETYPE.getName(),
@@ -271,6 +273,8 @@ public class HippoItemXMLDumper {
                     Attribute.PATH.getName(), XSD_STRING, img.getPath());
             attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                     Attribute.NAME.getName(), XSD_STRING, img.getName());
+            attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
+                    Attribute.NAME.getName(), XSD_STRING, img.getLocalizedName());
             if (StringUtils.isNotBlank(img.getDescription())) {
                 attrs.addAttribute(NS_EMPTY, Attribute.DESC.getName(),
                         Attribute.DESC.getName(), XSD_STRING, img.getDescription());
