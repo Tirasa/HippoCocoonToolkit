@@ -235,7 +235,9 @@ public class HippoItemXMLDumper {
             attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                     Attribute.NAME.getName(), XSD_STRING, asset.getName());
             attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
-                    Attribute.LOC_NAME.getName(), XSD_STRING, asset.getLocalizedName());
+                    Attribute.LOC_NAME.getName(), XSD_STRING,
+                    ((HippoItem) asset.getParentBean().getBean("hippo:translation")).
+                    getProperty("hippo:message", asset.getName()).toString());
             attrs.addAttribute(NS_EMPTY, Attribute.PATH.getName(),
                     Attribute.PATH.getName(), XSD_STRING, asset.getPath());
             attrs.addAttribute(NS_EMPTY, Attribute.MIMETYPE.getName(),
@@ -270,8 +272,6 @@ public class HippoItemXMLDumper {
                     Attribute.PATH.getName(), XSD_STRING, img.getPath());
             attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                     Attribute.NAME.getName(), XSD_STRING, img.getName());
-            attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
-                    Attribute.LOC_NAME.getName(), XSD_STRING, img.getLocalizedName());
             if (StringUtils.isNotBlank(img.getDescription())) {
                 attrs.addAttribute(NS_EMPTY, Attribute.DESC.getName(),
                         Attribute.DESC.getName(), XSD_STRING, img.getDescription());
