@@ -27,9 +27,6 @@ import java.util.Map.Entry;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import static net.tirasa.hct.cocoon.sax.Constants.*;
-import net.tirasa.hct.cocoon.sax.Constants.Attribute;
-import net.tirasa.hct.cocoon.sax.Constants.Element;
-import net.tirasa.hct.cocoon.sax.Constants.StartEndDocumentFilter;
 import net.tirasa.hct.hstbeans.HCTTaxonomyCategoryBean;
 import net.tirasa.hct.hstbeans.HippoCompoundDocument;
 import net.tirasa.hct.hstbeans.HippoDate;
@@ -238,7 +235,7 @@ public class HippoItemXMLDumper {
             attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                     Attribute.NAME.getName(), XSD_STRING, asset.getName());
             attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
-                    Attribute.NAME.getName(), XSD_STRING, asset.getLocalizedName());
+                    Attribute.LOC_NAME.getName(), XSD_STRING, asset.getLocalizedName());
             attrs.addAttribute(NS_EMPTY, Attribute.PATH.getName(),
                     Attribute.PATH.getName(), XSD_STRING, asset.getPath());
             attrs.addAttribute(NS_EMPTY, Attribute.MIMETYPE.getName(),
@@ -274,7 +271,7 @@ public class HippoItemXMLDumper {
             attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                     Attribute.NAME.getName(), XSD_STRING, img.getName());
             attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
-                    Attribute.NAME.getName(), XSD_STRING, img.getLocalizedName());
+                    Attribute.LOC_NAME.getName(), XSD_STRING, img.getLocalizedName());
             if (StringUtils.isNotBlank(img.getDescription())) {
                 attrs.addAttribute(NS_EMPTY, Attribute.DESC.getName(),
                         Attribute.DESC.getName(), XSD_STRING, img.getDescription());
