@@ -29,7 +29,6 @@ import org.apache.cocoon.pipeline.caching.CacheKey;
 import org.apache.cocoon.pipeline.caching.TimestampCacheKey;
 import org.apache.cocoon.pipeline.component.CachingPipelineComponent;
 import org.apache.cocoon.sitemap.component.AbstractReader;
-import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
 import org.hippoecm.hst.content.beans.standard.HippoAsset;
 import org.hippoecm.hst.content.beans.standard.HippoGalleryImageBean;
 import org.hippoecm.hst.content.beans.standard.HippoGalleryImageSet;
@@ -45,6 +44,7 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
 
         thumbnail,
         original
+
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(HippoRepositoryReader.class);
@@ -94,13 +94,8 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
         }
 
         final HCTConnManager connManager = HCTConnManager.getBinaryInstance();
-        HippoItem obj;
         try {
-            obj = ObjectUtils.getHippoItem(connManager, nodePath);
-            if (obj == null) {
-                throw new HippoRepositoryNotFoundException("Could not read " + nodePath);
-            }
-
+            final HippoItem obj = ObjectUtils.getHippoItem(connManager, nodePath);
             if (obj instanceof HippoGalleryImageSet) {
                 final HippoGalleryImageBean imgBean = imageType == ImageType.thumbnail
                         ? ((HippoGalleryImageSet) obj).getThumbnail() : ((HippoGalleryImageSet) obj).getOriginal();
@@ -124,7 +119,6 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
             connManager.logout();
         }
     }
-
 
     @Override
     public String getContentType() {

@@ -15,12 +15,18 @@
  */
 package net.tirasa.hct.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import javax.jcr.Node;
 import net.tirasa.hct.repository.HCTConnManager;
 import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
 import org.hippoecm.hst.content.beans.standard.HippoItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ObjectUtils {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectUtils.class);
 
     private ObjectUtils() {
     }
@@ -51,7 +57,12 @@ public class ObjectUtils {
     public static <T extends HippoItem> T getHippoItem(final HCTConnManager connManager, final String path,
             final Class<T> clazz) throws ObjectBeanManagerException {
 
-        final T result = (T) connManager.getObjMan().getObject(path);
+        T result = null;
+        try {
+            result = (T) connManager.getObjMan().getObject(URLDecoder.decode(path, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            LOG.error("Couldnt decode {}", path, e);
+        }
         if (result == null) {
             throw new IllegalArgumentException("No object found at " + path);
         }
