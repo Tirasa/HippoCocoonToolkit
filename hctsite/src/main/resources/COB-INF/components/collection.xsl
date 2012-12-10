@@ -29,7 +29,7 @@
   <xsl:param name="availability"/>
   <xsl:param name="requestURI"/>
 
-  <xsl:template match="hct:queryResult">
+  <xsl:template match="/">
     <div id="collection">
       <xsl:choose>
         <xsl:when test="contains($requestURI, '/index.html')">
@@ -53,6 +53,9 @@
           <xsl:value-of select="@localizedName"/>
         </a>        
       </div>
+      <ul>
+        <xsl:apply-templates select="hct:folder|hct:taxonomy"/>
+      </ul>
     </li>
   </xsl:template>
     
