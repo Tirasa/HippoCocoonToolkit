@@ -234,10 +234,12 @@ public class HippoItemXMLDumper {
             final AttributesImpl attrs = new AttributesImpl();
             attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                     Attribute.NAME.getName(), XSD_STRING, asset.getName());
-            attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
-                    Attribute.LOC_NAME.getName(), XSD_STRING,
-                    ((HippoItem) asset.getParentBean().getBean("hippo:translation")).
-                    getProperty("hippo:message", asset.getName()).toString());
+            if (asset.getParentBean().getBean("hippo:translation") != null) {
+                attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
+                        Attribute.LOC_NAME.getName(), XSD_STRING,
+                        ((HippoItem) asset.getParentBean().getBean("hippo:translation")).
+                        getProperty("hippo:message", asset.getName()).toString());
+            }
             attrs.addAttribute(NS_EMPTY, Attribute.PATH.getName(),
                     Attribute.PATH.getName(), XSD_STRING, asset.getPath());
             attrs.addAttribute(NS_EMPTY, Attribute.MIMETYPE.getName(),
