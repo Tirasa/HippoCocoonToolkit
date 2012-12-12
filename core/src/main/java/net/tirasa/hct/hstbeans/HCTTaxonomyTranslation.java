@@ -28,4 +28,8 @@ public class HCTTaxonomyTranslation extends HippoTranslation {
     public String getMessage() {
         return getProperty("hippo:message");
     }
+
+    public String getOrder() {
+        return getProperty("order") == null ? "" : getProperty("order").toString();
+    }
 }

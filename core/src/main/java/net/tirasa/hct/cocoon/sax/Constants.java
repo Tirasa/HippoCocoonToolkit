@@ -212,6 +212,7 @@ public class Constants {
         DESC("description"),
         LOCALE("locale"),
         LOC_NAME("localizedName"),
+        ORDER("order"),
         HEIGHT("height"),
         WIDTH("width"),
         MIMETYPE("mimeType"),

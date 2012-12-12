@@ -345,6 +345,8 @@ public class HippoItemXMLDumper {
                 Attribute.NAME.getName(), XSD_STRING, taxonomy.getKey());
         attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
                 Attribute.LOC_NAME.getName(), XSD_STRING, taxonomy.getLocalizedName(locale.getLanguage()));
+        attrs.addAttribute(NS_EMPTY, Attribute.ORDER.getName(),
+                Attribute.ORDER.getName(), XSD_STRING, taxonomy.getOrder(locale.getLanguage()));
         attrs.addAttribute(NS_EMPTY, Attribute.PATH.getName(),
                 Attribute.PATH.getName(), XSD_STRING, taxonomy.getPath());
 

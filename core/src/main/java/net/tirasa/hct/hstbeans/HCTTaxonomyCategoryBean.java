@@ -47,4 +47,25 @@ public class HCTTaxonomyCategoryBean extends HippoItem {
 
         return localizedName;
     }
+
+    public String getOrder() {
+        return getOrder(Locale.getDefault().getLanguage());
+
+    }
+
+    public String getOrder(final String language) {
+        String order = "";
+        final List<HCTTaxonomyTranslation> translations = getChildBeans(HCTTaxonomyTranslation.class);
+        if (translations.size() == 1) {
+            order = translations.iterator().next().getOrder();
+        } else {
+            for (HCTTaxonomyTranslation translation : getChildBeans(HCTTaxonomyTranslation.class)) {
+                if (translation.getLanguage().equals(language)) {
+                    order = translation.getOrder();
+                }
+            }
+        }
+
+        return order;
+    }
 }

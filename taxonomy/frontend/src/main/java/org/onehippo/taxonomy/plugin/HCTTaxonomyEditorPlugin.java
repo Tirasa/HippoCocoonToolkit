@@ -16,6 +16,9 @@
  */
 package org.onehippo.taxonomy.plugin;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.jcr.NodeIterator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,9 +26,11 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.hippoecm.frontend.plugin.IPluginContext;
 import org.hippoecm.frontend.plugin.config.IPluginConfig;
+import org.onehippo.taxonomy.api.TaxonomyNodeTypes;
 import org.onehippo.taxonomy.plugin.api.EditableCategory;
 import org.onehippo.taxonomy.plugin.api.EditableCategoryInfo;
 import org.onehippo.taxonomy.plugin.api.TaxonomyException;
+import org.onehippo.taxonomy.plugin.model.JcrCategoryInfo;
 
 public class HCTTaxonomyEditorPlugin extends TaxonomyEditorPlugin {
 
@@ -42,11 +47,11 @@ public class HCTTaxonomyEditorPlugin extends TaxonomyEditorPlugin {
         container.add(order);
 
         container.add(new AjaxLink("plus") {
+
             private static final long serialVersionUID = 9123164874596936371L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
-
+            public void onClick(final AjaxRequestTarget target) {
                 int position = Integer.parseInt(order.getDefaultModelObjectAsString());
                 position++;
                 order.setDefaultModelObject(Integer.toString(position));
@@ -55,11 +60,11 @@ public class HCTTaxonomyEditorPlugin extends TaxonomyEditorPlugin {
         }).setEnabled(editing);
 
         container.add(new AjaxLink("minus") {
+
             private static final long serialVersionUID = 9123164874596936371L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
-
+            public void onClick(final AjaxRequestTarget target) {
                 int position = Integer.parseInt(order.getDefaultModelObjectAsString());
                 if (position >= 1) {
                     position--;
@@ -76,8 +81,7 @@ public class HCTTaxonomyEditorPlugin extends TaxonomyEditorPlugin {
 
         @Override
         public String getObject() {
-            EditableCategory category = getCategory();
-
+            final EditableCategory category = getCategory();
             if (category != null) {
                 return category.getInfo(getCurrentLanguageSelection().getLanguageCode()).getString("order", "0");
             }
@@ -85,14 +89,35 @@ public class HCTTaxonomyEditorPlugin extends TaxonomyEditorPlugin {
         }
 
         @Override
-        public void setObject(String object) {
-            EditableCategoryInfo info = getCategory().getInfo(getCurrentLanguageSelection().getLanguageCode());
+        public void setObject(final String object) {
+            List<String> languages = new ArrayList<String>();
 
-            try {
-                info.setString("order", object);
-            } catch (TaxonomyException e) {
-                error(e.getMessage());
-                redraw();
+            final String selectedLanguage = getCurrentLanguageSelection().getLanguageCode();
+            final EditableCategoryInfo selectedInfo = getCategory().getInfo(selectedLanguage);
+            if (selectedInfo instanceof JcrCategoryInfo) {
+                try {
+                    final NodeIterator itor = ((JcrCategoryInfo) selectedInfo).getNode().getParent().
+                            getNodes(TaxonomyNodeTypes.HIPPOTAXONOMY_TRANSLATION);
+                    while (itor.hasNext()) {
+                        languages.add(itor.nextNode().getProperty("hippo:language").getString());
+                    }
+                } catch (Exception e) {
+                    log.error("Could not read available languages", e);
+                }
+            }
+
+            if (languages.isEmpty()) {
+                languages.add(selectedLanguage);
+            }
+
+            for (String language : languages) {
+                final EditableCategoryInfo info = getCategory().getInfo(language);
+                try {
+                    info.setString("order", object);
+                } catch (TaxonomyException e) {
+                    error(e.getMessage());
+                    redraw();
+                }
             }
         }
 
