@@ -47,7 +47,7 @@ public class HCTTaxonomyEditorPlugin extends TaxonomyEditorPlugin {
             @Override
             public void onClick(AjaxRequestTarget target) {
 
-                int position = Integer.parseInt(order.getDefaultModelObject().toString());
+                int position = Integer.parseInt(order.getDefaultModelObjectAsString());
                 position++;
                 order.setDefaultModelObject(Integer.toString(position));
                 target.addComponent(order);

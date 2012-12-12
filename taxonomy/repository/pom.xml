@@ -54,6 +54,7 @@
             <filter>
               <artifact>org.onehippo:taxonomy-addon-repository</artifact>
               <excludes>
+                <exclude>namespace-hippotaxonomy.xml</exclude>
                 <exclude>hippotaxonomy.cnd</exclude>
               </excludes>
             </filter>
