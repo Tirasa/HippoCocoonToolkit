@@ -79,7 +79,7 @@
       <map:match pattern="components/static/**">
         <map:read src="components/static/{map:1}"/>
       </map:match>
-            
+
       <map:match pattern="components/collection">
         <map:generate type="string-template" src="components/collection.xml"/>
         <!--<map:transform type="logasxml"/>-->
@@ -159,7 +159,7 @@
       <map:match pattern="*/sample_*/search">
         <map:generate type="string-template" src="pages/search.xml">
           <map:parameter name="availability" value="{map:1}"/>
-          <map:parameter name="base" value="/content/documents/"/>
+          <map:parameter name="base" value="/content/documents/sample_{map:2}"/>
           <map:parameter name="locale" value="{map:2}"/>
           <map:parameter name="requestURI" value="{jexl:cocoon.request.requestURI}"/>
           <map:parameter name="query" value="{jexl:cocoon.request.query}"/>
