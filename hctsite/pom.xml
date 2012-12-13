@@ -55,10 +55,6 @@
       <groupId>net.tirasa.hct</groupId>
       <artifactId>hct-core</artifactId>
     </dependency>
-    <dependency>
-      <groupId>net.tirasa.hct</groupId>
-      <artifactId>hct-repository-event-listener-hst</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>org.apache.cocoon.servlet</groupId>

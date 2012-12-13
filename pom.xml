@@ -101,7 +101,7 @@
     <filesync.override>false</filesync.override>
     <maven.plugins.filesync.version>1.0.0</maven.plugins.filesync.version>
     
-    <hct.version>0.5-SNAPSHOT</hct.version>
+    <hct.version>0.5</hct.version>
     <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
     <spring.version>3.1.2.RELEASE</spring.version>
   </properties>
@@ -180,16 +180,6 @@
         <groupId>net.tirasa.hct</groupId>
         <artifactId>hct-core</artifactId>
         <version>${hct.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>net.tirasa.hct</groupId>
-        <artifactId>hct-repository-event-listener-hst</artifactId>
-        <version>${hct.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>net.tirasa.hct</groupId>
-        <version>${hct.version}</version>
-        <artifactId>hct-repository-event-listener-repository</artifactId>
       </dependency>
 
       <dependency>
