@@ -77,7 +77,6 @@ header h1 {
   color: #fff;
   line-height: 1;
   margin-bottom: 0.2em;
-  width: 540px;
 }
 
 header h2 {
@@ -85,7 +84,6 @@ header h2 {
   color: #9ddcff;
   font-weight: normal;
   line-height: 1.3;
-  width: 540px;
   letter-spacing: 0;
 }
 
@@ -149,12 +147,15 @@ header a.button {
   background: transparent url(../images/github-button.png) 0 0 no-repeat;
 }
 aside a.button {
-  width: 138px;
-  padding-left: 64px;
-  display: block;
-  background: transparent url(../images/download-button.png) 0 0 no-repeat;
-  margin-bottom: 20px;
-  font-size: 21px;
+    background-color: #2d78d3;
+    border: 1px solid #CCC;
+    border-radius: 7px;
+    height: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+    display: block;
+    padding: 5px;
+    width: 200px;
 }
 
 code, pre {
@@ -341,12 +342,12 @@ dl dd {
 }
 
 footer {
-  background: transparent url('../images/hr.png') 0 0 no-repeat;
-  margin-top: 40px;
-  padding-top: 20px;
-  padding-bottom: 30px;
+  border-top: 1px solid #CCC;
   font-size: 13px;
   color: #aaa;
+  text-align: center;
+  float: left;
+  width: 690px;
 }
 
 footer a {
