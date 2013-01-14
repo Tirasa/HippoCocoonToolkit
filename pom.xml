@@ -55,21 +55,21 @@
 
   <mailingLists>
     <mailingList>
-      <name>HCT</name>
-      <subscribe>hct-subscribe@tirasa.net</subscribe>
-      <unsubscribe>hct-unsubscribe@tirasa.net</unsubscribe>
-      <post>hct@tirasa.net</post>
+      <name>HippoCocoonToolkit</name>
+      <subscribe>hippococoontoolkit-subscribe@googlegroups.com</subscribe>
+      <unsubscribe>hippococoontoolkit-unsubscribe@googlegroups.com</unsubscribe>
+      <post>hippococoontoolkit@googlegroups.com</post>
     </mailingList>
   </mailingLists>
   
   <issueManagement>
-    <url>https://github.com/Tirasa/HippoCocoonToolkit/issues</url>
-    <system>GitHub Issues</system>
+    <system>jira</system>
+    <url>https://hippococoontoolkit.atlassian.net/browse/HCT</url>
   </issueManagement>
 
   <ciManagement>
     <system>Jenkins</system>
-    <url>http://jenkins.tirasa.net/job/HCT%20(trunk)/</url>
+    <url>http://jenkins.tirasa.net/job/HCT%20(master)/</url>
   </ciManagement>
     
   <prerequisites>
