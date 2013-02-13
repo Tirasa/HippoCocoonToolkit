@@ -394,6 +394,7 @@
         <version>0.8</version>
         <configuration>
           <excludes>
+            <exclude>.travis.*</exclude>
             <exclude>nbactions.xml</exclude>
             <exclude>nb-configuration.xml</exclude>
             <exclude>.externalToolBuilders/**</exclude>
