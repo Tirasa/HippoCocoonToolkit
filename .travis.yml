@@ -11,4 +11,4 @@ after_success:
 
 notifications:
   email:
-    - connid-dev@googlegroups.com
+    - hippococoontoolkit@googlegroups.com
