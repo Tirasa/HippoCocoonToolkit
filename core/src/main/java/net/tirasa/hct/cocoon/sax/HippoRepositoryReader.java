@@ -16,7 +16,6 @@
 package net.tirasa.hct.cocoon.sax;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +25,10 @@ import net.tirasa.hct.util.ObjectUtils;
 import org.apache.cocoon.pipeline.ProcessingException;
 import org.apache.cocoon.pipeline.SetupException;
 import org.apache.cocoon.pipeline.caching.CacheKey;
-import org.apache.cocoon.pipeline.caching.TimestampCacheKey;
+import org.apache.cocoon.pipeline.caching.TimestampURLCacheKey;
 import org.apache.cocoon.pipeline.component.CachingPipelineComponent;
 import org.apache.cocoon.sitemap.component.AbstractReader;
+import org.apache.commons.io.IOUtils;
 import org.hippoecm.hst.content.beans.standard.HippoAsset;
 import org.hippoecm.hst.content.beans.standard.HippoGalleryImageBean;
 import org.hippoecm.hst.content.beans.standard.HippoGalleryImageSet;
@@ -131,7 +131,7 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
             throw new SetupException(getClass().getSimpleName() + " has no source configured to read from.");
         }
 
-        return new TimestampCacheKey(this.source, this.lastmodified);
+        return new TimestampURLCacheKey(this.source, this.lastmodified);
     }
 
     @Override
@@ -156,13 +156,7 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
         } catch (Exception e) {
             throw new ProcessingException("While reading node", e);
         } finally {
-            if (repositoryIS != null) {
-                try {
-                    repositoryIS.close();
-                } catch (IOException ioe) {
-                    LOG.error("While closing InputSTream", ioe);
-                }
-            }
+            IOUtils.closeQuietly(repositoryIS);
             connManager.logout();
         }
     }
