@@ -80,9 +80,9 @@
     <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
     <spring.version>3.2.1.RELEASE</spring.version>
 
-    <hippo.repository.version>2.22.13</hippo.repository.version>
-    <hippo.cms.version>2.22.13</hippo.cms.version>
-    <hippo.hst.version>2.24.12</hippo.hst.version>
+    <hippo.repository.version>2.22.15</hippo.repository.version>
+    <hippo.cms.version>2.22.15</hippo.cms.version>
+    <hippo.hst.version>2.24.14</hippo.hst.version>
         
     <forge.taxonomy.version>1.08.04</forge.taxonomy.version>
     <forge.ecm-tagging.version>4.04.01</forge.ecm-tagging.version>
@@ -405,6 +405,9 @@
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
+          <showWarnings>true</showWarnings>
+          <showDeprecation>true</showDeprecation>
+          <!--<compilerArgument>-Xlint:unchecked</compilerArgument>-->
         </configuration>
       </plugin>
       
