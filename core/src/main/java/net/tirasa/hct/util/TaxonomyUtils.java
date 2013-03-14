@@ -47,10 +47,14 @@ public final class TaxonomyUtils {
 
         if (keys != null) {
             for (String key : keys) {
+                HCTTaxonomyCategoryBean taxonomy = null;
                 try {
-                    taxonomies.add(getTaxonomy(connManager, key));
+                    taxonomy = getTaxonomy(connManager, key);
                 } catch (Exception e) {
                     LOG.error("While getting taxonomy", e);
+                }
+                if (taxonomy != null) {
+                    taxonomies.add(taxonomy);
                 }
             }
         }

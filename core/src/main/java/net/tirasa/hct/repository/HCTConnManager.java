@@ -49,6 +49,7 @@ public final class HCTConnManager {
         return new HCTConnManager(Credentials.class.getName() + ".binaries");
     }
 
+    @SuppressWarnings("unchecked")
     private HCTConnManager(final String componentName) {
         if (!HstServices.isAvailable()) {
             throw new SetupException("HstServices not available");
@@ -66,7 +67,7 @@ public final class HCTConnManager {
         final MetadataReaderClasspathResourceScanner scanner = new MetadataReaderClasspathResourceScanner();
         scanner.setResourceLoader(new ClassPathXmlApplicationContext());
         try {
-            final String[] fallbackNodeTypes = (String[]) ArrayUtils.add(
+            final String[] fallbackNodeTypes = ArrayUtils.add(
                     ObjectConverterUtils.getDefaultFallbackNodeTypes(), "hippo:compound");
 
             objConv = ObjectConverterUtils.createObjectConverter(

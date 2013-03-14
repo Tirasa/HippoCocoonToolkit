@@ -88,6 +88,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
     private transient HCTQuery hctQuery;
 
     @Override
+    @SuppressWarnings("unchecked")
     public void setConfiguration(final Map<String, ? extends Object> configuration) {
         this.setup((Map<String, Object>) configuration);
     }
@@ -258,7 +259,10 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         final List<HippoDocument> relDocs = new ArrayList<HippoDocument>();
         for (RelatedDocs docs : doc.getChildBeans(RelatedDocs.class)) {
             for (String relDocUuid : docs.getRelatedDocsUuids()) {
-                relDocs.add(ObjectUtils.getHippoItemByUuid(connManager, relDocUuid, HippoDocument.class));
+                HippoDocument docByUuid = ObjectUtils.getHippoItemByUuid(connManager, relDocUuid, HippoDocument.class);
+                if (docByUuid != null) {
+                    relDocs.add(doc);
+                }
             }
         }
         dumper.dumpRelatedDocs(relDocs, Element.DOCUMENT.getName(), true);
@@ -281,15 +285,19 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         dumper.endHippoItem(item);
     }
 
-    private void traverse(final HCTConnManager connManager) throws ObjectBeanManagerException, SAXException,
-            RepositoryException {
+    private void traverse(final HCTConnManager connManager)
+            throws ObjectBeanManagerException, SAXException, RepositoryException {
+
         if (hctTraversal == null) {
             throw new IllegalArgumentException("HCTTraversal is null");
         }
-
-        final Class traversalType = hctTraversal.getBase().startsWith("/content/taxonomies")
-                ? HCTTaxonomyCategoryBean.class : HippoFolder.class;
         final HippoItem base = ObjectUtils.getHippoItem(connManager, hctTraversal.getBase());
+        if (base == null) {
+            throw new IllegalArgumentException("base is null");
+        }
+
+        final Class<? extends HippoItem> traversalType = hctTraversal.getBase().startsWith("/content/taxonomies")
+                ? HCTTaxonomyCategoryBean.class : HippoFolder.class;
         final HippoItemXMLDumper dumper = new HippoItemXMLDumper(this.getSAXConsumer());
 
         recursiveTraversal(base, traversalType, hctTraversal.getDepth(), dumper);
@@ -316,25 +324,29 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             final Map<HippoItem, List<HippoItem>> resultByFolder = new HashMap<HippoItem, List<HippoItem>>();
             for (String uuid : queryResult.getUuids()) {
                 final HippoItem item = ObjectUtils.getHippoItemByUuid(connManager, uuid);
-
-                if (hctQuery.getType() == HCTQuery.Type.TAXONOMY_DOCS) {
-                    final String[] keys = item.getProperty(TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS);
-                    for (int i = 0; keys != null && i < keys.length; i++) {
-                        if (hctQuery.getTaxonomies().keySet().contains(keys[i])) {
-                            final HCTTaxonomyCategoryBean taxonomy = ObjectUtils.getHippoItem(
-                                    connManager, hctQuery.getTaxonomies().get(keys[i]), HCTTaxonomyCategoryBean.class);
-                            if (!resultByFolder.containsKey(taxonomy)) {
-                                resultByFolder.put(taxonomy, new ArrayList<HippoItem>());
+                if (item != null) {
+                    if (hctQuery.getType() == HCTQuery.Type.TAXONOMY_DOCS) {
+                        final String[] keys = item.getProperty(TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS);
+                        for (int i = 0; keys != null && i < keys.length; i++) {
+                            if (hctQuery.getTaxonomies().keySet().contains(keys[i])) {
+                                final HCTTaxonomyCategoryBean taxonomy = ObjectUtils.getHippoItem(
+                                        connManager, hctQuery.getTaxonomies().get(keys[i]),
+                                        HCTTaxonomyCategoryBean.class);
+                                if (taxonomy != null) {
+                                    if (!resultByFolder.containsKey(taxonomy)) {
+                                        resultByFolder.put(taxonomy, new ArrayList<HippoItem>());
+                                    }
+                                    resultByFolder.get(taxonomy).add(item);
+                                }
                             }
-                            resultByFolder.get(taxonomy).add(item);
                         }
+                    } else {
+                        final HippoFolder folder = (HippoFolder) item.getParentBean();
+                        if (!resultByFolder.containsKey(folder)) {
+                            resultByFolder.put(folder, new ArrayList<HippoItem>());
+                        }
+                        resultByFolder.get(folder).add(item);
                     }
-                } else {
-                    final HippoFolder folder = (HippoFolder) item.getParentBean();
-                    if (!resultByFolder.containsKey(folder)) {
-                        resultByFolder.put(folder, new ArrayList<HippoItem>());
-                    }
-                    resultByFolder.get(folder).add(item);
                 }
             }
 
@@ -358,22 +370,23 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         } else {
             for (String uuid : queryResult.getUuids()) {
                 final HippoItem item = ObjectUtils.getHippoItemByUuid(connManager, uuid);
-
-                switch (hctQuery.getType()) {
-                    case TAXONOMY_DOCS:
-                        final String[] keys = item.getProperty(TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS);
-                        for (int i = 0; keys != null && i < keys.length; i++) {
-                            if (hctQuery.getTaxonomies().keySet().contains(keys[i])) {
-                                dumper.dumpHippoItem(connManager, item, TaxonomyUtils.buildPathInTaxonomy(
-                                        hctQuery.getTaxonomies().get(keys[i]), item.getName()),
-                                        hctQuery, locale);
+                if (item != null) {
+                    switch (hctQuery.getType()) {
+                        case TAXONOMY_DOCS:
+                            final String[] keys = item.getProperty(TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS);
+                            for (int i = 0; keys != null && i < keys.length; i++) {
+                                if (hctQuery.getTaxonomies().keySet().contains(keys[i])) {
+                                    dumper.dumpHippoItem(connManager, item, TaxonomyUtils.buildPathInTaxonomy(
+                                            hctQuery.getTaxonomies().get(keys[i]), item.getName()),
+                                            hctQuery, locale);
+                                }
                             }
-                        }
-                        break;
+                            break;
 
-                    case FOLDER_DOCS:
-                    default:
-                        dumper.dumpHippoItem(connManager, item, item.getPath(), hctQuery, locale);
+                        case FOLDER_DOCS:
+                        default:
+                            dumper.dumpHippoItem(connManager, item, item.getPath(), hctQuery, locale);
+                    }
                 }
             }
         }
@@ -624,7 +637,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
 
             LOG.debug("Fields to be returned: {}; images: {}; relatedDocs: {}",
                     new Object[]{hctQuery.getReturnFields(), hctQuery.isReturnImages(),
-                        hctQuery.isReturnRelatedDocs()});
+                hctQuery.isReturnRelatedDocs()});
         }
 
         if (element == Element.ORDERBY) {

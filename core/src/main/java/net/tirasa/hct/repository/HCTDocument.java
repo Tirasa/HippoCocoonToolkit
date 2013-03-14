@@ -78,8 +78,12 @@ public class HCTDocument extends AbstractHCTEntity {
         for (final NodeIterator itor = parent.getNodes(baseDoc.getPath().
                 substring(baseDoc.getPath().lastIndexOf('/') + 1)); itor.hasNext();) {
 
+            final String uuid = itor.nextNode().getIdentifier();
             final HippoDocument version = ObjectUtils.getHippoItemByUuid(
-                    connManager, itor.nextNode().getIdentifier(), HippoDocument.class);
+                    connManager, uuid, HippoDocument.class);
+            if (version == null) {
+                throw new HippoRepositoryNotFoundException("Document not available as uuid " + uuid);
+            }
             if (ArrayUtils.contains((String[]) version.getProperty("hippo:availability"), availability.toString())) {
                 doc = version;
             }

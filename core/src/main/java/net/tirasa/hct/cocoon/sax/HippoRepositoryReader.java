@@ -64,6 +64,7 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void setConfiguration(final Map<String, ? extends Object> configuration) {
         this.setup((Map<String, Object>) configuration);
     }
@@ -109,7 +110,11 @@ public class HippoRepositoryReader extends AbstractReader implements CachingPipe
                     this.uuid = asset.getNode().getIdentifier();
                 }
             } else {
-                LOG.warn("Unexpected node type: {}", obj.getClass().getName());
+                if (obj == null) {
+                    LOG.warn("Unexpected null node");
+                } else {
+                    LOG.warn("Unexpected node type: {}", obj.getClass().getName());
+                }
                 this.lastmodified = -1;
                 this.uuid = null;
             }

@@ -15,9 +15,12 @@
  */
 package net.tirasa.hct.cocoon.sax;
 
+import static net.tirasa.hct.cocoon.sax.Constants.*;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -26,7 +29,6 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import static net.tirasa.hct.cocoon.sax.Constants.*;
 import net.tirasa.hct.hstbeans.HCTTaxonomyCategoryBean;
 import net.tirasa.hct.hstbeans.HippoCompoundDocument;
 import net.tirasa.hct.hstbeans.HippoDate;
@@ -39,7 +41,6 @@ import net.tirasa.hct.util.ObjectUtils;
 import net.tirasa.hct.util.TaxonomyUtils;
 import org.apache.cocoon.sax.SAXConsumer;
 import org.apache.cocoon.sax.util.XMLUtils;
-import org.apache.commons.collections.keyvalue.DefaultMapEntry;
 import org.apache.commons.lang3.StringUtils;
 import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
 import org.hippoecm.hst.content.beans.standard.HippoAsset;
@@ -154,8 +155,7 @@ public class HippoItemXMLDumper {
                     saxConsumer.startElement(NS_HCT, Element.FIELD.getName(),
                             PREFIX_HCT + ":" + Element.FIELD.getName(), attrs);
 
-                    for (String value :
-                            (String[]) item.getAvailableTranslationsBean().
+                    for (String value : (String[]) item.getAvailableTranslationsBean().
                             getTranslation(locale).
                             getProperty("hippo:availability")) {
 
@@ -421,7 +421,7 @@ public class HippoItemXMLDumper {
     public void dumpDate(final String name, final Calendar calendar, final String dateFormat, final Locale locale)
             throws SAXException {
 
-        dumpField(new DefaultMapEntry(name, calendar), dateFormat, locale);
+        dumpField(new SimpleEntry<String, Object>(name, calendar), dateFormat, locale);
     }
 
     public void dumpHtml(final HCTConnManager connManager, final HippoHtml rtf, final XMLReader xmlReader,
@@ -497,7 +497,7 @@ public class HippoItemXMLDumper {
                     }
                 }
             } else {
-                dumpField(new DefaultMapEntry(fieldName, fieldValue), hctQuery.getDateFormat(), locale);
+                dumpField(new SimpleEntry<String, Object>(fieldName, fieldValue), hctQuery.getDateFormat(), locale);
             }
         }
 
@@ -533,7 +533,11 @@ public class HippoItemXMLDumper {
             final List<HippoDocument> relDocs = new ArrayList<HippoDocument>();
             for (RelatedDocs docs : item.getChildBeans(RelatedDocs.class)) {
                 for (String relDocUuid : docs.getRelatedDocsUuids()) {
-                    relDocs.add(ObjectUtils.getHippoItemByUuid(connManager, relDocUuid, HippoDocument.class));
+                    final HippoDocument doc =
+                            ObjectUtils.getHippoItemByUuid(connManager, relDocUuid, HippoDocument.class);
+                    if (doc != null) {
+                        relDocs.add(doc);
+                    }
                 }
             }
             dumpRelatedDocs(relDocs, Element.DOCUMENT.getName(), true);
