@@ -78,7 +78,7 @@
   
   <properties>
     <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
-    <spring.version>3.2.1.RELEASE</spring.version>
+    <spring.version>3.0.7.RELEASE</spring.version>
 
     <hippo.repository.version>2.22.11</hippo.repository.version>
     <hippo.cms.version>2.22.13</hippo.cms.version>
