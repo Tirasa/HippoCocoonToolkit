@@ -21,7 +21,7 @@
   <parent>
     <groupId>net.tirasa.hct</groupId>
     <artifactId>hct</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.5.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>hct-taxonomy</artifactId>
