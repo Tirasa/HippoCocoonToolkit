@@ -1,6 +1,6 @@
 /*
- *  Copyright 2009 Hippo.
- *  Copyright 2012 Tirasa.
+ *  Copyright 2009-2013 Hippo B.V. (http://www.onehippo.com)
+ *  Copyright 2012-2013 Tirasa.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
  */
 package org.onehippo.taxonomy.plugin.api;
 
+import static org.onehippo.taxonomy.plugin.api.TaxonomyHelper.getCategoryName;
 import java.util.Locale;
 
 import org.onehippo.taxonomy.api.Category;
@@ -41,7 +42,9 @@ public final class TaxonomyHelper {
         return category.getName();
     }
 
+    // <HCT>
     public static String getCategoryPath(Category category) {
         return category.getPath();
     }
+    // </HCT>
 }

@@ -1,13 +1,12 @@
 /*
- *  Copyright 2009 Hippo.
- *  Copyright 2012 Tirasa.
- * 
+ *  Copyright 2009-2013 Hippo B.V. (http://www.onehippo.com)
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,19 +56,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Plugin that edits the classification for a document.  The storage implementation is delegated to a
+ * Plugin that edits the classification for a document. The storage implementation is delegated to a
  * {@link ClassificationDao}, so this plugin is unaware of any of the taxonomy node types.
  */
 public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
 
     public static final String HIPPOTRANSLATION_TRANSLATED = "hippotranslation:translated";
+
     public static final String HIPPOTRANSLATION_LOCALE = "hippotranslation:locale";
 
     @SuppressWarnings("unused")
     private final static String SVN_ID = "$Id: TaxonomyPickerPlugin.java 68792 2009-06-24 10:44:39Z fvlankvelt $";
+
     private static final long serialVersionUID = 1L;
 
-    static final Logger log = LoggerFactory.getLogger(TaxonomyPickerPlugin.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TaxonomyPickerPlugin.class);
 
     private class CategoryListView extends RefreshingView<String> {
 
@@ -89,14 +90,17 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
             final Iterator<String> upstream = classification.getKeys().iterator();
             return new Iterator<IModel<String>>() {
 
+                @Override
                 public boolean hasNext() {
                     return upstream.hasNext();
                 }
 
+                @Override
                 public IModel<String> next() {
                     return new Model<String>(upstream.next());
                 }
 
+                @Override
                 public void remove() {
                     upstream.remove();
                 }
@@ -109,15 +113,23 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
             if (taxonomy != null) {
                 Category category = taxonomy.getCategoryByKey(item.getModelObject());
                 if (category != null) {
-                    item.add(new Label("key", new Model(TaxonomyHelper.getCategoryName(category, getLocale()))));
-                    item.add(new Label("path", new Model(TaxonomyHelper.getCategoryPath(category))));
+                    item.add(new Label("key",
+                            new Model<String>(TaxonomyHelper.getCategoryName(category, getPreferredLocale()))));
+                    // <HCT>
+                    item.add(new Label("path",
+                            new Model<String>(TaxonomyHelper.getCategoryPath(category))));
+                    // </HCT>
                 } else {
                     item.add(new Label("key", new ResourceModel("invalid.taxonomy.key")));
+                    // <HCT>
                     item.add(new Label("path", new ResourceModel("invalid.taxonomy.key")));
+                    // </HCT>
                 }
             } else {
                 item.add(new Label("key", new ResourceModel("invalid.taxonomy")));
+                // <HCT>
                 item.add(new Label("path", new ResourceModel("invalid.taxonomy")));
+                // </HCT>
             }
 
         }
@@ -139,23 +151,31 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
             if (taxonomy != null) {
                 Category category = taxonomy.getCategoryByKey(change.getValue());
                 if (category != null) {
-                    item.add(label = new Label("key", new Model(TaxonomyHelper.getCategoryName(category, getLocale()))));
-                    item.add(new Label("path", new Model(TaxonomyHelper.getCategoryPath(category))));
+                    item.add(label = new Label("key",
+                            new Model<String>(TaxonomyHelper.getCategoryName(category, getPreferredLocale()))));
+                    // <HCT>
+                    item.add(new Label("path",
+                            new Model<String>(TaxonomyHelper.getCategoryPath(category))));
+                    // </HCT>
                 } else {
                     item.add(label = new Label("key", new ResourceModel("invalid.taxonomy.key")));
+                    // <HCT>
                     item.add(new Label("path", new ResourceModel("invalid.taxonomy.key")));
+                    // </HCT>
                 }
             } else {
                 item.add(label = new Label("key", new ResourceModel("invalid.taxonomy")));
+                // <HCT>
                 item.add(new Label("path", new ResourceModel("invalid.taxonomy")));
+                // </HCT>
             }
             switch (change.getType()) {
-            case ADDED:
-                label.add(new AttributeAppender("class", new Model("hippo-diff-added"), " "));
-                break;
-            case REMOVED:
-                label.add(new AttributeAppender("class", new Model("hippo-diff-removed"), " "));
-                break;
+                case ADDED:
+                    label.add(new AttributeAppender("class", new Model<String>("hippo-diff-added"), " "));
+                    break;
+                case REMOVED:
+                    label.add(new AttributeAppender("class", new Model<String>("hippo-diff-removed"), " "));
+                    break;
             }
         }
     }
@@ -165,30 +185,33 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
     public TaxonomyPickerPlugin(final IPluginContext context, final IPluginConfig config) {
         super(context, config);
 
-        add(CSSPackageResource.getHeaderContribution(TaxonomyPickerPlugin.class, "style.css"));
+        add(CSSPackageResource.getHeaderContribution(TaxonomyPickerPlugin.class, "res/style.css"));
 
         add(new Label("title", new ResourceModel("title")));
 
         dao = context.getService(config.getString(ClassificationDao.SERVICE_ID), ClassificationDao.class);
         if (dao == null) {
-            log.warn("No DAO found to retrieve classification");
+            LOG.warn("No DAO found to retrieve classification");
         }
 
         final Mode mode = Mode.fromString(config.getString("mode", "view"));
         if (dao != null && mode == Mode.EDIT) {
-            add(new CategoryListView("keys"));
+            add(new TaxonomyPickerPlugin.CategoryListView("keys"));
             final ClassificationModel model = new ClassificationModel(dao, getModel());
             IDialogFactory dialogFactory = new IDialogFactory() {
 
                 private static final long serialVersionUID = 1L;
 
+                @Override
                 public AbstractDialog<Classification> createDialog() {
                     return createPickerDialog(model, getPreferredLocale());
                 }
             };
-            add(new DialogLink("edit", new ResourceModel("edit"), dialogFactory, getDialogService()));
+            add(new DialogLink("edit", new ResourceModel("edit"), dialogFactory, getDialogService())).setEnabled(
+                    getTaxonomy() != null);
         } else if (dao != null && mode == Mode.COMPARE && config.containsKey("model.compareTo")) {
             IModel<List<Change<String>>> changesModel = new LoadableDetachableModel<List<Change<String>>>() {
+
                 private static final long serialVersionUID = 1L;
 
                 @SuppressWarnings("unchecked")
@@ -212,26 +235,30 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
             };
 
             add(new CategoryCompareView("keys", changesModel));
-            add(new Label("edit",changesModel).setVisible(false));
+            add(new Label("edit", changesModel).setVisible(false));
         } else {
-            add(new CategoryListView("keys"));
+            add(new TaxonomyPickerPlugin.CategoryListView("keys"));
             add(new Label("edit").setVisible(false));
         }
 
         final IModel<CanonicalCategory> canonicalNameModel = new LoadableDetachableModel<CanonicalCategory>() {
+
+            private static final long serialVersionUID = 3417187712118563862L;
 
             @Override
             protected CanonicalCategory load() {
                 Taxonomy taxonomy = getTaxonomy();
                 if (taxonomy != null) {
                     Classification classification = dao.getClassification(TaxonomyPickerPlugin.this.getModelObject());
-                    return new CanonicalCategory(taxonomy, classification.getCanonical(), getLocale());
+                    return new CanonicalCategory(taxonomy, classification.getCanonical(), getPreferredLocale());
                 } else {
                     return null;
                 }
             }
         };
         add(new Label("canon", new StringResourceModel("canonical", this, canonicalNameModel)) {
+
+            private static final long serialVersionUID = 7479470942521630615L;
 
             @Override
             public boolean isVisible() {
@@ -260,6 +287,7 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
      * If you want to provide a custom taxonomy picker plugin, you might want to
      * override this method.
      * </P>
+     *
      * @param model
      * @return
      */
@@ -270,11 +298,12 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
     /**
      * Returns the translation locale of the document if exists.
      * Otherwise, returns the user's UI locale as a fallback.
+     *
      * @return
      */
     protected String getPreferredLocale() {
         Node node = getModel().getObject();
-        
+
         try {
             if (node.isNodeType(HIPPOTRANSLATION_TRANSLATED)) {
                 if (node.hasProperty(HIPPOTRANSLATION_LOCALE)) {
@@ -282,7 +311,7 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
                 }
             }
         } catch (RepositoryException e) {
-            log.error("Failed to detect hippotranslation:locale to choose the preferred locale", e);
+            LOG.error("Failed to detect hippotranslation:locale to choose the preferred locale", e);
         }
 
         return getLocale().getLanguage();
@@ -291,27 +320,24 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
     private Taxonomy getTaxonomy() {
         IPluginConfig config = getPluginConfig();
         ITaxonomyService service = getPluginContext()
-                .getService(config.getString(ITaxonomyService.SERVICE_ID, ITaxonomyService.class.getName()), ITaxonomyService.class);
-        return service.getTaxonomy(config.getString(ITaxonomyService.TAXONOMY_NAME));
+                .getService(config.getString(ITaxonomyService.SERVICE_ID, ITaxonomyService.class.getName()),
+                ITaxonomyService.class);
+
+        final String taxonomyName = config.getString(ITaxonomyService.TAXONOMY_NAME);
+
+        if (taxonomyName == null || taxonomyName.isEmpty()) {
+            LOG.info("No configured/chosen taxonomy name. Found '{}'", taxonomyName);
+            return null;
+        }
+
+        return service.getTaxonomy(taxonomyName);
     }
 
     @Override
     public void renderHead(HtmlHeaderContainer container) {
         super.renderHead(container);
 
-        container.getHeaderResponse()
-                .renderCSSReference(new ResourceReference(TaxonomyPickerPlugin.class, "style.css"));
-    }
-
-    private String getCategoryName(String categoryKey) {
-        Category category = null;
-        if (categoryKey != null) {
-            category = getTaxonomy().getCategoryByKey(categoryKey);
-        }
-        if (category != null) {
-            return TaxonomyHelper.getCategoryName(category, getLocale());
-        } else {
-            return null;
-        }
+        container.getHeaderResponse().
+                renderCSSReference(new ResourceReference(TaxonomyPickerPlugin.class, "res/style.css"));
     }
 }
