@@ -307,7 +307,7 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
     @Override
     public Map<String, ? extends CategoryInfo> getInfos() {
         Map<String, ? extends CategoryInfo> map = new HashMap<String, EditableCategoryInfo>();
-        return LazyMap.<String, EditableCategoryInfo>decorate(map, new Transformer() {
+        return LazyMap.decorate(map, new Transformer() {
 
             @Override
             public Object transform(Object language) {
