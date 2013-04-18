@@ -102,7 +102,7 @@ public class HCTTaxonomyEditorPlugin extends TaxonomyEditorPlugin {
                         languages.add(itor.nextNode().getProperty("hippo:language").getString());
                     }
                 } catch (Exception e) {
-                    log.error("Could not read available languages", e);
+                    LOG.error("Could not read available languages", e);
                 }
             }
 
