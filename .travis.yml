@@ -1,4 +1,13 @@
 language: java
+
+# default install is mvn install --quiet -DskipTests=true
+install: mvn --show-version --errors install
+#invoker.streamLogs: we cannot access to log files through Travis web ui, so display everything in the console
+script: mvn --show-version --errors clean install -Dinvoker.streamLogs=true
+branches:
+  only:
+    - master
+    - 0_5_X
  
 env:
   global:
