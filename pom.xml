@@ -78,15 +78,15 @@
   
   <properties>
     <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
-    <spring.version>3.2.2.RELEASE</spring.version>
+    <spring.version>3.2.5.RELEASE</spring.version>
 
-    <hippo.repository.version>2.22.16</hippo.repository.version>
-    <hippo.cms.version>2.22.15</hippo.cms.version>
-    <hippo.hst.version>2.24.14</hippo.hst.version>
+    <hippo.repository.version>2.24.09</hippo.repository.version>
+    <hippo.cms.version>2.24.07</hippo.cms.version>
+    <hippo.hst.version>2.26.08</hippo.hst.version>
         
     <forge.taxonomy.version>1.09.02</forge.taxonomy.version>
-    <forge.ecm-tagging.version>4.04.01</forge.ecm-tagging.version>
-    <forge.repository-event-listener.version>1.01.07</forge.repository-event-listener.version>
+    <forge.ecm-tagging.version>4.05.01</forge.ecm-tagging.version>
+    <forge.repository-event-listener.version>1.02.00</forge.repository-event-listener.version>
         
     <javax.jcr.version>2.0</javax.jcr.version>
         
@@ -382,7 +382,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>2.3</version>
+          <version>2.4</version>
         </plugin>
         <plugin>
           <groupId>org.apache.cocoon</groupId>
@@ -392,7 +392,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>2.0</version>
+          <version>2.2</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -401,7 +401,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.0</version>
+        <version>3.1</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
