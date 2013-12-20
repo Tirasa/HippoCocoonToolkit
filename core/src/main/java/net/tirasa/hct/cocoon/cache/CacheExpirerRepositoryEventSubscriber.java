@@ -76,13 +76,14 @@ public class CacheExpirerRepositoryEventSubscriber extends BaseHippoEventSubscri
 
         String locale = null;
         try {
-            HippoDocument doc = (HippoDocument) getObjectBeanManager().getObject(event.getPath());
+            final HippoDocument doc = (HippoDocument) getObjectBeanManager().getObject(event.getPath());
             locale = doc.getLocaleString();
-        } catch(ObjectBeanManagerException e) {
+        } catch (ObjectBeanManagerException e) {
             LOG.error("Could not get HippoDocument for {}", event.getPath(), e);
         }
 
         if (StringUtils.isBlank(locale)) {
+            LOG.warn("No locale could be found, aborting");
             return;
         }
 
@@ -100,21 +101,25 @@ public class CacheExpirerRepositoryEventSubscriber extends BaseHippoEventSubscri
         LOG.debug("Expiring {} {}", locale, availability);
 
         final Cache cache = ApplicationContextProvider.getApplicationContext().getBean(Cache.class);
-        LOG.debug("Cocoon cache obtained: {}", cache);
+        if (cache == null) {
+            LOG.warn("No Cocoon cache found, aborting");
+        } else {
+            LOG.debug("Cocoon cache obtained: {}", cache);
 
-        final Set<CacheKey> expired = new HashSet<CacheKey>();
-        for (CacheKey key : cache.keySet()) {
-            if (findExpiredCacheKeys(key, availability, locale)) {
-                expired.add(key);
+            final Set<CacheKey> expired = new HashSet<CacheKey>();
+            for (CacheKey key : cache.keySet()) {
+                if (findExpiredCacheKeys(key, availability, locale)) {
+                    expired.add(key);
+                }
             }
-        }
 
-        LOG.debug("Cache keys to remove #{} {}", expired.size(), expired);
+            LOG.debug("Cache keys to remove #{} {}", expired.size(), expired);
 
-        LOG.debug("# of cache keys before removal: {}", cache.keySet().size());
-        for (CacheKey key : expired) {
-            cache.remove(key);
+            LOG.debug("# of cache keys before removal: {}", cache.keySet().size());
+            for (CacheKey key : expired) {
+                cache.remove(key);
+            }
+            LOG.debug("# of cache keys after removal: {}", cache.keySet().size());
         }
-        LOG.debug("# of cache keys after removal: {}", cache.keySet().size());
     }
 }
