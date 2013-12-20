@@ -514,6 +514,9 @@
           <sv:property sv:name="mode" sv:type="String">
             <sv:value>${mode}</sv:value>
           </sv:property>
+          <sv:property sv:name="keys.urlencode" sv:type="Boolean">
+            <sv:value>false</sv:value>
+          </sv:property>
         </sv:node>
       </sv:node>
     </sv:node>

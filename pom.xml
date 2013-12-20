@@ -84,7 +84,7 @@
     <hippo.cms.version>2.24.07</hippo.cms.version>
     <hippo.hst.version>2.26.08</hippo.hst.version>
         
-    <forge.taxonomy.version>1.09.02</forge.taxonomy.version>
+    <forge.taxonomy.version>1.09.03</forge.taxonomy.version>
     <forge.ecm-tagging.version>4.05.01</forge.ecm-tagging.version>
     <forge.repository-event-listener.version>1.02.00</forge.repository-event-listener.version>
         

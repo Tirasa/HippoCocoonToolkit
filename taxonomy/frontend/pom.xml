@@ -76,15 +76,6 @@
               <include>org.onehippo:taxonomy-addon-frontend</include>
             </includes>
           </artifactSet>
-          <filters>
-            <filter>
-              <artifact>org.onehippo:taxonomy-addon-frontend</artifact>
-              <excludes>
-                <exclude>org/onehippo/taxonomy/plugin/model/JcrCategory.class</exclude>
-                <exclude>org/onehippo/taxonomy/plugin/model/JcrCategory$1.class</exclude>
-              </excludes>
-            </filter>
-          </filters>
         </configuration>
         <executions>
           <execution>

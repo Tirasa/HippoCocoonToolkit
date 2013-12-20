@@ -1,13 +1,13 @@
 /*
  *  Copyright 2009-2013 Hippo B.V. (http://www.onehippo.com)
  *  Copyright 2012-2013 Tirasa.
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,9 +49,9 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
 
     private static final Logger LOG = LoggerFactory.getLogger(JcrCategory.class);
 
-    private static final long serialVersionUID = -6502152613516313634L;
+    private static final long serialVersionUID = 4494723358209679816L;
 
-    public JcrCategory(final IModel<Node> nodeModel, final boolean editable) throws TaxonomyException {
+    public JcrCategory(IModel<Node> nodeModel, boolean editable) throws TaxonomyException {
         super(nodeModel, editable);
         try {
             final Node node = getNode();
@@ -81,12 +81,11 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("Can't create a child category below " + nodePath, re);
                         } else {
-                            LOG.warn("Can't create a child category below {}, message is {}",
-                                    nodePath, re.getMessage());
+                            LOG.warn("Can't create a child category below {}, message is {}", nodePath, re.getMessage());
                         }
                     } catch (TaxonomyException te) {
-                        LOG.warn("TaxonomyException: can't create a child category below {}, message is {}",
-                                nodePath, te.getMessage());
+                        LOG.warn("TaxonomyException: can't create a child category below {}, message is {}" + nodePath,
+                                te.getMessage());
                     }
                 }
             }
@@ -184,6 +183,26 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
     public EditableCategoryInfo getInfo(final String language) {
         try {
             Node node = getNode();
+            // <HCT>
+            if (editable) {
+                final NodeIterator docChidlren = node.getNodes(HCTTaxonomyNodeTypes.NODENAME_HIPPOTAXONOMY_DOCUMENTS);
+                if (docChidlren == null || !docChidlren.hasNext()) {
+                    if (!JcrHelper.isNodeType(node, HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED)) {
+                        node.addMixin(HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED);
+                    }
+                    final Node documents = node.addNode(HCTTaxonomyNodeTypes.NODENAME_HIPPOTAXONOMY_DOCUMENTS,
+                            "hippofacnav:facetnavigation");
+                    documents.setProperty("hippo:docbase",
+                            node.getSession().getNode("/content/documents").getIdentifier());
+                    documents.setProperty("hippofacnav:facets",
+                            new String[] { TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS });
+                    documents.setProperty("hippofacnav:filters",
+                            new String[] { TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS + "=" + node.getName() });
+                    documents.setProperty("hippofacnav:limit", 10000);
+                }
+            }
+            // </HCT>
+
             if (JcrHelper.isNodeType(node, TaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_TRANSLATED)) {
                 NodeIterator translations = node.getNodes(TaxonomyNodeTypes.HIPPOTAXONOMY_TRANSLATION);
                 while (translations.hasNext()) {
@@ -208,92 +227,59 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
                         TaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_TRANSLATION);
                 child.setProperty(HippoNodeType.HIPPO_LANGUAGE, language);
                 child.setProperty(HippoNodeType.HIPPO_MESSAGE, NodeNameCodec.decode(node.getName()));
-
-                // <HCT>
-                final NodeIterator docChidlren = node.getNodes(HCTTaxonomyNodeTypes.NODENAME_HIPPOTAXONOMY_DOCUMENTS);
-                if (docChidlren == null || !docChidlren.hasNext()) {
-                    if (!JcrHelper.isNodeType(node, HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED)) {
-                        node.addMixin(HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED);
-                    }
-                    final Node documents = node.addNode(HCTTaxonomyNodeTypes.NODENAME_HIPPOTAXONOMY_DOCUMENTS,
-                            "hippofacnav:facetnavigation");
-                    documents.setProperty("hippo:docbase",
-                            node.getSession().getNode("/content/documents").getIdentifier());
-                    documents.setProperty("hippofacnav:facets",
-                            new String[] {TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS});
-                    documents.setProperty("hippofacnav:filters",
-                            new String[] {TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS + "=" + node.getName()});
-                    documents.setProperty("hippofacnav:limit", 10000);
-                }
-                // </HCT>
-
                 return new JcrCategoryInfo(new JcrNodeModel(child), editable);
             } else {
                 return new EditableCategoryInfo() {
 
-                    @Override
-                    public void setDescription(final String description) throws TaxonomyException {
+                    public void setDescription(String description) throws TaxonomyException {
                     }
 
-                    @Override
-                    public void setName(final String name) throws TaxonomyException {
+                    public void setName(String name) throws TaxonomyException {
                     }
 
-                    @Override
-                    public void setSynonyms(final String[] synonyms) throws TaxonomyException {
+                    public void setSynonyms(String[] synonyms) throws TaxonomyException {
                     }
 
-                    @Override
                     public Node getNode() throws ItemNotFoundException {
                         return null;
                     }
 
-                    @Override
                     public String getDescription() {
                         return "";
                     }
 
-                    @Override
                     public String getLanguage() {
                         return language;
                     }
 
-                    @Override
                     public String getName() {
                         return JcrCategory.this.getName();
                     }
 
-                    @Override
                     public String[] getSynonyms() {
                         return new String[0];
                     }
 
-                    @Override
                     public Map<String, Object> getProperties() {
                         return Collections.emptyMap();
                     }
 
-                    @Override
-                    public String getString(final String property) {
+                    public String getString(String property) {
                         return "";
                     }
 
-                    @Override
-                    public String getString(final String property, final String defaultValue) {
+                    public String getString(String property, String defaultValue) {
                         return "";
                     }
 
-                    @Override
-                    public String[] getStringArray(final String property) {
+                    public String[] getStringArray(String property) {
                         return new String[0];
                     }
 
-                    @Override
-                    public void setString(final String property, final String value) throws TaxonomyException {
+                    public void setString(String property, String value) throws TaxonomyException {
                     }
 
-                    @Override
-                    public void setStringArray(final String property, final String[] values) throws TaxonomyException {
+                    public void setStringArray(String property, String[] values) throws TaxonomyException {
                     }
                 };
             }
@@ -307,13 +293,14 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
     @Override
     public Map<String, ? extends CategoryInfo> getInfos() {
         Map<String, ? extends CategoryInfo> map = new HashMap<String, EditableCategoryInfo>();
-        return LazyMap.decorate(map, new Transformer() {
+        return LazyMap.decorate(map,
+                new Transformer() {
 
-            @Override
-            public Object transform(Object language) {
-                return getInfo((String) language);
-            }
-        });
+                    @Override
+                    public Object transform(Object language) {
+                        return getInfo((String) language);
+                    }
+                });
     }
 
     @Override
@@ -330,11 +317,12 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
     }
 
     @Override
-    public JcrCategory addCategory(final String key, final String name) throws TaxonomyException {
+    public JcrCategory addCategory(String key, String name, String locale) throws TaxonomyException {
         try {
-            return createCategory(getNode(), key, name);
+            return createCategory(getNode(), key, name, locale);
         } catch (RepositoryException e) {
-            throw new TaxonomyException("Could not create category", e);
+            throw new TaxonomyException("Could not create category with key " + key + ", name " + name + " and locale "
+                    + locale, e);
         }
     }
 
@@ -348,4 +336,5 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
             throw new TaxonomyException("Could not remove category", e);
         }
     }
+
 }
