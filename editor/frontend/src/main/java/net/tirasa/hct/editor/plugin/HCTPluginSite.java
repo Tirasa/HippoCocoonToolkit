@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,16 +20,16 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.hippoecm.frontend.plugin.IPluginContext;
 import org.hippoecm.frontend.plugin.config.IPluginConfig;
-import net.tirasa.hct.editor.HctPlugin;
-import net.tirasa.hct.editor.panel.HctSitePanel;
+import net.tirasa.hct.editor.HCTPlugin;
+import net.tirasa.hct.editor.panel.HCTSitePanel;
 
-public class HctPluginSite extends HctPlugin {
+public class HCTPluginSite extends HCTPlugin {
 
     private static final long serialVersionUID = -692590539874058169L;
 
-    public HctPluginSite(final IPluginContext context,
+    public HCTPluginSite(final IPluginContext context,
             final IPluginConfig config) {
-        super(context, HctSitePanel.class);
+        super(context, HCTSitePanel.class);
     }
 
     @Override

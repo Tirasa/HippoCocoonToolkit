@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +18,6 @@ package net.tirasa.hct.editor.panel;
 import java.util.List;
 import javax.jcr.RepositoryException;
 import org.apache.wicket.Component;
-import org.apache.wicket.ResourceReference;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.breadcrumb.IBreadCrumbModel;
@@ -31,16 +32,15 @@ import org.hippoecm.frontend.dialog.IDialogService;
 import org.hippoecm.frontend.plugin.IPluginContext;
 import org.hippoecm.frontend.session.UserSession;
 import net.tirasa.hct.editor.beans.SiteBean;
-import net.tirasa.hct.editor.crumbs.HctBreadCrumbPanel;
+import net.tirasa.hct.editor.crumbs.HCTBreadCrumbPanel;
 import net.tirasa.hct.editor.data.DetachableSite;
-import net.tirasa.hct.editor.data.SiteDataProvider;
 import net.tirasa.hct.editor.widgets.AjaxBreadCrumbLink;
 import net.tirasa.hct.editor.widgets.AjaxLinkLabel;
 import net.tirasa.hct.editor.widgets.ConfirmDeleteDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ViewSitePanel extends HctBreadCrumbPanel {
+public class ViewSitePanel extends HCTBreadCrumbPanel {
 
     private static final Logger LOG =
             LoggerFactory.getLogger(ViewSitePanel.class);
@@ -67,15 +67,15 @@ public class ViewSitePanel extends HctBreadCrumbPanel {
                 new AjaxBreadCrumbLink("manage-component", breadCrumbModel, null) {
 
                     private static final long serialVersionUID =
-                            506897728694578583L;
+                    506897728694578583L;
 
                     @Override
                     protected IBreadCrumbParticipant getParticipant(
                             final String componentId, final String siteName) {
-                        return new HctComponentPanel(id,
-                                context, breadCrumbModel,
-                                ((DetachableSite) model).getSite().getSiteName());
-                    }
+                                return new HCTComponentPanel(id,
+                                        context, breadCrumbModel,
+                                        ((DetachableSite) model).getSite().getSiteName());
+                            }
                 };
 
         components.setVisible(true);
@@ -85,15 +85,15 @@ public class ViewSitePanel extends HctBreadCrumbPanel {
                 new AjaxBreadCrumbLink("manage-page", breadCrumbModel, null) {
 
                     private static final long serialVersionUID =
-                            506897728694578583L;
+                    506897728694578583L;
 
                     @Override
                     protected IBreadCrumbParticipant getParticipant(
                             final String componentId, final String siteName) {
-                        return new HctPagePanel(id, context,
-                                breadCrumbModel,
-                                ((DetachableSite) model).getSite().getSiteName());
-                    }
+                                return new HCTPagePanel(id, context,
+                                        breadCrumbModel,
+                                        ((DetachableSite) model).getSite().getSiteName());
+                            }
                 };
 
         page.setVisible(true);
@@ -104,14 +104,14 @@ public class ViewSitePanel extends HctBreadCrumbPanel {
                 new AjaxBreadCrumbLink("edit-site", breadCrumbModel, null) {
 
                     private static final long serialVersionUID =
-                            506897728694578583L;
+                    506897728694578583L;
 
                     @Override
                     protected IBreadCrumbParticipant getParticipant(
                             final String componentId, final String siteName) {
-                        return new SitePanel(componentId, context,
-                                breadCrumbModel, model, siteName);
-                    }
+                                return new SitePanel(componentId, context,
+                                        breadCrumbModel, model, siteName);
+                            }
                 };
 
         edit.setVisible(true);
@@ -125,26 +125,26 @@ public class ViewSitePanel extends HctBreadCrumbPanel {
             public void onClick(final AjaxRequestTarget target) {
                 context.getService(IDialogService.class.getName(),
                         IDialogService.class).show(
-                        new ConfirmDeleteDialog(model, this) {
+                                new ConfirmDeleteDialog(model, this) {
 
-                            private static final long serialVersionUID =
+                                    private static final long serialVersionUID =
                                     -5828988483261392319L;
 
-                            @Override
-                            protected void onOk() {
-                                deleteSite(model);
-                            }
+                                    @Override
+                                    protected void onOk() {
+                                        deleteSite(model);
+                                    }
 
-                            @Override
-                            protected String getTitleKey() {
-                                return "site-delete-title";
-                            }
+                                    @Override
+                                    protected String getTitleKey() {
+                                        return "site-delete-title";
+                                    }
 
-                            @Override
-                            protected String getTextKey() {
-                                return "site-delete-text";
-                            }
-                        });
+                                    @Override
+                                    protected String getTextKey() {
+                                        return "site-delete-text";
+                                    }
+                                });
             }
         });
     }

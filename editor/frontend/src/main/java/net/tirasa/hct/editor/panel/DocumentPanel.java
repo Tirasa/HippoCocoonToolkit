@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +30,7 @@ public class DocumentPanel extends Panel {
 
     public DocumentPanel(final String id, final String operation,
             final DocumentBean component, final String siteName) {
-        
+
         super(id);
 
         final AjaxTextFieldPanel name = new AjaxTextFieldPanel(
@@ -40,7 +42,7 @@ public class DocumentPanel extends Panel {
         name.addValidator(new ComponentNameValidator(siteName));
         name.addValidator(new NodeNameValidator());
         add(name);
-        
+
         final AjaxTextFieldPanel docType = new AjaxTextFieldPanel(
                 "docType", "docType",
                 new PropertyModel<String>(component, "docType"), false);

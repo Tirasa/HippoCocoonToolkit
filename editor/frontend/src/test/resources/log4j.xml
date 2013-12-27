@@ -16,22 +16,22 @@
   limitations under the License.
 -->
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{ISO8601} [%p] [%t] [%c] - %m%n" />
-        </layout>
-    </appender>
+  <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{ISO8601} [%p] [%t] [%c] - %m%n" />
+    </layout>
+  </appender>
 
-    <logger name="org.apache.cocoon">
-        <level value="INFO"/>
-    </logger>
+  <logger name="org.apache.cocoon">
+    <level value="INFO"/>
+  </logger>
 
-    <logger name="net.tirasa.hct.cocoon">
-        <level value="DEBUG"/>
-    </logger>
+  <logger name="net.tirasa.hct.cocoon">
+    <level value="DEBUG"/>
+  </logger>
   
-    <root>
-        <priority value="INFO"/>
-        <appender-ref ref="CONSOLE"/>
-    </root>
+  <root>
+    <priority value="INFO"/>
+    <appender-ref ref="CONSOLE"/>
+  </root>
 </log4j:configuration>

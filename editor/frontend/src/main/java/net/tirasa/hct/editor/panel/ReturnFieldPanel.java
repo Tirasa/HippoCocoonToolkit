@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -65,18 +67,18 @@ public class ReturnFieldPanel extends Panel {
             AjaxButton addNewButton = new IndicatingAjaxButton("addNewField",
                     new Model("addNewField")) {
 
-                private static final long serialVersionUID =
+                        private static final long serialVersionUID =
                         -4804368561204623354L;
 
-                @Override
-                protected void onSubmit(final AjaxRequestTarget target,
-                        final Form form) {
+                        @Override
+                        protected void onSubmit(final AjaxRequestTarget target,
+                                final Form form) {
 
-                    FieldBean fieldItem = new FieldBean();
-                    doc.getFieldList().add(fieldItem);
-                    target.addComponent(fieldContainer);
-                }
-            };
+                            FieldBean fieldItem = new FieldBean();
+                            doc.getFieldList().add(fieldItem);
+                            target.addComponent(fieldContainer);
+                        }
+                    };
             addNewButton.setDefaultFormProcessing(false);
             fieldContainer.add(addNewButton);
         }
@@ -117,19 +119,19 @@ public class ReturnFieldPanel extends Panel {
             final AjaxButton dropButton = new IndicatingAjaxButton(
                     "dropButton", new Model("dropButton")) {
 
-                private static final long serialVersionUID =
+                        private static final long serialVersionUID =
                         -4804368561204623354L;
 
-                @Override
-                protected void onSubmit(
-                        final AjaxRequestTarget target,
-                        final Form form) {
+                        @Override
+                        protected void onSubmit(
+                                final AjaxRequestTarget target,
+                                final Form form) {
 
-                    getList().remove(
-                            Integer.valueOf(getParent().getId()).intValue());
-                    target.addComponent(fieldContainer);
-                }
-            };
+                                    getList().remove(
+                                            Integer.valueOf(getParent().getId()).intValue());
+                                    target.addComponent(fieldContainer);
+                                }
+                    };
 
             dropButton.setDefaultFormProcessing(false);
             item.add(dropButton);

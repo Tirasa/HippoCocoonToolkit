@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +25,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public class HctBreadCrumbBar extends BreadCrumbBar {
+public class HCTBreadCrumbBar extends BreadCrumbBar {
 
     private static final long serialVersionUID = -5273446310539788971L;
 
@@ -44,8 +46,7 @@ public class HctBreadCrumbBar extends BreadCrumbBar {
                         private static final long serialVersionUID = 506897728694578583L;
 
                         @Override
-                        protected IBreadCrumbParticipant getParticipant(
-                                String componentId) {
+                        protected IBreadCrumbParticipant getParticipant(final String componentId) {
                             return participant;
                         }
                     };
@@ -62,7 +63,7 @@ public class HctBreadCrumbBar extends BreadCrumbBar {
         }
     }
 
-    public HctBreadCrumbBar(final String id) {
+    public HCTBreadCrumbBar(final String id) {
         super(id);
     }
 

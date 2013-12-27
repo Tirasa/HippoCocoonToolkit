@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,6 +25,7 @@ public class Component implements Serializable {
      * Component Id.
      */
     private Integer id;
+
     /**
      * Component name.
      */
@@ -30,6 +33,7 @@ public class Component implements Serializable {
 
     /**
      * Component Type constructor.
+     *
      * @param idType - component idType
      * @param idName - component idName
      */
@@ -37,6 +41,7 @@ public class Component implements Serializable {
         this.id = idType;
         this.name = idName;
     }
+
     /**
      *
      * @return id

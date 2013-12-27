@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -82,7 +84,9 @@ public class ResourceBean extends ComponentType implements Serializable {
 
     public enum OperationType {
 
-        AND, OR
+        AND,
+        OR
+
     };
 
     public ResourceBean() {
@@ -150,17 +154,14 @@ public class ResourceBean extends ComponentType implements Serializable {
         relPath.append(Properties.SLASH);
         relPath.append(componentName);
         try {
-            final Query query = getQueryManager().createQuery(
-                    relPath.toString(), Query.XPATH);
-            if (query.execute().getNodes().hasNext()) {
-                return true;
-            }
+            @SuppressWarnings("deprecation")
+            final Query query = getQueryManager().createQuery(relPath.toString(), Query.XPATH);
+            return query.execute().getNodes().hasNext();
         } catch (RepositoryException e) {
             LOG.error("Unable to check if component '{}'"
                     + "exists, returning true", componentName, e);
             return true;
         }
-        return false;
     }
 
     /**

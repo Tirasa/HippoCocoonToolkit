@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,24 +28,24 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.hippoecm.frontend.plugin.IPluginContext;
 import org.hippoecm.frontend.widgets.AbstractView;
-import net.tirasa.hct.editor.crumbs.HctBreadCrumbPanel;
+import net.tirasa.hct.editor.crumbs.HCTBreadCrumbPanel;
 import net.tirasa.hct.editor.widgets.AjaxBreadCrumbPanelLink;
 
-public class HctPanelPlugin extends HctBreadCrumbPanel {
+public class HCTPanelPlugin extends HCTBreadCrumbPanel {
 
     private static final long serialVersionUID = -7452200457282472023L;
 
-    public HctPanelPlugin(final String id, final IPluginContext context,
+    public HCTPanelPlugin(final String id, final IPluginContext context,
             final IBreadCrumbModel breadCrumbModel) {
         super(id, breadCrumbModel);
 
-        add(new AbstractView<HctPlugin>("panels",
+        add(new AbstractView<HCTPlugin>("panels",
                 new AdminPluginProvider(context)) {
             private static final long serialVersionUID = -5883876020383905671L;
 
             @Override
-            protected void populateItem(final Item<HctPlugin> item) {
-                final HctPlugin service = item.getModelObject();
+            protected void populateItem(final Item<HCTPlugin> item) {
+                final HCTPlugin service = item.getModelObject();
                 final AjaxBreadCrumbPanelLink link =
                         new AjaxBreadCrumbPanelLink(
                         "link", getBreadCrumbModel(), service, "");
@@ -56,13 +58,13 @@ public class HctPanelPlugin extends HctBreadCrumbPanel {
         });
     }
 
-    static class AdminPluginProvider implements IDataProvider<HctPlugin> {
+    static class AdminPluginProvider implements IDataProvider<HCTPlugin> {
 
         private static final long serialVersionUID = -7682624922789215681L;
 
         private transient IPluginContext context;
 
-        private transient List<HctPlugin> services;
+        private transient List<HCTPlugin> services;
 
         public AdminPluginProvider(final IPluginContext context) {
             this.context = context;
@@ -71,12 +73,12 @@ public class HctPanelPlugin extends HctBreadCrumbPanel {
         private void load() {
             if (services == null) {
                 services = context.getServices(
-                        HctPlugin.ADMIN_PANEL_ID, HctPlugin.class);
+                        HCTPlugin.ADMIN_PANEL_ID, HCTPlugin.class);
             }
         }
 
     @Override
-        public Iterator<HctPlugin> iterator(final int first, final int count) {
+        public Iterator<HCTPlugin> iterator(final int first, final int count) {
             load();
             return services.subList(first, first + count).iterator();
         }
@@ -88,7 +90,7 @@ public class HctPanelPlugin extends HctBreadCrumbPanel {
         }
 
         @Override
-        public IModel<HctPlugin> model(final HctPlugin object) {
+        public IModel<HCTPlugin> model(final HCTPlugin object) {
             return new Model(object);
         }
 

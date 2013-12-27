@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,8 +18,6 @@ package net.tirasa.hct.editor.panel;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.wicket.Component;
-import org.apache.wicket.Resource;
-import org.apache.wicket.ResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.breadcrumb.IBreadCrumbModel;
 import org.apache.wicket.extensions.breadcrumb.panel.BreadCrumbPanel;
@@ -31,7 +31,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.hippoecm.frontend.plugin.IPluginContext;
-import net.tirasa.hct.editor.crumbs.HctBreadCrumbPanel;
+import net.tirasa.hct.editor.crumbs.HCTBreadCrumbPanel;
 import net.tirasa.hct.editor.data.ComponentDataProvider;
 import net.tirasa.hct.editor.widgets.AdminDataTable;
 import net.tirasa.hct.editor.widgets.AjaxBreadCrumbPanelLink;
@@ -40,19 +40,19 @@ import net.tirasa.hct.editor.widgets.AjaxLinkLabel;
 /**
  * This panel displays a pageable list of components.
  */
-public class HctComponentPanel extends HctBreadCrumbPanel {
+public class HCTComponentPanel extends HCTBreadCrumbPanel {
 
     private static final long serialVersionUID = 3452743611425398827L;
 
     private final String siteName;
 
-    public HctComponentPanel(final String id, final IPluginContext context,
+    public HCTComponentPanel(final String id, final IPluginContext context,
             final IBreadCrumbModel breadCrumbModel, final String siteName) {
         super(id, breadCrumbModel);
 
         this.siteName = siteName;
         setOutputMarkupId(true);
-        
+
         final ComponentDataProvider componentDataProvider =
                 new ComponentDataProvider(siteName);
 
@@ -66,48 +66,48 @@ public class HctComponentPanel extends HctBreadCrumbPanel {
         columns.add(new AbstractColumn(
                 new ResourceModel("componentName"), "componentName") {
 
-            private static final long serialVersionUID = -1822504503325964706L;
-
-            @Override
-            public void populateItem(final Item item,
-                    final String componentId, final IModel model) {
-
-                final AjaxLinkLabel action = new AjaxLinkLabel(componentId,
-                        new PropertyModel(model, "componentName")) {
-
-                    private static final long serialVersionUID =
-                            3776750333491622263L;
+                    private static final long serialVersionUID = -1822504503325964706L;
 
                     @Override
-                    public void onClick(final AjaxRequestTarget target) {
-                        //panel.showView(target, model);
-                        activate(new IBreadCrumbPanelFactory() {
+                    public void populateItem(final Item item,
+                            final String componentId, final IModel model) {
+
+                        final AjaxLinkLabel action = new AjaxLinkLabel(componentId,
+                                new PropertyModel(model, "componentName")) {
 
                             private static final long serialVersionUID =
-                                    299017652786542948L;
+                            3776750333491622263L;
 
                             @Override
-                            public BreadCrumbPanel create(
-                                    final String componentId,
-                                    final IBreadCrumbModel breadCrumbModel) {
+                            public void onClick(final AjaxRequestTarget target) {
+                                //panel.showView(target, model);
+                                activate(new IBreadCrumbPanelFactory() {
 
-                                return new ViewComponentPanel(componentId,
-                                        context, breadCrumbModel,
-                                        model, siteName);
+                                    private static final long serialVersionUID =
+                                    299017652786542948L;
+
+                                    @Override
+                                    public BreadCrumbPanel create(
+                                            final String componentId,
+                                            final IBreadCrumbModel breadCrumbModel) {
+
+                                                return new ViewComponentPanel(componentId,
+                                                        context, breadCrumbModel,
+                                                        model, siteName);
+                                            }
+                                });
                             }
-                        });
+                        };
+                        item.add(action);
                     }
-                };
-                item.add(action);
-            }
-        });
+                });
 
         columns.add(new PropertyColumn(new ResourceModel("componentType"),
                 "frontend:componentType", "componentType"));
 
         final AdminDataTable table =
                 new AdminDataTable("table", columns,
-                new ComponentDataProvider(siteName), 20);
+                        new ComponentDataProvider(siteName), 20);
         table.setOutputMarkupId(true);
         add(table);
     }

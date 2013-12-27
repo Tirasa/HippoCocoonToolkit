@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -102,23 +104,19 @@ public class SiteBean implements Comparable<SiteBean>, IClusterable {
     }
 
     public static boolean siteExists(final String siteName) {
-        final StringBuilder queryString =
-                new StringBuilder(Properties.HCT_ROOT);
+        final StringBuilder queryString = new StringBuilder(Properties.HCT_ROOT);
         queryString.append(Properties.SLASH);
         queryString.append(siteName);
 
         try {
-            final Query query = getQueryManager().createQuery(
-                    queryString.toString(), Query.XPATH);
-            if (query.execute().getNodes().hasNext()) {
-                return true;
-            }
+            @SuppressWarnings("deprecation")
+            final Query query = getQueryManager().createQuery(queryString.toString(), Query.XPATH);
+            return query.execute().getNodes().hasNext();
         } catch (RepositoryException e) {
             LOG.error("Unable to check if site '{}' "
                     + "exists, returning true", siteName, e);
             return true;
         }
-        return false;
     }
 
     /**
@@ -134,17 +132,17 @@ public class SiteBean implements Comparable<SiteBean>, IClusterable {
         final StringBuilder relPath = new StringBuilder(Properties.HCT_ROOT);
         relPath.append(Properties.SLASH);
         relPath.append(getSiteName());
-        
+
         //Add site node
         node = ((UserSession) Session.get()).getRootNode().
                 addNode(relPath.toString());
         setOrRemoveStringProperty(node,
                 Properties.PROP_DESCRIPTION, getDescription());
-        
+
         //Add child node
         node.addNode(Properties.HCT_COMPONENTS);
         node.addNode(Properties.HCT_PAGES);
-       
+
         //save parent when adding a node
         node.getParent().getParent().getSession().save();
     }
@@ -179,7 +177,7 @@ public class SiteBean implements Comparable<SiteBean>, IClusterable {
 
     /**
      * Delete the current site
-     * 
+     *
      *
      * @throws RepositoryException
      */

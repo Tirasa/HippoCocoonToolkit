@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,8 +38,7 @@ public abstract class AjaxBreadCrumbLink extends AjaxFallbackLink {
      * @param id The link id
      * @param breadCrumbModel The bread crumb model
      */
-    public AjaxBreadCrumbLink(final String id,
-            final IBreadCrumbModel breadCrumbModel, final String siteName) {
+    public AjaxBreadCrumbLink(final String id, final IBreadCrumbModel breadCrumbModel, final String siteName) {
         super(id);
         this.breadCrumbModel = breadCrumbModel;
         this.siteName = siteName;

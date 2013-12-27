@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -61,31 +63,31 @@ public class PageFieldPanel extends Panel {
 
         final AjaxDropDownChoicePanel top =
                 new AjaxDropDownChoicePanel("top", "top",
-                new PropertyModel(page, "top"), true);
+                        new PropertyModel(page, "top"), true);
         top.setChoices(componentNameList);
         add(top);
 
         final AjaxDropDownChoicePanel left =
                 new AjaxDropDownChoicePanel("left", "left",
-                new PropertyModel(page, "left"), true);
+                        new PropertyModel(page, "left"), true);
         left.setChoices(componentNameList);
         add(left);
 
         final AjaxDropDownChoicePanel bottom =
                 new AjaxDropDownChoicePanel("bottom", "bottom",
-                new PropertyModel(page, "bottom"), true);
+                        new PropertyModel(page, "bottom"), true);
         bottom.setChoices(componentNameList);
         add(bottom);
 
         final AjaxDropDownChoicePanel center =
                 new AjaxDropDownChoicePanel("center", "center",
-                new PropertyModel(page, "center"), true);
+                        new PropertyModel(page, "center"), true);
         center.setChoices(componentNameList);
         add(center);
 
         final AjaxDropDownChoicePanel right =
                 new AjaxDropDownChoicePanel("right", "right",
-                new PropertyModel(page, "right"), true);
+                        new PropertyModel(page, "right"), true);
         right.setChoices(componentNameList);
         add(right);
     }

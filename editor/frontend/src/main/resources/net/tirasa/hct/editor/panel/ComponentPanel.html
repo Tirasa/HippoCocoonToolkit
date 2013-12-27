@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!--
   Copyright (C) 2012 Tirasa
 
@@ -16,35 +16,35 @@
   limitations under the License.
 -->
 <html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:wicket="http://wicket.apache.org/"
-    xml:lang="en"
-    lang="en">
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:wicket="http://wicket.apache.org/"
+  xml:lang="en"
+  lang="en">
 
-    <wicket:extend>
-        <div wicket:id="feedmsg" class="hippo-feedback"/>
-        <div class="main">
-            <form class="hctForm" wicket:id="form">
+  <wicket:extend>
+    <div wicket:id="feedmsg" class="hippo-feedback"/>
+    <div class="main">
+      <form class="hctForm" wicket:id="form">
 
-                <span wicket:id="main">
+        <span wicket:id="main">
 
-                    <span wicket:id="typePanel"></span>
-                    <wicket:fragment wicket:id="viewSelect">
-                        <fieldset id="personal">
-                            <legend><wicket:message key="component-create-title"/></legend>
-                            <wicket:message key="componentType"/>
-                            <select wicket:id="type"></select>
-                        </fieldset>
-                    </wicket:fragment>
-                    <wicket:fragment wicket:id="hiddenSelect">
-                    </wicket:fragment>               
-                    <span wicket:id="summary"></span>
-                </span> 
-                <p>
-                    <input type="submit" wicket:message="value:create-action" wicket:id="create-button"/>
-                    <input type="submit" wicket:message="value:cancel-action" wicket:id="cancel-button"/>
-                </p>
-            </form>
-        </div>
-    </wicket:extend>
+          <span wicket:id="typePanel"></span>
+          <wicket:fragment wicket:id="viewSelect">
+            <fieldset id="personal">
+              <legend><wicket:message key="component-create-title"/></legend>
+              <wicket:message key="componentType"/>
+              <select wicket:id="type"></select>
+            </fieldset>
+          </wicket:fragment>
+          <wicket:fragment wicket:id="hiddenSelect">
+          </wicket:fragment>               
+          <span wicket:id="summary"></span>
+        </span> 
+        <p>
+          <input type="submit" wicket:message="value:create-action" wicket:id="create-button"/>
+          <input type="submit" wicket:message="value:cancel-action" wicket:id="cancel-button"/>
+        </p>
+      </form>
+    </div>
+  </wicket:extend>
 </html>

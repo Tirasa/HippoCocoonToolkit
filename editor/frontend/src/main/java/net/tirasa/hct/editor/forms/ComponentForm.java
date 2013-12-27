@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,7 +43,6 @@ import net.tirasa.hct.editor.beans.FilterBean;
 import net.tirasa.hct.editor.beans.OrderBean;
 import net.tirasa.hct.editor.beans.ResourceBean;
 import net.tirasa.hct.editor.beans.SummaryBean;
-import net.tirasa.hct.editor.data.ComponentDataProvider;
 import net.tirasa.hct.editor.panel.CollectionPanel;
 import net.tirasa.hct.editor.panel.DocumentPanel;
 import net.tirasa.hct.editor.panel.ResourcePanel;
@@ -58,9 +59,9 @@ public class ComponentForm extends Form {
 
     private List<Component> typeComponent =
             Arrays.asList(new Component(0, "hct:document"),
-            new Component(1, "hct:summary"),
-            new Component(2, "hct:collection"),
-            new Component(3, "hct:resource"));
+                    new Component(1, "hct:summary"),
+                    new Component(2, "hct:collection"),
+                    new Component(3, "hct:resource"));
 
     private final WebMarkupContainer mainContainer;
 
@@ -69,7 +70,7 @@ public class ComponentForm extends Form {
     private transient IModel model;
 
     private transient String operationType;
-    
+
     private String siteName;
 
     public ComponentForm(final String id, final IModel model,

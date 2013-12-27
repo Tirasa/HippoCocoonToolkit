@@ -21,32 +21,28 @@
   xml:lang="en"
   lang="en">
   <wicket:panel>
-    <fieldset id="personal">
-      <legend>General Parameters</legend>
-      <div>
-        <div>
-          <wicket:message key="componentName"/>
-        </div>
-        <div>
-          <span wicket:id="componentName">[componentName]</span>
+    <div yui:id="hippo-controlpanel-perspective-wrapper" class="hippo-controlpanel">
+      <div yui:id="hippo-controlpanel-perspective-top">
+        <div yui:id="hippo-controlpanel-perspective-top-body" class="hippo-controlpanel-breadcrumbs">
+          <span class="hippo-controlpanel-breadcrumbs-backbutton" wicket:id="breadCrumbBar">bar</span>
         </div>
       </div>
-      <div>
-        <div>
-          <wicket:message key="base"/>
-        </div>
-        <div>
-          <span wicket:id="base">[base]</span>
+      <div yui:id="hippo-controlpanel-perspective-center">
+        <div yui:id="hippo-controlpanel-perspective-center-body">
+          <table class="hippo-controlpanel-body" summary="">
+            <tr>
+              <td width="15%">&nbsp;</td>
+              <td wicket:id="panel" valign="top" width="70%">[ Admin panel ]</td>
+              <td width="15%">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <br/><br/>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
-      <div>
-        <div>
-          <wicket:message key="depth"/>
-        </div>
-        <div>
-          <span wicket:id="depth">[depth]</span>
-        </div>
-      </div>
-    </fieldset>
+    </div>
   </wicket:panel>
 </html>

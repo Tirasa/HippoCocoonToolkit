@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +20,6 @@ import java.util.List;
 import java.util.logging.Level;
 import javax.jcr.RepositoryException;
 import org.apache.wicket.Component;
-import org.apache.wicket.ResourceReference;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.breadcrumb.IBreadCrumbModel;
@@ -34,7 +35,7 @@ import org.hippoecm.frontend.plugin.IPluginContext;
 import org.hippoecm.frontend.session.UserSession;
 import net.tirasa.hct.editor.beans.ComponentType;
 import net.tirasa.hct.editor.beans.PageBean;
-import net.tirasa.hct.editor.crumbs.HctBreadCrumbPanel;
+import net.tirasa.hct.editor.crumbs.HCTBreadCrumbPanel;
 import net.tirasa.hct.editor.data.PageDataProvider;
 import net.tirasa.hct.editor.widgets.AjaxBreadCrumbLink;
 import net.tirasa.hct.editor.widgets.AjaxLinkLabel;
@@ -42,7 +43,7 @@ import net.tirasa.hct.editor.widgets.ConfirmDeleteDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ViewComponentPanel extends HctBreadCrumbPanel {
+public class ViewComponentPanel extends HCTBreadCrumbPanel {
 
     private static final Logger LOG =
             LoggerFactory.getLogger(ViewComponentPanel.class);
@@ -70,18 +71,18 @@ public class ViewComponentPanel extends HctBreadCrumbPanel {
 
         final AjaxBreadCrumbLink edit =
                 new AjaxBreadCrumbLink("edit-component",
-                breadCrumbModel, siteName) {
+                        breadCrumbModel, siteName) {
 
                     private static final long serialVersionUID =
-                            506897728694578583L;
+                    506897728694578583L;
 
                     @Override
                     protected IBreadCrumbParticipant getParticipant(
                             final String componentId, final String siteName) {
-                        return new ComponentPanel(
-                                componentId, context, breadCrumbModel,
-                                model, siteName);
-                    }
+                                return new ComponentPanel(
+                                        componentId, context, breadCrumbModel,
+                                        model, siteName);
+                            }
                 };
 
         edit.setVisible(true);
@@ -89,38 +90,38 @@ public class ViewComponentPanel extends HctBreadCrumbPanel {
         add(new AjaxLinkLabel("delete-component",
                 new ResourceModel("component-delete")) {
 
-            private static final long serialVersionUID = 3776750333491622263L;
+                    private static final long serialVersionUID = 3776750333491622263L;
 
-            @Override
-            public void onClick(final AjaxRequestTarget target) {
-                context.getService(IDialogService.class.getName(),
-                        IDialogService.class).show(
-                        new ConfirmDeleteDialog(model, this) {
+                    @Override
+                    public void onClick(final AjaxRequestTarget target) {
+                        context.getService(IDialogService.class.getName(),
+                                IDialogService.class).show(
+                                new ConfirmDeleteDialog(model, this) {
 
-                            private static final long serialVersionUID =
+                                    private static final long serialVersionUID =
                                     -5828988483261392319L;
 
-                            @Override
-                            protected void onOk() {
-                                final String name =
+                                    @Override
+                                    protected void onOk() {
+                                        final String name =
                                         ((ComponentType) model.getObject())
                                         .getComponentName();
-                                deleteComponent(model);
-                                updatePageProperty(name, siteName);
-                            }
+                                        deleteComponent(model);
+                                        updatePageProperty(name, siteName);
+                                    }
 
-                            @Override
-                            protected String getTitleKey() {
-                                return "component-delete-title";
-                            }
+                                    @Override
+                                    protected String getTitleKey() {
+                                        return "component-delete-title";
+                                    }
 
-                            @Override
-                            protected String getTextKey() {
-                                return "component-delete-text";
-                            }
-                        });
-            }
-        });
+                                    @Override
+                                    protected String getTextKey() {
+                                        return "component-delete-text";
+                                    }
+                                });
+                    }
+                });
     }
 
     private void deleteComponent(final IModel model) {

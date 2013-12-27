@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,10 +21,10 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.hippoecm.frontend.plugin.IPluginContext;
-import net.tirasa.hct.editor.crumbs.HctBreadCrumbPanel;
+import net.tirasa.hct.editor.crumbs.HCTBreadCrumbPanel;
 import net.tirasa.hct.editor.forms.SiteForm;
 
-public class SitePanel extends HctBreadCrumbPanel {
+public class SitePanel extends HCTBreadCrumbPanel {
 
     private static final long serialVersionUID = 1832147074344581181L;
 

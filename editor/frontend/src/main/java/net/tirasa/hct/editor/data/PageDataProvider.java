@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -92,8 +94,7 @@ public class PageDataProvider extends SortableDataProvider {
             pageList.clear();
             NodeIterator iter;
 
-            final StringBuilder query =
-                    new StringBuilder(Properties.HCT_ROOT);
+            final StringBuilder query = new StringBuilder(Properties.HCT_ROOT);
             query.append(Properties.SLASH);
             query.append(siteName);
             query.append(Properties.SLASH);
@@ -102,8 +103,8 @@ public class PageDataProvider extends SortableDataProvider {
             query.append(Properties.STAR);
 
             try {
-                final Query listQuery =
-                        ((UserSession) Session.get()).getQueryManager().
+                @SuppressWarnings("deprecation")
+                final Query listQuery = ((UserSession) Session.get()).getQueryManager().
                         createQuery(query.toString(), Query.XPATH);
                 iter = listQuery.execute().getNodes();
                 while (iter.hasNext()) {

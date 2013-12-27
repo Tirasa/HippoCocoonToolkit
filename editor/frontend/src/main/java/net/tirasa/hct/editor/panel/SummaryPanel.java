@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -55,7 +57,7 @@ public class SummaryPanel extends Panel {
             new LoadableDetachableModel<List<FilterCond.Type>>() {
 
                 private static final long serialVersionUID =
-                        5275935387613157437L;
+                5275935387613157437L;
 
                 @Override
                 protected List<FilterCond.Type> load() {
@@ -67,7 +69,7 @@ public class SummaryPanel extends Panel {
             new LoadableDetachableModel<List<OrderCond.Type>>() {
 
                 private static final long serialVersionUID =
-                        5275935387613157437L;
+                5275935387613157437L;
 
                 @Override
                 protected List<OrderCond.Type> load() {
@@ -118,40 +120,39 @@ public class SummaryPanel extends Panel {
         AjaxButton addAndButton = new IndicatingAjaxButton("addAndButton",
                 new Model("addAndButton")) {
 
-            private static final long serialVersionUID = -4804368561204623354L;
+                    private static final long serialVersionUID = -4804368561204623354L;
 
-            @Override
-            protected void onSubmit(final AjaxRequestTarget target,
-                    final Form form) {
+                    @Override
+                    protected void onSubmit(final AjaxRequestTarget target,
+                            final Form form) {
 
-                FilterBean conditionWrapper = new FilterBean();
-                conditionWrapper.setOperationType(OperationType.AND);
-                component.getFilterList().add(conditionWrapper);
-                target.addComponent(filterContainer);
-            }
-        };
+                        FilterBean conditionWrapper = new FilterBean();
+                        conditionWrapper.setOperationType(OperationType.AND);
+                        component.getFilterList().add(conditionWrapper);
+                        target.addComponent(filterContainer);
+                    }
+                };
 
         addAndButton.setDefaultFormProcessing(false);
         filterContainer.add(addAndButton);
         this.add(filterContainer);
 
-
         AjaxButton addOrButton = new IndicatingAjaxButton("addOrButton",
                 new Model("addOrButton")) {
 
-            private static final long serialVersionUID = -4804368561204623354L;
+                    private static final long serialVersionUID = -4804368561204623354L;
 
-            @Override
-            protected void onSubmit(final AjaxRequestTarget target,
-                    final Form form) {
+                    @Override
+                    protected void onSubmit(final AjaxRequestTarget target,
+                            final Form form) {
 
-                FilterBean conditionWrapper =
+                        FilterBean conditionWrapper =
                         new FilterBean();
-                conditionWrapper.setOperationType(OperationType.OR);
-                component.getFilterList().add(conditionWrapper);
-                target.addComponent(filterContainer);
-            }
-        };
+                        conditionWrapper.setOperationType(OperationType.OR);
+                        component.getFilterList().add(conditionWrapper);
+                        target.addComponent(filterContainer);
+                    }
+                };
 
         addOrButton.setDefaultFormProcessing(false);
         filterContainer.add(addOrButton);
@@ -165,17 +166,17 @@ public class SummaryPanel extends Panel {
 
         final AjaxButton addOrderButton =
                 new IndicatingAjaxButton("addOrderButton",
-                new Model("addOrderButton")) {
+                        new Model("addOrderButton")) {
 
                     private static final long serialVersionUID =
-                            -4804368561204623354L;
+                    -4804368561204623354L;
 
                     @Override
                     protected void onSubmit(final AjaxRequestTarget target,
                             final Form form) {
 
                         OrderBean conditionWrapper =
-                                new OrderBean();
+                        new OrderBean();
                         component.getOrderList().add(conditionWrapper);
                         target.addComponent(orderContainer);
                     }
@@ -229,9 +230,9 @@ public class SummaryPanel extends Panel {
 
             final DropDownChoice<FilterCond.Type> typeCond =
                     new DropDownChoice<FilterCond.Type>(
-                    "typeCond", new PropertyModel<FilterCond.Type>(
-                    filterCondition, "typeCond"),
-                    attributeTypes);
+                            "typeCond", new PropertyModel<FilterCond.Type>(
+                                    filterCondition, "typeCond"),
+                            attributeTypes);
             typeCond.setRequired(true);
             item.add(typeCond);
 
@@ -247,8 +248,8 @@ public class SummaryPanel extends Panel {
 
             final TextField<String> filterValue =
                     new TextField<String>("filterValue",
-                    new PropertyModel<String>(
-                    filterCondition, "filterValue"));
+                            new PropertyModel<String>(
+                                    filterCondition, "filterValue"));
             item.add(filterValue);
             filterValue.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
@@ -263,25 +264,26 @@ public class SummaryPanel extends Panel {
             AjaxButton dropButton = new IndicatingAjaxButton(
                     "dropButton", new Model("dropButton")) {
 
-                private static final long serialVersionUID =
+                        private static final long serialVersionUID =
                         -4804368561204623354L;
 
-                @Override
-                protected void onSubmit(
-                        final AjaxRequestTarget target,
-                        final Form form) {
+                        @Override
+                        protected void onSubmit(
+                                final AjaxRequestTarget target,
+                                final Form form) {
 
-                    getList().remove(
-                            Integer.valueOf(getParent().getId()).intValue());
-                    target.addComponent(summaryFilterContainer);
-                }
-            };
+                                    getList().remove(
+                                            Integer.valueOf(getParent().getId()).intValue());
+                                    target.addComponent(summaryFilterContainer);
+                                }
+                    };
 
             dropButton.setDefaultFormProcessing(false);
             item.add(dropButton);
         }
 
         private static final long serialVersionUID = 4122181591857292875L;
+
     }
 
     private class OrderBy extends ListView<OrderBean> {
@@ -307,9 +309,9 @@ public class SummaryPanel extends Panel {
 
             final DropDownChoice<OrderCond.Type> orderby =
                     new DropDownChoice<OrderCond.Type>(
-                    "orderby", new PropertyModel<OrderCond.Type>(
-                    orderCondition, "orderby"),
-                    orderTypes);
+                            "orderby", new PropertyModel<OrderCond.Type>(
+                                    orderCondition, "orderby"),
+                            orderTypes);
             orderby.setRequired(true);
             orderby.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
@@ -340,19 +342,19 @@ public class SummaryPanel extends Panel {
             AjaxButton dropButton = new IndicatingAjaxButton(
                     "dropButton", new Model("dropButton")) {
 
-                private static final long serialVersionUID =
+                        private static final long serialVersionUID =
                         -4804368561204623354L;
 
-                @Override
-                protected void onSubmit(
-                        final AjaxRequestTarget target,
-                        final Form form) {
+                        @Override
+                        protected void onSubmit(
+                                final AjaxRequestTarget target,
+                                final Form form) {
 
-                    getList().remove(
-                            Integer.valueOf(getParent().getId()).intValue());
-                    target.addComponent(orderContainer);
-                }
-            };
+                                    getList().remove(
+                                            Integer.valueOf(getParent().getId()).intValue());
+                                    target.addComponent(orderContainer);
+                                }
+                    };
             dropButton.setDefaultFormProcessing(false);
             item.add(dropButton);
         }

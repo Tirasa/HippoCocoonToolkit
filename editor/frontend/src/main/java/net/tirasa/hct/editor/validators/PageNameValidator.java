@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,10 +22,10 @@ import net.tirasa.hct.editor.beans.PageBean;
 public class PageNameValidator extends StringValidator {
 
     private static final long serialVersionUID = 4569852459401738409L;
-    
+
     private String siteName;
-    
-    public PageNameValidator(final String siteName){
+
+    public PageNameValidator(final String siteName) {
         this.siteName = siteName;
     }
 

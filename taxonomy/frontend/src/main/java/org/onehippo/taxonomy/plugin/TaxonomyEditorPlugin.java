@@ -80,6 +80,7 @@ import org.slf4j.LoggerFactory;
  *
  * @version $Id: TaxonomyEditorPlugin.java 1459 2013-07-01 08:48:46Z mmilicevic $
  */
+@SuppressWarnings("unchecked")
 public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
 
     protected static final Logger LOG = LoggerFactory.getLogger(TaxonomyEditorPlugin.class);

@@ -20,33 +20,27 @@
   xmlns:wicket="http://wicket.apache.org/"
   xml:lang="en"
   lang="en">
-  <wicket:panel>
-    <fieldset id="personal">
-      <legend>General Parameters</legend>
-      <div>
-        <div>
-          <wicket:message key="componentName"/>
-        </div>
-        <div>
-          <span wicket:id="componentName">[componentName]</span>
-        </div>
+  <wicket:extend>
+    <div>
+      <div style="float:left;">
+        <img wicket:id="img_component"></img>
       </div>
-      <div>
-        <div>
-          <wicket:message key="base"/>
-        </div>
-        <div>
-          <span wicket:id="base">[base]</span>
-        </div>
+      <div style="float:left;margin-top: 10px;">
+        <h2>
+          <wicket:message key="component-view-options-title"></wicket:message>
+        </h2>
       </div>
-      <div>
-        <div>
-          <wicket:message key="depth"/>
-        </div>
-        <div>
-          <span wicket:id="depth">[depth]</span>
-        </div>
-      </div>
-    </fieldset>
-  </wicket:panel>
+    </div>
+    <div style="margin-top: 70px;">
+      <ul class="hippo-controlpanel-options">
+        <li>
+          <a href="#" wicket:id="create-component"><wicket:message key="component-create"/></a>
+        </li>
+        <li>
+          <wicket:message key="component-click-and-edit"/>
+        </li>
+      </ul>
+    </div>
+    <table class="hippo-controlpanel-table-default hippo-list-details" cellspacing="0" wicket:id="table">[table]</table>
+  </wicket:extend>
 </html>

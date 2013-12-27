@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,7 +31,8 @@ public class AdminDataTable extends DataTable {
     private static final long serialVersionUID = 7831191713372614221L;
 
     public AdminDataTable(final String id, final List<IColumn> columns,
-            ISortableDataProvider dataProvider, int rowsPerPage) {
+            final ISortableDataProvider dataProvider, final int rowsPerPage) {
+
         this(id, (IColumn[]) columns.toArray(
                 new IColumn[columns.size()]), dataProvider, rowsPerPage);
     }
@@ -37,6 +40,7 @@ public class AdminDataTable extends DataTable {
     public AdminDataTable(final String id, final IColumn[] columns,
             final ISortableDataProvider dataProvider,
             final int rowsPerPage) {
+
         super(id, columns, dataProvider, rowsPerPage);
         setOutputMarkupId(true);
         setVersioned(false);

@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,24 +27,24 @@ import org.hippoecm.frontend.plugins.standards.perspective.Perspective;
 import org.hippoecm.frontend.plugins.yui.layout.WireframeBehavior;
 import org.hippoecm.frontend.plugins.yui.layout.WireframeSettings;
 import org.hippoecm.frontend.service.IconSize;
-import net.tirasa.hct.editor.crumbs.HctBreadCrumbBar;
+import net.tirasa.hct.editor.crumbs.HCTBreadCrumbBar;
 
-public class HctPerspective extends Perspective {
+public class HCTPerspective extends Perspective {
 
     private static final long serialVersionUID = -5142961480434101722L;
 
-    public HctPerspective(final IPluginContext context,
+    public HCTPerspective(final IPluginContext context,
             final IPluginConfig config) {
 
         super(context, config);
         setOutputMarkupId(true);
 
         final BreadCrumbBar breadCrumbBar =
-                new HctBreadCrumbBar("breadCrumbBar");
+                new HCTBreadCrumbBar("breadCrumbBar");
         add(breadCrumbBar);
 
-        final HctPanelPlugin adminPanel =
-                new HctPanelPlugin("panel", context, breadCrumbBar);
+        final HCTPanelPlugin adminPanel =
+                new HCTPanelPlugin("panel", context, breadCrumbBar);
         add(adminPanel);
         breadCrumbBar.setActive(adminPanel);
         breadCrumbBar.addListener(new IBreadCrumbModelListener() {
@@ -72,13 +74,13 @@ public class HctPerspective extends Perspective {
         add(new WireframeBehavior(
                 new WireframeSettings(
                 config.getPluginConfig("layout.wireframe"))));
-        add(CSSPackageResource.getHeaderContribution(HctPerspective.class,
+        add(CSSPackageResource.getHeaderContribution(HCTPerspective.class,
                 "hct-perspective.css"));
     }
 
     @Override
     public final ResourceReference getIcon(final IconSize type) {
-        return new ResourceReference(HctPerspective.class,
+        return new ResourceReference(HCTPerspective.class,
                 "hct-perspective-" + type.getSize() + ".png");
     }
 

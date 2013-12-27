@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -78,7 +80,9 @@ public class SummaryBean extends ComponentType
 
     public enum OperationType {
 
-        AND, OR
+        AND,
+        OR
+
     };
 
     public SummaryBean() {
@@ -135,8 +139,7 @@ public class SummaryBean extends ComponentType
         return ((UserSession) Session.get()).getQueryManager();
     }
 
-    public static boolean componentExists(final String componentName,
-            final String siteName) {
+    public static boolean componentExists(final String componentName, final String siteName) {
         final StringBuilder relPath = new StringBuilder(Properties.HCT_ROOT);
         relPath.append(Properties.SLASH);
         relPath.append(siteName);
@@ -145,17 +148,14 @@ public class SummaryBean extends ComponentType
         relPath.append(Properties.SLASH);
         relPath.append(componentName);
         try {
-            Query query = getQueryManager().createQuery(
-                    relPath.toString(), Query.XPATH);
-            if (query.execute().getNodes().hasNext()) {
-                return true;
-            }
+            @SuppressWarnings("deprecation")
+            Query query = getQueryManager().createQuery(relPath.toString(), Query.XPATH);
+            return query.execute().getNodes().hasNext();
         } catch (RepositoryException e) {
             LOG.error("Unable to check if component '{}'"
                     + "exists, returning true", componentName, e);
             return true;
         }
-        return false;
     }
 
     /**

@@ -1,9 +1,11 @@
 /*
+ * Copyright (C) 2012 Tirasa
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,19 +26,18 @@ public class AjaxBreadCrumbPanelFactory implements IBreadCrumbPanelFactory {
 
     private static final long serialVersionUID = -6702082950556472319L;
 
-    private final transient Class panelClass;
+    private final transient Class<?> panelClass;
 
     private final transient IPluginContext context;
 
     /**
-     * Construct.
+     * Constructor.
      *
      * @param panelClass The class to use for creating instances. Must be of
      * type {@link BreadCrumbPanel}, and must have constructor
-     *            {@link BreadCrumbPanel#BreadCrumbPanel(String, IBreadCrumbModel)}
+     * {@link BreadCrumbPanel#BreadCrumbPanel(String, IBreadCrumbModel)}
      */
-    public AjaxBreadCrumbPanelFactory(final IPluginContext context,
-            final Class panelClass) {
+    public AjaxBreadCrumbPanelFactory(final IPluginContext context, final Class<?> panelClass) {
         this.context = context;
         if (panelClass == null) {
             throw new IllegalArgumentException(
@@ -51,7 +52,7 @@ public class AjaxBreadCrumbPanelFactory implements IBreadCrumbPanelFactory {
 
         this.panelClass = panelClass;
     }
-   
+
     public BreadCrumbPanel create(final String componentId,
             final IBreadCrumbModel breadCrumbModel, final String siteName) {
         return create(componentId, context, breadCrumbModel, siteName);
@@ -66,10 +67,11 @@ public class AjaxBreadCrumbPanelFactory implements IBreadCrumbPanelFactory {
             final IPluginContext context,
             final IBreadCrumbModel breadCrumbModel,
             final String siteName) {
+
         final Constructor ctor = getConstructor();
         try {
-            return (BreadCrumbPanel) ctor.newInstance(new Object[]{componentId,
-                        context, breadCrumbModel, siteName});
+            return (BreadCrumbPanel) ctor.newInstance(new Object[] { componentId,
+                context, breadCrumbModel, siteName });
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -86,7 +88,7 @@ public class AjaxBreadCrumbPanelFactory implements IBreadCrumbPanelFactory {
         final Constructor ctor = getModelConstructor();
         try {
             return (BreadCrumbPanel) ctor.newInstance(
-                    new Object[]{componentId, breadCrumbModel, model, siteName});
+                    new Object[] { componentId, breadCrumbModel, model, siteName });
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -100,8 +102,8 @@ public class AjaxBreadCrumbPanelFactory implements IBreadCrumbPanelFactory {
     private final Constructor getConstructor() {
         try {
             Constructor ctor = panelClass.getConstructor(
-                    new Class[]{String.class, IPluginContext.class,
-                        IBreadCrumbModel.class, String.class});
+                    new Class[] { String.class, IPluginContext.class,
+                        IBreadCrumbModel.class, String.class });
             return ctor;
         } catch (SecurityException e) {
             throw new RuntimeException(e);
@@ -118,8 +120,8 @@ public class AjaxBreadCrumbPanelFactory implements IBreadCrumbPanelFactory {
     private Constructor getModelConstructor() {
         try {
             Constructor ctor = panelClass.getConstructor(
-                    new Class[]{String.class, IPluginContext.class,
-                        IBreadCrumbModel.class, IModel.class, String.class});
+                    new Class[] { String.class, IPluginContext.class,
+                        IBreadCrumbModel.class, IModel.class, String.class });
             return ctor;
         } catch (SecurityException e) {
             throw new RuntimeException(e);
