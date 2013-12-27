@@ -63,9 +63,9 @@ public class HCTDocument extends AbstractHCTEntity {
 
         // Check translation
         if (path != null) {
-            if (baseDoc.getAvailableTranslationsBean().hasTranslation(locale.getLanguage())) {
-                baseDoc = (HippoDocument) baseDoc.getAvailableTranslationsBean().getTranslation(locale.getLanguage()).
-                        getContextualBean();
+            if (baseDoc.getAvailableTranslations().hasTranslation(locale.getLanguage())) {
+                baseDoc = (HippoDocument) baseDoc.getAvailableTranslations().getTranslation(locale.getLanguage()).
+                        getCanonicalBean();
             } else {
                 throw new HippoRepositoryNotFoundException("Could not find locale " + locale
                         + " for document " + path);

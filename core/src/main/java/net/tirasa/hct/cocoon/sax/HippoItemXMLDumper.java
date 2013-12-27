@@ -129,21 +129,20 @@ public class HippoItemXMLDumper {
         // 1. translations
         saxConsumer.startElement(NS_HCT, Element.TRANSLATIONS.getName(),
                 PREFIX_HCT + ":" + Element.TRANSLATIONS.getName(), EMPTY_ATTRS);
-        for (String locale : item.getAvailableTranslationsBean().getAvailableLocales()) {
+        for (String locale : item.getAvailableTranslations().getAvailableLocales()) {
             if (!localeString.equals(locale)) {
                 attrs = new AttributesImpl();
                 attrs.addAttribute(NS_EMPTY, Attribute.LOCALE.getName(),
                         Attribute.LOCALE.getName(), XSD_STRING, locale);
                 attrs.addAttribute(NS_EMPTY, Attribute.PATH.getName(),
                         Attribute.PATH.getName(), XSD_STRING,
-                        item.getAvailableTranslationsBean().getTranslation(locale).getContextualBean().getPath());
+                        item.getAvailableTranslations().getTranslation(locale).getCanonicalBean().getPath());
                 attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                         Attribute.NAME.getName(), XSD_STRING,
-                        item.getAvailableTranslationsBean().getTranslation(locale).getContextualBean().getName());
+                        item.getAvailableTranslations().getTranslation(locale).getCanonicalBean().getName());
                 attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
                         Attribute.LOC_NAME.getName(), XSD_STRING,
-                        item.getAvailableTranslationsBean().getTranslation(locale).getContextualBean().
-                        getLocalizedName());
+                        item.getAvailableTranslations().getTranslation(locale).getCanonicalBean().getLocalizedName());
 
                 saxConsumer.startElement(NS_HCT, Element.TRANSLATION.getName(),
                         PREFIX_HCT + ":" + Element.TRANSLATION.getName(), attrs);
@@ -155,8 +154,7 @@ public class HippoItemXMLDumper {
                     saxConsumer.startElement(NS_HCT, Element.FIELD.getName(),
                             PREFIX_HCT + ":" + Element.FIELD.getName(), attrs);
 
-                    for (String value : (String[]) item.getAvailableTranslationsBean().
-                            getTranslation(locale).
+                    for (String value : (String[]) item.getAvailableTranslations().getTranslation(locale).
                             getProperty("hippo:availability")) {
 
                         saxConsumer.startElement(NS_HCT, Element.VALUE.getName(),
@@ -248,7 +246,7 @@ public class HippoItemXMLDumper {
                     Attribute.SIZE_KB.getName(), XSD_INT, String.valueOf(asset.getAsset().getLengthKB()));
             attrs.addAttribute(NS_EMPTY, Attribute.LAST_MOD.getName(),
                     Attribute.LAST_MOD.getName(), XSD_DATETIME, sdf.format(asset.getAsset().
-                    getLastModified().getTime()));
+                            getLastModified().getTime()));
 
             saxConsumer.startElement(NS_HCT, elementName, PREFIX_HCT + ":" + elementName, attrs);
             saxConsumer.endElement(NS_HCT, elementName, PREFIX_HCT + ":" + elementName);
