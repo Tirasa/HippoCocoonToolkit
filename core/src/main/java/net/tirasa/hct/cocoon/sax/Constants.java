@@ -18,6 +18,7 @@ package net.tirasa.hct.cocoon.sax;
 import java.util.EnumSet;
 import org.apache.commons.lang3.StringUtils;
 import org.hippoecm.hst.content.beans.standard.HippoAsset;
+import org.hippoecm.hst.content.beans.standard.HippoAvailableTranslations;
 import org.hippoecm.hst.content.beans.standard.HippoAvailableTranslationsBean;
 import org.hippoecm.hst.content.beans.standard.HippoDirectory;
 import org.hippoecm.hst.content.beans.standard.HippoDocument;
@@ -138,7 +139,6 @@ public class Constants {
 
         }
     }
-
     public static final EnumSet<Element> FILTER_ELEMENTS = EnumSet.of(
             Element.EQUALTO, Element.NOT_EQUALTO, Element.CONTAINS, Element.NOT_CONTAINS,
             Element.LIKE, Element.NOT_LIKE, Element.ISNULL, Element.NOT_NULL,
@@ -169,6 +169,7 @@ public class Constants {
      *
      * @see org.hippoecm.hst.util.ObjectConverterUtils
      */
+    @SuppressWarnings("deprecation")
     public static final Class<?>[] DEFAULT_BUILT_IN_MAPPING_CLASSES = {
         HippoDocument.class,
         HippoFolder.class,
@@ -189,7 +190,7 @@ public class Constants {
         HippoFacetsAvailableNavigation.class,
         HippoFacetSubNavigation.class,
         HippoFacetResult.class,
-        HippoAvailableTranslationsBean.class
+        HippoAvailableTranslations.class
     };
 
     public static enum Attribute {
