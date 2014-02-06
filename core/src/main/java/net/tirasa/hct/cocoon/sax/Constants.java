@@ -19,7 +19,6 @@ import java.util.EnumSet;
 import org.apache.commons.lang3.StringUtils;
 import org.hippoecm.hst.content.beans.standard.HippoAsset;
 import org.hippoecm.hst.content.beans.standard.HippoAvailableTranslations;
-import org.hippoecm.hst.content.beans.standard.HippoAvailableTranslationsBean;
 import org.hippoecm.hst.content.beans.standard.HippoDirectory;
 import org.hippoecm.hst.content.beans.standard.HippoDocument;
 import org.hippoecm.hst.content.beans.standard.HippoFacetSelect;
@@ -139,6 +138,7 @@ public class Constants {
 
         }
     }
+
     public static final EnumSet<Element> FILTER_ELEMENTS = EnumSet.of(
             Element.EQUALTO, Element.NOT_EQUALTO, Element.CONTAINS, Element.NOT_CONTAINS,
             Element.LIKE, Element.NOT_LIKE, Element.ISNULL, Element.NOT_NULL,
@@ -153,6 +153,8 @@ public class Constants {
     public static final String XSD_INT = "xsd:integer";
 
     public static final String XSD_LONG = "xsd:long";
+
+    public static final String XSD_DOUBLE = "xsd:double";
 
     public static final String XSD_DATETIME = "xsd:dateTime";
 
@@ -220,7 +222,8 @@ public class Constants {
         SIZE_KB("sizeKb"),
         LAST_MOD("lastModified"),
         INCLUDE_FOLDERS("includeFolders"),
-        DATE_FORMAT("dateFormat");
+        DATE_FORMAT("dateFormat"),
+        SCORE("score");
 
         private String name;
 

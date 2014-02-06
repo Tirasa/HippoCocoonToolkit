@@ -51,6 +51,8 @@ import org.hippoecm.hst.content.beans.standard.HippoGalleryImageSet;
 import org.hippoecm.hst.content.beans.standard.HippoHtml;
 import org.hippoecm.hst.content.beans.standard.HippoItem;
 import org.hippoecm.repository.api.HippoNodeType;
+import org.onehippo.forge.ecmtagging.Tag;
+import org.onehippo.forge.ecmtagging.TagCollection;
 import org.onehippo.forge.ecmtagging.TaggingNodeType;
 import org.onehippo.taxonomy.api.TaxonomyNodeTypes;
 import org.xml.sax.InputSource;
@@ -319,6 +321,26 @@ public class HippoItemXMLDumper {
             saxConsumer.endElement(NS_HCT, Element.RELATED_DOCS.getName(),
                     PREFIX_HCT + ":" + Element.RELATED_DOCS.getName());
         }
+    }
+
+    public void dumpTags(final TagCollection tags) throws SAXException {
+        saxConsumer.startElement(NS_HCT, Element.TAGS.getName(),
+                PREFIX_HCT + ":" + Element.TAGS.getName(), EMPTY_ATTRS);
+
+        for (Tag tag : tags.values()) {
+            final AttributesImpl attrs = new AttributesImpl();
+            attrs.addAttribute(NS_EMPTY, Attribute.SCORE.getName(),
+                    Attribute.SCORE.getName(), XSD_DOUBLE, String.valueOf(tag.getScore()));
+
+            saxConsumer.startElement(NS_HCT, Element.TAG.getName(),
+                    PREFIX_HCT + ":" + Element.TAG.getName(), attrs);
+            saxConsumer.characters(tag.getName().toCharArray(), 0, tag.getName().length());
+            saxConsumer.endElement(NS_HCT, Element.TAG.getName(),
+                    PREFIX_HCT + ":" + Element.TAG.getName());
+        }
+
+        saxConsumer.endElement(NS_HCT, Element.TAGS.getName(),
+                PREFIX_HCT + ":" + Element.TAGS.getName());
     }
 
     public void dumpTags(final String[] tags) throws SAXException {

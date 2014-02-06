@@ -60,6 +60,7 @@ import org.hippoecm.hst.content.beans.standard.HippoItem;
 import org.hippoecm.hst.content.beans.standard.HippoMirror;
 import org.hippoecm.repository.api.HippoNodeType;
 import org.onehippo.forge.ecmtagging.TaggingNodeType;
+import org.onehippo.forge.ecmtagging.providers.AllTagsProvider;
 import org.onehippo.taxonomy.api.TaxonomyNodeTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -268,6 +269,12 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         dumper.dumpRelatedDocs(relDocs, Element.DOCUMENT.getName(), true);
 
         dumper.endHippoItem(doc);
+    }
+
+    private void tags(final HCTConnManager connManager) throws RepositoryException, SAXException {
+        final HippoItemXMLDumper dumper = new HippoItemXMLDumper(this.getSAXConsumer());
+
+        dumper.dumpTags(AllTagsProvider.getTags(connManager.getSession(), "tags"));
     }
 
     private <T extends HippoItem> void recursiveTraversal(final HippoItem item, final Class<T> traversalType,
@@ -581,11 +588,13 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
         }
 
         if (element == Element.TAGS) {
-            if (state != State.INSIDE_RETURN) {
+            if (state == State.INSIDE_RETURN) {
+                hctQuery.setReturnTags(true);
+            } else if (state == State.OUTSIDE) {
+                LOG.debug("Requiring tags, no processing needed here");
+            } else {
                 throw new InvalidHCTRequestException(localName, state);
             }
-
-            hctQuery.setReturnTags(true);
         }
 
         if (element == Element.TAXONOMIES) {
@@ -636,8 +645,8 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             state = State.INSIDE_QUERY;
 
             LOG.debug("Fields to be returned: {}; images: {}; relatedDocs: {}",
-                    new Object[]{hctQuery.getReturnFields(), hctQuery.isReturnImages(),
-                hctQuery.isReturnRelatedDocs()});
+                    new Object[] { hctQuery.getReturnFields(), hctQuery.isReturnImages(),
+                        hctQuery.isReturnRelatedDocs() });
         }
 
         if (element == Element.ORDERBY) {
@@ -668,7 +677,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
             }
             state = State.OUTSIDE;
 
-            HCTConnManager connManager = HCTConnManager.getContentInstance();
+            final HCTConnManager connManager = HCTConnManager.getContentInstance();
             try {
                 query(connManager);
             } catch (Exception e) {
@@ -683,7 +692,7 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
                 throw new InvalidHCTRequestException(localName, state);
             }
 
-            HCTConnManager connManager = HCTConnManager.getContentInstance();
+            final HCTConnManager connManager = HCTConnManager.getContentInstance();
             try {
                 traverse(connManager);
             } catch (Exception e) {
@@ -694,12 +703,27 @@ public class HippoRepositoryTransformer extends AbstractSAXTransformer implement
 
         }
 
+        if (element == Element.TAGS) {
+            if (state != State.OUTSIDE) {
+                throw new InvalidHCTRequestException(localName, state);
+            }
+
+            final HCTConnManager connManager = HCTConnManager.getContentInstance();
+            try {
+                tags(connManager);
+            } catch (Exception e) {
+                throw new ProcessingException("While fetching tags", e);
+            } finally {
+                connManager.logout();
+            }
+        }
+
         if (element == Element.DOCUMENT) {
             if (state != State.OUTSIDE) {
                 throw new InvalidHCTRequestException(localName, state);
             }
 
-            HCTConnManager connManager = HCTConnManager.getContentInstance();
+            final HCTConnManager connManager = HCTConnManager.getContentInstance();
             try {
                 document(connManager);
             } catch (Exception e) {
