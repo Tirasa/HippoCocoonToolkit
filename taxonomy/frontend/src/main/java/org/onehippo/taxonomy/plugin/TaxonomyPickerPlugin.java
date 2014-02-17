@@ -165,7 +165,7 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
     public TaxonomyPickerPlugin(final IPluginContext context, final IPluginConfig config) {
         super(context, config);
 
-        add(CSSPackageResource.getHeaderContribution(TaxonomyPickerPlugin.class, "style.css"));
+        add(CSSPackageResource.getHeaderContribution(TaxonomyPickerPlugin.class, "res/style.css"));
 
         add(new Label("title", new ResourceModel("title")));
 
@@ -300,7 +300,7 @@ public class TaxonomyPickerPlugin extends RenderPlugin<Node> {
         super.renderHead(container);
 
         container.getHeaderResponse()
-                .renderCSSReference(new ResourceReference(TaxonomyPickerPlugin.class, "style.css"));
+                .renderCSSReference(new ResourceReference(TaxonomyPickerPlugin.class, "res/style.css"));
     }
 
     private String getCategoryName(String categoryKey) {
