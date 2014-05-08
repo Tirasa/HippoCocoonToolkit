@@ -80,12 +80,12 @@
     <cocoon.version>3.0.0-beta-1-SNAPSHOT</cocoon.version>
     <spring.version>3.2.6.RELEASE</spring.version>
 
-    <hippo.repository.version>2.24.09.1</hippo.repository.version>
-    <hippo.cms.version>2.24.07.1</hippo.cms.version>
-    <hippo.hst.version>2.26.09</hippo.hst.version>
+    <hippo.repository.version>2.24.12</hippo.repository.version>
+    <hippo.cms.version>2.24.10</hippo.cms.version>
+    <hippo.hst.version>2.26.10</hippo.hst.version>
         
-    <forge.taxonomy.version>1.09.03</forge.taxonomy.version>
-    <forge.ecm-tagging.version>4.05.01</forge.ecm-tagging.version>
+    <forge.taxonomy.version>1.09.04</forge.taxonomy.version>
+    <forge.ecm-tagging.version>4.05.02</forge.ecm-tagging.version>
     <forge.repository-event-listener.version>1.02.00</forge.repository-event-listener.version>
         
     <javax.jcr.version>2.0</javax.jcr.version>
