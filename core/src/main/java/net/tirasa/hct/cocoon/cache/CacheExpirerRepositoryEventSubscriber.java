@@ -28,6 +28,7 @@ import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
 import org.hippoecm.hst.content.beans.standard.HippoDocument;
+import org.hippoecm.hst.content.beans.standard.HippoFolder;
 import org.onehippo.forge.repositoryeventlistener.hst.events.BaseHippoEventSubscriber;
 import org.onehippo.forge.repositoryeventlistener.hst.hippo.HippoEvent;
 import org.slf4j.Logger;
@@ -76,8 +77,11 @@ public class CacheExpirerRepositoryEventSubscriber extends BaseHippoEventSubscri
 
         String locale = null;
         try {
-            final HippoDocument doc = (HippoDocument) getObjectBeanManager().getObject(event.getPath());
-            locale = doc.getLocaleString();
+            if (getObjectBeanManager().getObject(event.getPath()) != null 
+                    && getObjectBeanManager().getObject(event.getPath()) instanceof HippoDocument) {
+                final HippoDocument doc = (HippoDocument) getObjectBeanManager().getObject(event.getPath());
+                locale = doc.getLocaleString();
+            }
         } catch (ObjectBeanManagerException e) {
             LOG.error("Could not get HippoDocument for {}", event.getPath(), e);
         }
