@@ -94,6 +94,8 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
     private JcrTaxonomy taxonomy;
 
     private String key;
+    
+    private String path;
 
     private IModel<String[]> synonymModel;
 
@@ -165,8 +167,10 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
                     protected void onNodeLinkClicked(AjaxRequestTarget target, TreeNode node) {
                         if (node instanceof CategoryNode) {
                             key = ((CategoryNode) node).getCategory().getKey();
+                            path = ((CategoryNode) node).getCategory().getPath();
                         } else {
                             key = null;
+                            path = null;
                         }
                         redraw();
                         super.onNodeLinkClicked(target, node);
@@ -197,7 +201,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 IDialogService dialogService = getDialogService();
-                dialogService.show(new NewCategoryDialog(taxonomyModel) {
+                dialogService.show(new NewCategoryDialog(taxonomyModel, path) {
 
                     private static final long serialVersionUID = 1L;
 
@@ -726,7 +730,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
         public void detach() {
         }
     }
-
+    
     protected final class LanguageSelection implements Serializable {
 
         private static final long serialVersionUID = 1L;
