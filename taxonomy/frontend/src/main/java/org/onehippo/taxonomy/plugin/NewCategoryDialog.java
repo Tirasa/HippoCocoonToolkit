@@ -15,10 +15,12 @@
  */
 package org.onehippo.taxonomy.plugin;
 
+import org.apache.cxf.common.util.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
@@ -30,20 +32,26 @@ import org.onehippo.taxonomy.api.Taxonomy;
 import org.onehippo.taxonomy.plugin.api.KeyCodec;
 
 public class NewCategoryDialog extends AbstractDialog<Taxonomy> {
+
     private static final long serialVersionUID = 1L;
 
     private String key;
+
     private String name;
+
     private String pathKey;
 
     public NewCategoryDialog(final IModel<Taxonomy> taxonomyModel, final String pathKey) {
         super(taxonomyModel);
 
         name = "new category";
+        this.pathKey = pathKey;
+        this.key = createKey();
 
         add(new AttributeAppender("class", new Model<String>("hippo-editor"), " "));
-        
+
         final FormComponent<String> keyField = new TextField<String>("key", new IModel<String>() {
+
             private static final long serialVersionUID = 1L;
 
             public String getObject() {
@@ -57,7 +65,11 @@ public class NewCategoryDialog extends AbstractDialog<Taxonomy> {
             public void detach() {
             }
         });
+
+        keyField.setModelObject(key);
+        keyField.add(new SimpleAttributeModifier("readonly", "readonly"));
         keyField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -68,6 +80,7 @@ public class NewCategoryDialog extends AbstractDialog<Taxonomy> {
         add(keyField);
 
         FormComponent<String> nameField = new TextField<String>("name", new IModel<String>() {
+
             private static final long serialVersionUID = 1L;
 
             public String getObject() {
@@ -82,14 +95,25 @@ public class NewCategoryDialog extends AbstractDialog<Taxonomy> {
             }
         });
         nameField.add(new OnChangeAjaxBehavior() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                keyField.setModelObject(createKey());
                 target.addComponent(keyField);
             }
         });
         add(nameField);
+    }
+
+    private String createKey() {
+        StringBuilder fullPath =
+                new StringBuilder(pathKey != null && !StringUtils.isEmpty(pathKey) ? pathKey : "");
+        if (name != null && !StringUtils.isEmpty(name)) {
+            fullPath.append(KeyCodec.encode(name));
+        }
+        return fullPath.toString().replaceAll("/", ".");
     }
 
     protected String getKey() {

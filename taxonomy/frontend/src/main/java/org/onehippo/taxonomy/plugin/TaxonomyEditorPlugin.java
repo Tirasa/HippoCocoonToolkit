@@ -74,11 +74,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * TaxonomyEditorPlugin used when editing taxonomy documents.
+ *
  * @version $Id: TaxonomyEditorPlugin.java 1343 2013-01-14 10:48:51Z mdenburger $
  */
 public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
 
     private final class DescriptionModel implements IModel<String> {
+
         private static final long serialVersionUID = 1L;
 
         public String getObject() {
@@ -104,6 +106,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
     }
 
     private final class NameModel implements IModel<String> {
+
         private static final long serialVersionUID = 1L;
 
         public String getObject() {
@@ -134,6 +137,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
         private static final long serialVersionUID = 1L;
 
         private String languageCode;
+
         private String displayName;
 
         /**
@@ -211,21 +215,30 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
     static final Logger log = LoggerFactory.getLogger(TaxonomyEditorPlugin.class);
 
     private List<LanguageSelection> availableLanguageSelections;
+
     private LanguageSelection currentLanguageSelection;
 
     private JcrTaxonomy taxonomy;
+
     private String key;
+
+    private String path;
+
     private IModel<String[]> synonymModel;
 
     private Form container;
+
     private MarkupContainer holder;
+
     private MarkupContainer toolbarHolder;
+
     private TaxonomyTree tree;
 
     /**
      * Constructor which adds all the UI components.
      * The UI components include taxonomy tree, toolbar, and detail form container.
      * The detail form container holds all the category detail fields such as name, description and synonyms.
+     *
      * @param context
      * @param config
      */
@@ -240,15 +253,18 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
         currentLanguageSelection = new LanguageSelection(getLocale(), getLocale());
 
         synonymModel = new IModel<String[]>() {
+
             private static final long serialVersionUID = 1L;
 
             public String[] getObject() {
-                EditableCategoryInfo info = taxonomy.getCategoryByKey(key).getInfo(currentLanguageSelection.getLanguageCode());
+                EditableCategoryInfo info = taxonomy.getCategoryByKey(key).getInfo(currentLanguageSelection.
+                        getLanguageCode());
                 return info.getSynonyms();
             }
 
             public void setObject(String[] object) {
-                EditableCategoryInfo info = taxonomy.getCategoryByKey(key).getInfo(currentLanguageSelection.getLanguageCode());
+                EditableCategoryInfo info = taxonomy.getCategoryByKey(key).getInfo(currentLanguageSelection.
+                        getLanguageCode());
                 try {
                     info.setSynonyms(object);
                 } catch (TaxonomyException e) {
@@ -262,26 +278,30 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
         };
         final IModel<Taxonomy> taxonomyModel = new Model(taxonomy);
         String currentLanguageCode = currentLanguageSelection.getLanguageCode();
-        tree = new TaxonomyTree("tree", new TaxonomyTreeModel(taxonomyModel, currentLanguageCode), currentLanguageCode) {
-            private static final long serialVersionUID = 1L;
+        tree =
+                new TaxonomyTree("tree", new TaxonomyTreeModel(taxonomyModel, currentLanguageCode), currentLanguageCode) {
 
-            @Override
-            public boolean isEnabled() {
-                return editing;
-            }
+                    private static final long serialVersionUID = 1L;
 
-            @Override
-            protected void onNodeLinkClicked(AjaxRequestTarget target, TreeNode node) {
-                if (node instanceof CategoryNode) {
-                    key = ((CategoryNode) node).getCategory().getKey();
-                } else {
-                    key = null;
-                }
-                redraw();
-                super.onNodeLinkClicked(target, node);
-            }
+                    @Override
+                    public boolean isEnabled() {
+                        return editing;
+                    }
 
-        };
+                    @Override
+                    protected void onNodeLinkClicked(AjaxRequestTarget target, TreeNode node) {
+                        if (node instanceof CategoryNode) {
+                            key = ((CategoryNode) node).getCategory().getKey();
+                            path = ((CategoryNode) node).getCategory().getPath();
+                        } else {
+                            key = null;
+                            path = null;
+                        }
+                        redraw();
+                        super.onNodeLinkClicked(target, node);
+                    }
+
+                };
         tree.setOutputMarkupId(true);
         add(tree);
         if (editing) {
@@ -295,6 +315,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
         toolbarHolder = new WebMarkupContainer("toolbar-container-holder");
         toolbarHolder.setOutputMarkupId(true);
         AjaxLink addCategory = new AjaxLink("add-category") {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -305,7 +326,8 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 IDialogService dialogService = getDialogService();
-                dialogService.show(new NewCategoryDialog(taxonomyModel) {
+                dialogService.show(new NewCategoryDialog(taxonomyModel, path) {
+
                     private static final long serialVersionUID = 1L;
 
                     @Override
@@ -313,7 +335,8 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
                         EditableCategory category = taxonomy.getCategoryByKey(key);
                         TreeNode node;
                         if (category != null) {
-                            node = new CategoryNode(new CategoryModel(taxonomyModel, key), currentLanguageSelection.getLanguageCode());
+                            node = new CategoryNode(new CategoryModel(taxonomyModel, key), currentLanguageSelection.
+                                    getLanguageCode());
                         } else {
                             node = new TaxonomyNode(taxonomyModel, currentLanguageSelection.getLanguageCode());
                         }
@@ -324,7 +347,8 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
                             } else {
                                 taxonomy.addCategory(newKey, getName());
                             }
-                            TreeNode child = new CategoryNode(new CategoryModel(taxonomyModel, newKey), currentLanguageSelection.getLanguageCode());
+                            TreeNode child = new CategoryNode(new CategoryModel(taxonomyModel, newKey),
+                                    currentLanguageSelection.getLanguageCode());
                             tree.getTreeState().selectNode(child, true);
                             key = newKey;
                         } catch (TaxonomyException e) {
@@ -399,6 +423,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
         // </HCT>
 
         container = new Form("container") {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -407,11 +432,15 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
             }
         };
 
-        ChoiceRenderer<LanguageSelection> choiceRenderer = new ChoiceRenderer<LanguageSelection>("displayName", "languageCode");
+        ChoiceRenderer<LanguageSelection> choiceRenderer = new ChoiceRenderer<LanguageSelection>("displayName",
+                "languageCode");
         DropDownChoice<LanguageSelection> languageSelectionChoice =
-                new DropDownChoice<LanguageSelection>("language", new PropertyModel<LanguageSelection>(this, "currentLanguageSelection"), availableLanguageSelections, choiceRenderer);
+                new DropDownChoice<LanguageSelection>("language", new PropertyModel<LanguageSelection>(this,
+                                "currentLanguageSelection"), availableLanguageSelections, choiceRenderer);
         languageSelectionChoice.add(new OnChangeAjaxBehavior() {
+
             private static final long serialVersionUID = 1L;
+
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 redraw();
@@ -425,6 +454,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
             MarkupContainer name = new Fragment("name", "fragmentname", this);
             FormComponent<String> nameField = new TextField<String>("widget", new NameModel());
             nameField.add(new OnChangeAjaxBehavior() {
+
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -445,6 +475,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
         }
 
         container.add(new RefreshingView<String>("view") {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -455,6 +486,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
             @Override
             protected void populateItem(final Item<String> item) {
                 item.add(new AjaxLink("up") {
+
                     private static final long serialVersionUID = 1L;
 
                     @Override
@@ -479,6 +511,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
                     }
                 });
                 item.add(new AjaxLink("down") {
+
                     private static final long serialVersionUID = 1L;
 
                     @Override
@@ -504,6 +537,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
                     }
                 });
                 item.add(new AjaxLink("remove") {
+
                     private static final long serialVersionUID = 1L;
 
                     @Override
@@ -534,6 +568,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
         });
 
         container.add(new AjaxLink("add") {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -561,7 +596,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
     }
 
     /**
-     * Factory method for wrapping a JCR node in a JcrTaxonomy object.  Override to customize
+     * Factory method for wrapping a JCR node in a JcrTaxonomy object. Override to customize
      * the taxonomy repository structure.
      */
     protected JcrTaxonomy newTaxonomy(IModel<Node> model, boolean editing) {
@@ -592,6 +627,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
     /**
      * Returns the current editable category instance
      * which is being edited.
+     *
      * @return
      */
     protected EditableCategory getCategory() {
@@ -612,6 +648,7 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
         for (int i = 0; i < synonyms.length; i++) {
             final int j = i;
             list.add(new IModel<String>() {
+
                 private static final long serialVersionUID = 1L;
 
                 public String getObject() {
@@ -662,11 +699,13 @@ public class TaxonomyEditorPlugin extends RenderPlugin<Node> {
     }
 
     /**
-     * Returns the detail form container which holds all the category detail fields such as name, description and synonyms.
+     * Returns the detail form container which holds all the category detail fields such as name, description and
+     * synonyms.
      * <P>
      * If you want to add custom UI components for your custom category fields, you might want to override this plugin
      * and invoke this method in the constructor to add the custom UI components.
      * </P>
+     *
      * @return
      */
     protected Form getContainerForm() {
