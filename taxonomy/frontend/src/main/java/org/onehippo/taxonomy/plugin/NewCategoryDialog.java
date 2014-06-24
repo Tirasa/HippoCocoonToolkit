@@ -28,7 +28,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.value.IValueMap;
 import org.hippoecm.frontend.dialog.AbstractDialog;
-import org.hippoecm.repository.api.NodeNameCodec;
 import org.hippoecm.repository.api.StringCodec;
 import org.onehippo.taxonomy.api.Taxonomy;
 import org.onehippo.taxonomy.plugin.api.KeyCodec;
@@ -41,13 +40,13 @@ public abstract class NewCategoryDialog extends AbstractDialog<Taxonomy> {
 
     private String name;
 
-    private String pathkey;
+    private String pathKey;
 
-    public NewCategoryDialog(final IModel<Taxonomy> taxonomyModel, final String pathkey) {
+    public NewCategoryDialog(final IModel<Taxonomy> taxonomyModel, final String pathKey) {
         super(taxonomyModel);
 
         this.name = "new category";
-        this.pathkey = pathkey;
+        this.pathKey = pathKey;
         this.key = createKey();
 
         add(new AttributeAppender("class", new Model<String>("hippo-editor"), " "));
@@ -111,7 +110,7 @@ public abstract class NewCategoryDialog extends AbstractDialog<Taxonomy> {
 
     private String createKey() {
         StringBuilder fullPath =
-                new StringBuilder(pathkey != null && !StringUtils.isEmpty(pathkey) ? pathkey : "");
+                new StringBuilder(pathKey != null && !StringUtils.isEmpty(pathKey) ? pathKey : "");
         if (name != null && !StringUtils.isEmpty(name)) {
             fullPath.append(KeyCodec.encode(name));
         }
