@@ -81,7 +81,7 @@
     <spring.version>3.0.7.RELEASE</spring.version>
 
     <hippo.repository.version>2.22.20</hippo.repository.version>
-    <hippo.cms.version>2.22.18</hippo.cms.version>
+    <hippo.cms.version>2.22.19</hippo.cms.version>
     <hippo.hst.version>2.24.16</hippo.hst.version>
         
     <forge.taxonomy.version>1.09.00</forge.taxonomy.version>
