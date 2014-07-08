@@ -76,9 +76,12 @@ public class CacheExpirerRepositoryEventSubscriber extends BaseHippoEventSubscri
 
         String locale = null;
         try {
-            HippoDocument doc = (HippoDocument) getObjectBeanManager().getObject(event.getPath());
-            locale = doc.getLocaleString();
-        } catch(ObjectBeanManagerException e) {
+            if (getObjectBeanManager().getObject(event.getPath()) != null
+                    && getObjectBeanManager().getObject(event.getPath()) instanceof HippoDocument) {
+                final HippoDocument doc = (HippoDocument) getObjectBeanManager().getObject(event.getPath());
+                locale = doc.getLocaleString();
+            }
+        } catch (ObjectBeanManagerException e) {
             LOG.error("Could not get HippoDocument for {}", event.getPath(), e);
         }
 
