@@ -41,6 +41,7 @@ import net.tirasa.hct.util.ObjectUtils;
 import net.tirasa.hct.util.TaxonomyUtils;
 import org.apache.cocoon.sax.SAXConsumer;
 import org.apache.cocoon.sax.util.XMLUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hippoecm.hst.content.beans.ObjectBeanManagerException;
 import org.hippoecm.hst.content.beans.standard.HippoAsset;
@@ -234,11 +235,15 @@ public class HippoItemXMLDumper {
             final AttributesImpl attrs = new AttributesImpl();
             attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                     Attribute.NAME.getName(), XSD_STRING, asset.getName());
-            if (asset.getParentBean().getBean("hippo:translation") != null) {
+            if (asset.getParentBean().getChildBeans("hippo:translation") != null
+                    && !asset.getParentBean().getChildBeans("hippo:translation").isEmpty()) {
                 attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
                         Attribute.LOC_NAME.getName(), XSD_STRING,
-                        ((HippoItem) asset.getParentBean().getBean("hippo:translation")).
+                        ((HippoItem) asset.getParentBean().getChildBeans("hippo:translation").get(0)).
                         getProperty("hippo:message", asset.getName()).toString());
+            } else {
+                attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
+                        Attribute.LOC_NAME.getName(), XSD_STRING, asset.getName());
             }
             attrs.addAttribute(NS_EMPTY, Attribute.PATH.getName(),
                     Attribute.PATH.getName(), XSD_STRING, asset.getPath());
@@ -248,7 +253,7 @@ public class HippoItemXMLDumper {
                     Attribute.SIZE_KB.getName(), XSD_INT, String.valueOf(asset.getAsset().getLengthKB()));
             attrs.addAttribute(NS_EMPTY, Attribute.LAST_MOD.getName(),
                     Attribute.LAST_MOD.getName(), XSD_DATETIME, sdf.format(asset.getAsset().
-                    getLastModified().getTime()));
+                            getLastModified().getTime()));
 
             saxConsumer.startElement(NS_HCT, elementName, PREFIX_HCT + ":" + elementName, attrs);
             saxConsumer.endElement(NS_HCT, elementName, PREFIX_HCT + ":" + elementName);
