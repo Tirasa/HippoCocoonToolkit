@@ -219,7 +219,7 @@ public class HippoItemXMLDumper {
 
         saxConsumer.endElement(NS_HCT, Element.COMPOUND.getName(), PREFIX_HCT + ":" + Element.COMPOUND.getName());
     }
-
+    
     public void dumpAssets(final List<HippoAsset> assets, final String elementName, final boolean wrap,
             final String dateFormat, final Locale locale)
             throws SAXException {
@@ -234,11 +234,15 @@ public class HippoItemXMLDumper {
             final AttributesImpl attrs = new AttributesImpl();
             attrs.addAttribute(NS_EMPTY, Attribute.NAME.getName(),
                     Attribute.NAME.getName(), XSD_STRING, asset.getName());
-            if (asset.getParentBean().getBean("hippo:translation") != null) {
+            if (asset.getParentBean().getChildBeans("hippo:translation") != null
+                    && !asset.getParentBean().getChildBeans("hippo:translation").isEmpty()) {
                 attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
                         Attribute.LOC_NAME.getName(), XSD_STRING,
-                        ((HippoItem) asset.getParentBean().getBean("hippo:translation")).
+                        ((HippoItem) asset.getParentBean().getChildBeans("hippo:translation").get(0)).
                         getProperty("hippo:message", asset.getName()).toString());
+            } else {
+                attrs.addAttribute(NS_EMPTY, Attribute.LOC_NAME.getName(),
+                        Attribute.LOC_NAME.getName(), XSD_STRING, asset.getName());
             }
             attrs.addAttribute(NS_EMPTY, Attribute.PATH.getName(),
                     Attribute.PATH.getName(), XSD_STRING, asset.getPath());
