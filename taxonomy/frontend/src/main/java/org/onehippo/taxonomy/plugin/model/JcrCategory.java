@@ -197,7 +197,7 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
                     documents.setProperty("hippofacnav:facets",
                             new String[] { TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS });
                     documents.setProperty("hippofacnav:filters",
-                            new String[] { TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS + "=" + node.getName() });
+                            new String[] { TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS + "=" + this.getKey() });
                     documents.setProperty("hippofacnav:limit", 10000);
                 }
             }
