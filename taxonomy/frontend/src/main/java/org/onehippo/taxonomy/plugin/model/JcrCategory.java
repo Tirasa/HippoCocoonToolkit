@@ -186,7 +186,7 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
             // <HCT>
             if (editable) {
                 final NodeIterator docChidlren = node.getNodes(HCTTaxonomyNodeTypes.NODENAME_HIPPOTAXONOMY_DOCUMENTS);
-                if (docChidlren == null || !docChidlren.hasNext()) {
+                    if (docChidlren == null || !docChidlren.hasNext()) {
                     if (!JcrHelper.isNodeType(node, HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED)) {
                         node.addMixin(HCTTaxonomyNodeTypes.NODETYPE_HIPPOTAXONOMY_FACETED);
                     }
@@ -197,7 +197,7 @@ public class JcrCategory extends TaxonomyObject implements EditableCategory {
                     documents.setProperty("hippofacnav:facets",
                             new String[] { TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS });
                     documents.setProperty("hippofacnav:filters",
-                            new String[] { TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS + "=" + node.getName() });
+                            new String[] { TaxonomyNodeTypes.HIPPOTAXONOMY_KEYS + "=" + this.getKey() });
                     documents.setProperty("hippofacnav:limit", 10000);
                 }
             }
